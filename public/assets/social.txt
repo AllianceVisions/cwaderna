@@ -1,0 +1,17 @@
+ <div class="header__social">
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-facebook-square"></i></a>
+                            <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div><!-- /.header__social -->
+
+
+  <li>
+                                <a href="#">جدول الفعاليات</a>
+                                <ul class="sub-menu">
+                                    <li><a href="about.html">About Page</a></li>
+                                    <li><a href="gallery.html">Gallery</a></li>
+                                    <li><a href="pricing.html">Pricing Plans</a></li>
+                                    <li><a href="faq.html">FAQ'S</a></li>
+                                </ul><!-- /.sub-menu -->
+                            </li>س
