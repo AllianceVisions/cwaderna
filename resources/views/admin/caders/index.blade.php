@@ -44,10 +44,10 @@
                             {{ trans('cruds.user.fields.phone') }}
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.nationality') }}
+                            {{ trans('cruds.user.fields.nationality_id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.national_id') }}
+                            {{ trans('cruds.user.fields.identity_num') }}
                         </th>
                         <th>
                             {{ trans('cruds.user.fields.approved') }}
@@ -88,10 +88,10 @@
                                 {{ $cader->user->phone ?? '' }}
                             </td>
                             <td>
-                                {{ $cader->user->nationality ?? '' }}
+                                {{ $cader->user->nationality ? $cader->user->nationality->$name : '' }}
                             </td>
                             <td>
-                                {{ $cader->user->national_id ?? '' }}
+                                {{ $cader->user->identity_num ?? '' }}
                             </td>
                             <td>
                                 <label class="c-switch c-switch-pill c-switch-success">

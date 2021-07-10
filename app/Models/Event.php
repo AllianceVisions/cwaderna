@@ -73,9 +73,6 @@ class Event extends Model implements HasMedia
         'deleted_at',
     ]; 
     
-    
-    
-    
     //times
     public function getStartAttendanceAttribute($value)
     {

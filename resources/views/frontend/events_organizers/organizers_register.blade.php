@@ -108,16 +108,15 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>رقم الهوية <span>*</span></label>
-                                    <input type="text" name="national_id"  class="form-control required">
+                                    <input type="text" name="identity_num"  class="form-control required">
                                 </div> 
                             </div>
                             <div class="col-md-6"> 
                                 <div class="form-group">
                                     <label>الجنسية: </label>
-                                    <select class="form-control" name="nationality">
-                                        <option disabled="disabled" selected="selected">اختر الجنسية</option>
-                                        @foreach(App\Models\User::NATIONALITY_SELECT as $label)
-                                            <option value="{{ $label }}" {{ old('nationality', '') === (string) $label ? 'selected' : '' }}>{{ trans('global.nationality.'.$label) }}</option>
+                                    <select class="form-control" name="nationality_id">
+                                        @foreach($nationalites as $id => $name)
+                                            <option value="{{ $id }}"  {{ old('nationality_id','') == $id ? 'selected' : '' }}>{{ $name }}</option>
                                         @endforeach
                                     </select>
                                 </div> 

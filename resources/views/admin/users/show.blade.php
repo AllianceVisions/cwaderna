@@ -74,18 +74,18 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.nationality') }}
+                            {{ trans('cruds.user.fields.nationality_name') }}
                         </th>
                         <td>
-                            {{ $user->nationality }}
+                            {{ $user->nationality->$name }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.national_id') }}
+                            {{ trans('cruds.user.fields.identity_num') }}
                         </th>
                         <td>
-                            {{ $user->national_id }}
+                            {{ $user->identity_num }}
                         </td>
                     </tr>
                     <tr>

@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'provider_man' => \App\Http\Middleware\ProviderMan::class,
         'events_organizer' => \App\Http\Middleware\EventsOrganizer::class,
         'cader' => \App\Http\Middleware\Cader::class,
+        'changelanguage' => \App\Http\Middleware\ChangeLanguage::class,
     ];
 }

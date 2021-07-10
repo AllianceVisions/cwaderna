@@ -41,10 +41,10 @@
                             {{ trans('cruds.user.fields.city_id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.nationality') }}
+                            {{ trans('cruds.user.fields.nationality_id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.user.fields.national_id') }}
+                            {{ trans('cruds.user.fields.identity_num') }}
                         </th> 
                         <th>
                             {{ trans('cruds.user.fields.approved') }}
@@ -82,10 +82,10 @@
                                 {{ $providerMan->user->city ? $providerMan->user->city->$name : '' }}
                             </td>
                             <td>
-                                {{ $providerMan->user->nationality ?? '' }}
+                                {{ $providerMan->user->nationality ? $providerMan->user->nationality->$name : '' }}
                             </td>
                             <td>
-                                {{ $providerMan->user->national_id ?? '' }}
+                                {{ $providerMan->user->identity_num ?? '' }}
                             </td> 
                             <td>
                                 <label class="c-switch c-switch-pill c-switch-success">

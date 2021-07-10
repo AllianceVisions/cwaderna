@@ -10,6 +10,7 @@ use App\Models\EventOrganizer;
 use Gate;
 use App\Models\User;
 use App\Models\City;
+use App\Models\Nationality;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,13 +46,14 @@ class EventOrganizerController extends Controller
         abort_if(Gate::denies('event_organizer_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $cities = City::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $nationalites = Nationality::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
 
-        return view('admin.eventOrganizers.create',compact('cities'));
+        return view('admin.eventOrganizers.create',compact('cities','nationalites'));
     }
 
     public function store(StoreEventOrganizerRequest $request)
     {
-        $validated_requests = $request->validated();
+        $validated_requests = $request->validated(); 
         $validated_requests['password'] = bcrypt($request->password);
         $validated_requests['user_type'] = 'events_organizer';
         $validated_requests['approved'] = 1;
@@ -85,8 +87,9 @@ class EventOrganizerController extends Controller
         abort_if(Gate::denies('event_organizer_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $cities = City::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $nationalites = Nationality::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
 
-        return view('admin.eventOrganizers.edit', compact('eventOrganizer','cities'));
+        return view('admin.eventOrganizers.edit', compact('eventOrganizer','cities','nationalites'));
     }
 
     public function update(UpdateEventOrganizerRequest $request, EventOrganizer $eventOrganizer)

@@ -10,6 +10,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\City;
 use App\Models\Event;
+use App\Models\Nationality;
 use Gate;
 use Auth;
 use Illuminate\Http\Request;
@@ -121,8 +122,9 @@ class UsersController extends Controller
         $roles = Role::all()->pluck('title', 'id');
         $events = Event::get(); 
         $cities = City::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $nationalites = Nationality::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
         
-        return view('admin.users.create', compact('roles','events','cities'));
+        return view('admin.users.create', compact('roles','events','cities','nationalites'));
     }
 
     public function store(StoreUserRequest $request)
@@ -155,9 +157,10 @@ class UsersController extends Controller
         $roles = Role::all()->pluck('title', 'id');
         $events = Event::with('event_organizer.user')->get(); 
         $cities = City::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $nationalites = Nationality::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
         $user->load(['roles','events']);
 
-        return view('admin.users.edit', compact('roles', 'user','events','cities'));
+        return view('admin.users.edit', compact('roles', 'user','events','cities','nationalites'));
     }
 
     public function update(UpdateUserRequest $request, User $user)

@@ -116,10 +116,9 @@
                     <div class="input-group">
                         <label class="label" style="width: 100%;">الجنسية</label> 
                         <div class="rs-select2 js-select-simple " style="width: 100%;">
-                            <select name="nationality" required>
-                                <option disabled="disabled" selected="selected">اختر الجنسية</option>
-                                @foreach(App\Models\User::NATIONALITY_SELECT as $label)
-                                    <option value="{{ $label }}" {{ old('nationality', '') === (string) $label ? 'selected' : '' }}>{{ trans('global.nationality.'.$label) }}</option>
+                            <select name="nationality_id" required>
+                                @foreach($nationalites as $id => $name)
+                                    <option value="{{ $id }}"  {{ old('nationality_id','') == $id ? 'selected' : '' }}>{{ $name }}</option>
                                 @endforeach
                             </select>  
                             <div class="select-dropdown"></div>
@@ -129,12 +128,7 @@
                 <div class="col-6">
                     <div class="input-group">
                         <label class="label">الرقم القومي </label>
-                        <input class="input--style-4" type="text" name="national_id"  value="{{old('national_id')}}">
-                        @if($errors->has('national_id'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('national_id') }}
-                            </div>
-                        @endif
+                        <input class="input--style-4" type="text" name="identity_num"  value="{{old('identity_num')}}"> 
                     </div>
                 </div>
             </div>

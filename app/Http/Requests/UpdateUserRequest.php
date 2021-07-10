@@ -38,10 +38,10 @@ class UpdateUserRequest extends FormRequest
             'phone'  => [
                 'required',
             ],
-            'nationality'  => [
+            'identity_num'  => [
                 'required',
             ],
-            'national_id'  => [
+            'nationality_id'  => [
                 'required',
             ],
             'roles.*' => [

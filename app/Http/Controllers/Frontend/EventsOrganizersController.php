@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\EventOrganizer;
 use App\Models\City;
 use App\Models\User;
+use App\Models\Nationality;
 use App\Http\Controllers\Traits\MediaUploadingTrait; 
 use Spatie\MediaLibrary\Models\Media;
 
@@ -20,8 +21,9 @@ class EventsOrganizersController extends Controller
     }
 
     public function organizers_register(){
-        $cities = City::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
-        return view('frontend.events_organizers.organizers_register',compact('cities'));
+        $cities = City::get()->pluck('name_ar', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $nationalites = Nationality::get()->pluck('name_ar', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        return view('frontend.events_organizers.organizers_register',compact('cities','nationalites'));
     }
 
     public function register_submit(Request $request)
@@ -34,8 +36,8 @@ class EventsOrganizersController extends Controller
             'city_id' => 'required',
             'gender' => 'required',
             'phone' => 'required',
-            'nationality' => 'required',
-            'national_id' => 'required', 
+            'nationality_id' => 'required',
+            'identity_num' => 'required', 
             'identity' => 'required',
         ]);
         $validated_requests = $request->all();

@@ -10,6 +10,7 @@ use App\Models\Cader;
 use App\Models\User;
 use App\Models\Skill;
 use App\Models\City;
+use App\Models\Nationality;
 use App\Models\Specialization;
 use App\Models\PreviousExperience;
 use App\Models\AcademicDegree;
@@ -74,10 +75,11 @@ class CaderController extends Controller
         abort_if(Gate::denies('cader_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $cities = City::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $nationalites = Nationality::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
         $skills = Skill::all();
         $specializations = Specialization::all();
 
-        return view('admin.caders.create', compact('cities','skills','specializations'));
+        return view('admin.caders.create', compact('cities','skills','specializations','nationalites'));
     }
 
     public function store(StoreCaderRequest $request)
@@ -129,6 +131,7 @@ class CaderController extends Controller
         abort_if(Gate::denies('cader_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $cities = City::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), '');
+        $nationalites = Nationality::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
         $specializations = Specialization::all();
         $cader->load(['specializations','skills']);
         $skills = Skill::get()->map(function($skill) use ($cader) {
@@ -136,7 +139,7 @@ class CaderController extends Controller
             return $skill;
         });
         
-        return view('admin.caders.edit', compact('cities', 'cader','skills','specializations'));
+        return view('admin.caders.edit', compact('cities', 'cader','skills','specializations','nationalites'));
     }
 
     public function update(UpdateCaderRequest $request, Cader $cader)

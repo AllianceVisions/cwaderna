@@ -108,37 +108,36 @@
                         </div>
                     </div> 
 
-                    {{-- national_id && nationality --}}
+                    {{-- identity_num && nationality_id --}}
                     <div class="row">
                         
                         <div class="col-md-6"> 
                             <div class="form-group">
-                                <label class="required" for="national_id">{{ trans('cruds.user.fields.national_id') }}</label>
-                                <input class="form-control {{ $errors->has('national_id') ? 'is-invalid' : '' }}" type="text" name="national_id" id="national_id" value="{{ old('national_id', $eventOrganizer->user->national_id) }}" required>
-                                @if($errors->has('national_id'))
+                                <label class="required" for="identity_num">{{ trans('cruds.user.fields.identity_num') }}</label>
+                                <input class="form-control {{ $errors->has('identity_num') ? 'is-invalid' : '' }}" type="text" name="identity_num" id="identity_num" value="{{ old('identity_num', $eventOrganizer->user->identity_num) }}" required>
+                                @if($errors->has('identity_num'))
                                     <div class="invalid-feedback">
-                                        {{ $errors->first('national_id') }}
+                                        {{ $errors->first('identity_num') }}
                                     </div>
                                 @endif
-                                <span class="help-block">{{ trans('cruds.user.fields.national_id_helper') }}</span>
+                                <span class="help-block">{{ trans('cruds.user.fields.identity_num_helper') }}</span>
                             </div>
                         </div>
                         
                         <div class="col-md-6"> 
                             <div class="form-group">
-                                <label class="required" for="nationality">{{ trans('cruds.user.fields.nationality') }}</label>
-                                <select class="form-control select2 {{ $errors->has('nationality') ? 'is-invalid' : '' }}" name="nationality" id="nationality" required>
-                                    <option value disabled {{ old('nationality', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
-                                    @foreach(App\Models\User::NATIONALITY_SELECT as $label)
-                                        <option value="{{ $label }}" {{ old('nationality', '') === (string) $label ? 'selected' : '' }} @if($eventOrganizer->user->nationality == $label) selected @endif>{{ trans('global.nationality.'.$label) }}</option>
+                                <label class="required" for="nationality_id">{{ trans('cruds.user.fields.nationality_id') }}</label>
+                                <select class="form-control select2 {{ $errors->has('nationality_id') ? 'is-invalid' : '' }}" name="nationality_id" id="nationality_id" required>
+                                    @foreach($nationalites as $id => $name)
+                                        <option value="{{ $id }}"  {{ old('nationality_id',$eventOrganizer->user->nationality_id) == $id ? 'selected' : '' }}>{{ $name }}</option>
                                     @endforeach
                                 </select>
-                                @if($errors->has('nationality'))
+                                @if($errors->has('nationality_id'))
                                     <div class="invalid-feedback">
-                                        {{ $errors->first('nationality') }}
+                                        {{ $errors->first('nationality_id') }}
                                     </div>
                                 @endif
-                                <span class="help-block">{{ trans('cruds.user.fields.nationality_helper') }}</span>
+                                <span class="help-block">{{ trans('cruds.user.fields.nationality_id_helper') }}</span>
                             </div>
                         </div>
 

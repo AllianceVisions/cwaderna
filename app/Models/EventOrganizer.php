@@ -22,7 +22,6 @@ class EventOrganizer extends Model implements HasMedia
     ];
 
     protected $appends = [
-        'photo',
         'commerical_reg',
         'identity',
     ];

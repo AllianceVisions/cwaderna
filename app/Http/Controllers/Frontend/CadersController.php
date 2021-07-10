@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Cader;
 use App\Models\User;
 use App\Models\City;
+use App\Models\Nationality;
 use App\Models\Specialization;
 use Auth;
 
@@ -16,12 +17,13 @@ class CadersController extends Controller
     public function cader_register()
     {
         $cities = City::get()
-            ->pluck('name_' . app()->getLocale(), 'id')
+            ->pluck('name_ar', 'id')
             ->prepend(trans('global.pleaseSelect'), '');
+        $nationalites = Nationality::get()->pluck('name_ar', 'id')->prepend(trans('global.pleaseSelect'), ''); 
         $specializations = Specialization::all();
         return view(
             'auth.cader_register',
-            compact('cities', 'specializations')
+            compact('cities', 'specializations','nationalites')
         );
     }
 
@@ -35,8 +37,8 @@ class CadersController extends Controller
             'city_id' => 'required',
             'gender' => 'required',
             'phone' => 'required',
-            'nationality' => 'required',
-            'national_id' => 'required',
+            'nationality_id' => 'required',
+            'identity_num' => 'required',
             'description' => 'required',
             'specializations' => 'required|array',
             'specializations.*' => 'integer',

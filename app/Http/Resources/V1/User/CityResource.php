@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Admin;
+namespace App\Http\Resources\V1\User;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PermissionResource extends JsonResource
+class CityResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +14,10 @@ class PermissionResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $name = 'name_' . app()->getLocale();
+        return [
+            'id' => $this->id,
+            'name' => $this->$name, 
+        ];
     }
 }

@@ -32,7 +32,16 @@ class UpdateEventOrganizerRequest extends FormRequest
             'city_id'  => [
                 'required',
             ],
+            'gender'  => [
+                'required',
+            ],
             'phone'  => [
+                'required',
+            ],
+            'identity_num'  => [
+                'required',
+            ],
+            'nationality_id'  => [
                 'required',
             ],
             'company_name' => [

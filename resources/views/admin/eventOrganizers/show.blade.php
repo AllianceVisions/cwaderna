@@ -66,18 +66,18 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.nationality') }}
+                            {{ trans('cruds.user.fields.nationality_id') }}
                         </th>
                         <td>
-                            {{ $eventOrganizer->user ? $eventOrganizer->user->nationality : "" }}
+                            {{ $eventOrganizer->user ? $eventOrganizer->user->nationality->$name : "" }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.national_id') }}
+                            {{ trans('cruds.user.fields.identity_num') }}
                         </th>
                         <td>
-                            {{ $eventOrganizer->user ? $eventOrganizer->user->national_id : "" }}
+                            {{ $eventOrganizer->user ? $eventOrganizer->user->identity_num : "" }}
                         </td>
                     </tr>
                     <tr>

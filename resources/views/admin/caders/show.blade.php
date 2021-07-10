@@ -46,10 +46,10 @@
                             </tr>
                             <tr>
                                 <th>
-                                    {{ trans('cruds.user.fields.nationality') }}
+                                    {{ trans('cruds.user.fields.nationality_id') }}
                                 </th>
                                 <td>
-                                    {{ $cader->user ? $cader->user->nationality : "" }}
+                                    {{ $cader->user ? $cader->user->nationality->$name : "" }}
                                 </td>
                             </tr>
                             <tr>
@@ -70,10 +70,10 @@
                             </tr>
                             <tr>
                                 <th>
-                                    {{ trans('cruds.user.fields.national_id') }}
+                                    {{ trans('cruds.user.fields.identity_num') }}
                                 </th>
                                 <td>
-                                    {{ $cader->user ? $cader->user->national_id : "" }}
+                                    {{ $cader->user ? $cader->user->identity_num : "" }}
                                 </td>
                             </tr>
                             <tr>

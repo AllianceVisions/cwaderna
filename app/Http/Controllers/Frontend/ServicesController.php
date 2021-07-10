@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\City;
 use App\Models\User;
 use App\Models\ProviderMan;
+use App\Models\Nationality;
 use Auth;
 
 class ServicesController extends Controller
@@ -37,8 +38,9 @@ class ServicesController extends Controller
     }
 
     public function service_register(){
-        $cities = City::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
-        return view('frontend.services.reg_sponser',compact('cities'));
+        $cities = City::get()->pluck('name_ar', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        $nationalites = Nationality::get()->pluck('name_ar', 'id')->prepend(trans('global.pleaseSelect'), ''); 
+        return view('frontend.services.reg_sponser',compact('cities','nationalites'));
     }
     
     public function register_submit(Request $request){
@@ -51,8 +53,8 @@ class ServicesController extends Controller
             'city_id' => 'required',
             'gender' => 'required',
             'phone' => 'required',
-            'nationality' => 'required',
-            'national_id' => 'required',
+            'nationality_id' => 'required',
+            'identity_num' => 'required',
         ]);
         $validated_requests = $request->all();
         $validated_requests['password'] = bcrypt($request->password);

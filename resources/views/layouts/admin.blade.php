@@ -103,7 +103,14 @@
           setTimeout(function(){
             $(".flash_messages div").remove();
           }, 5000 ); // 5 sec
-
+          
+          //perevent submittig multiple times
+          $("body").on("submit", "form", function() {
+              $(this).submit(function() {
+                  return false;
+              });
+              return true;
+          });
           
       });
 
