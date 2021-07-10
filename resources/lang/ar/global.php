@@ -7,6 +7,7 @@ return [
     'areYouSure'                           => 'هل أنت متأكد؟',
     'clickHereToVerify'                    => 'انقر هنا للتحقق',
     'create'                               => 'أضافة',
+    'dashboard'                            => 'الأحصائيات',
     'delete'                               => 'حذف',
     'downloadFile'                         => 'تحميل الملف',
     'download'                             => 'تحميل',
@@ -23,6 +24,7 @@ return [
     'filterDate'                           => 'فرز حسب التاريخ',
     'forgot_password'                      => 'نسيت كلمة المرور؟',
     'home'                                 => 'الرئيسية',
+    'homepage'                             => 'الصفحة الرئيسية',
     'list'                                 => 'قائمة',
     'login'                                => 'تسجيل الدخول',
     'login_email'                          => 'البريد الالكتروني',
@@ -342,6 +344,21 @@ return [
         'october'=>'أكتوبر',
         'november'=>'نوفمر',
         'december'=>'ديسمبر',
+    ], 
+    'event_status' => [
+        'pending' => 'قيدالانتطار',
+        'request_to_pricing' => 'مطلوب التسعير',
+        'pending_owner_accept' => 'بانتطار موافقة التسعير',
+        'accept' => 'تم الاتفاق',
+        'refused' => 'تم رفض التسعير',
+    ], 
+    'academic_degree' => [
+        'degree' => [
+            'high' => 'تعليم عالي', 
+            'diploma' => 'دبلوم',
+            'master' => 'ماجستير',
+            'phd' => 'دكتوراه',
+        ],
     ],
     'flash' => [
         '404' => 'لم يتم العثور علي اي بيانات',

@@ -1,4 +1,4 @@
-@extends('admin.layout.admin')
+@extends('layouts.provider_man')
 @section('content')
 
 <div class="row">
@@ -9,7 +9,7 @@
             </div>
 
             <div class="card-body">
-                <form method="POST" action="{{ route("admin.profile.update") }}">
+                <form method="POST" action="{{ route("provider-man.profile.update") }}">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
@@ -85,7 +85,7 @@
             </div>
 
             <div class="card-body">
-                <form method="POST" action="{{ route("admin.profile.password.update") }}">
+                <form method="POST" action="{{ route("provider-man.profile.password.update") }}">
                     @csrf
                     <div class="form-group">
                         <label class="required" for="title">{{ trans('cruds.user.fields.old_password') }}</label>

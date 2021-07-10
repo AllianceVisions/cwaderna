@@ -14,10 +14,13 @@ class SpecializationSeeder extends Seeder
     {
         $faker = Faker\Factory::create(); 
 
-        for ($i = 1 ; $i <= 50 ; $i++) {
+        $ar = ['ممثل','حارث','مصمم','سائق'];
+        $en = ['Actor','Security','Designer','Driver'];
+
+        for ($i = 1 ; $i <= 3 ; $i++) {
             $specialization = new Specialization;
-            $specialization->name_en = $faker->jobTitle;
-            $specialization->name_ar = $faker->jobTitle;
+            $specialization->name_en = $en[$i];
+            $specialization->name_ar = $ar[$i];
             $specialization->save();
         }
     }

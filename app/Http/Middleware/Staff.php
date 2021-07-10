@@ -20,8 +20,6 @@ class Staff
             return redirect()->route('provider-man.home');
         }elseif(Auth::user()->user_type == 'events_organizer'){ 
             return redirect()->route('events-organizer.home');
-        }elseif(Auth::user()->user_type == 'cader'){ 
-            return redirect()->route('cader.home');
         }
         return $next($request);
     }

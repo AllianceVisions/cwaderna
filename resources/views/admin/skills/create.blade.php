@@ -1,4 +1,4 @@
-@extends('admin.layout.admin')
+@extends('layouts.admin')
 @section('content')
 <div class="card" style=" text-align: center; font-size: 24px; box-shadow: 1px 2px 5px grey;"> 
     

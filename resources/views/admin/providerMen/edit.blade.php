@@ -1,4 +1,4 @@
-@extends('admin.layout.admin')
+@extends('layouts.admin')
 @section('content')
 
 <div class="card">
@@ -75,7 +75,7 @@
                     {{-- city_id --}}
                     <div class="row"> 
                         
-                        <div class="col-md-6"> 
+                        <div class="col-md-4"> 
                             <div class="form-group">
                                 <label class="required" for="city_id">{{ trans('cruds.user.fields.city_id') }}</label>
                                 <select class="form-control select2 {{ $errors->has('city_id') ? 'is-invalid' : '' }}" name="city_id" id="city_id" required>
@@ -91,7 +91,7 @@
                                 <span class="help-block">{{ trans('cruds.user.fields.city_id_helper') }}</span>
                             </div>
                         </div>
-                        <div class="col-md-6"> 
+                        <div class="col-md-4"> 
                             <div class="form-group">
                                 <label class="required" for="phone">{{ trans('cruds.user.fields.phone') }}</label>
                                 <input class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" type="text" name="phone" id="phone" value="{{ old('phone', $providerMan->user->phone) }}" required>
@@ -101,6 +101,18 @@
                                     </div>
                                 @endif
                                 <span class="help-block">{{ trans('cruds.user.fields.phone_helper') }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4"> 
+                            <div class="form-group">
+                                <label class="required" for="company_name">{{ trans('cruds.providerMan.fields.company_name') }}</label>
+                                <input class="form-control {{ $errors->has('company_name') ? 'is-invalid' : '' }}" type="text" name="company_name" id="company_name" value="{{ old('company_name', $providerMan->company_name) }}" required>
+                                @if($errors->has('company_name'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('company_name') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.providerMan.fields.company_name_helper') }}</span>
                             </div>
                         </div>
                         
@@ -151,6 +163,47 @@
                             </div>
                         </div>
 
+                    </div>
+
+                    
+                    <div class="row">
+                        
+                        <div class="col-md-4"> 
+                            <div class="form-group">
+                                <label class="required" for="commerical_reg_num">{{ trans('cruds.providerMan.fields.commerical_reg_num') }}</label>
+                                <input class="form-control {{ $errors->has('commerical_reg_num') ? 'is-invalid' : '' }}" type="text" name="commerical_reg_num" id="commerical_reg_num" value="{{ old('commerical_reg_num', $providerMan->commerical_reg_num) }}" required>
+                                @if($errors->has('commerical_reg_num'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('commerical_reg_num') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.providerMan.fields.commerical_reg_num_helper') }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4"> 
+                            <div class="form-group">
+                                <label class="required" for="working_field">{{ trans('cruds.providerMan.fields.working_field') }}</label>
+                                <input class="form-control {{ $errors->has('working_field') ? 'is-invalid' : '' }}" type="text" name="working_field" id="working_field" value="{{ old('working_field', $providerMan->working_field) }}" required>
+                                @if($errors->has('working_field'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('working_field') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.providerMan.fields.working_field_helper') }}</span>
+                            </div>
+                        </div> 
+                        <div class="col-md-4"> 
+                            <div class="form-group">
+                                <label class="required" for="website">{{ trans('cruds.providerMan.fields.website') }}</label>
+                                <input class="form-control {{ $errors->has('website') ? 'is-invalid' : '' }}" type="text" name="website" id="website" value="{{ old('website', $providerMan->website) }}" required>
+                                @if($errors->has('website'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('website') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.providerMan.fields.website_helper') }}</span>
+                            </div>
+                        </div> 
                     </div>
                 </div> 
             </div> 

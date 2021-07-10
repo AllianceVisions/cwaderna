@@ -1,4 +1,4 @@
-@extends('frontend.layout.frontend')
+@extends('layouts.frontend')
 
 @section('content') 
 
@@ -50,12 +50,12 @@
                 <!-- /.home--services -->
         <div class="col-md-3 col-xs-6">
             <div class="home--serv bg-theme-1">
-                <a href="#">
-            <div class="icon"> <img src="{{asset('assets/images/home_icon_01.png')}}"> </div>
-                <div class="title"> منظمي الفعاليات</div>
-                    </a>
+                <a href="{{route('frontend.organizers')}}">
+                    <div class="icon"> <img src="{{asset('assets/images/home_icon_01.png')}}"> </div>
+                    <div class="title"> منظمي الفعاليات</div>
+                </a>
             </div>
-                </div>
+        </div>
             <!-- /.home--services -->     
                 
         
@@ -65,36 +65,36 @@
                 <!-- /.home--services -->
         <div class="col-md-3 col-xs-4">
             <div class="home--serv bg-theme-2">
-                <a href="#">
-            <div class="icon"> <img src="{{asset('assets/images/home_icon_02.png')}}"> </div>
-                <div class="title"> الخدمات</div>
-                    </a>
+                <a href="{{route('frontend.all_services')}}">
+                    <div class="icon"> <img src="{{asset('assets/images/home_icon_02.png')}}"> </div>
+                    <div class="title"> الخدمات</div>
+                </a>
             </div>
-                </div>
+        </div>
             <!-- /.home--services -->   
                 
                 
                 <!-- /.home--services -->
         <div class="col-md-3 col-xs-5">
             <div class="home--serv bg-theme-4">
-                <a href="#">
-            <div class="icon"> <img src="{{asset('assets/images/home_icon_03.png')}}">  </div>
-                <div class="title"> الكوادر</div>
-                    </a>
+                <a href="{{route('frontend.cwaders')}}">
+                    <div class="icon"> <img src="{{asset('assets/images/home_icon_03.png')}}">  </div>
+                    <div class="title"> الكوادر</div>
+                </a>
             </div>
-                </div>
+        </div>
             <!-- /.home--services -->   
                 
                 
                 <!-- /.home--services -->
         <div class="col-md-3 col-xs-6">
             <div class="home--serv bg-theme-3">
-                <a href="#">
-            <div class="icon"> <img src="{{asset('assets/images/home_icon_04.png')}}"> </div>
-                <div class="title"> التذاكر  </div>
-                    </a>
+                <a href="{{route('frontend.tickets')}}">
+                    <div class="icon"> <img src="{{asset('assets/images/home_icon_04.png')}}"> </div>
+                    <div class="title"> التذاكر  </div>
+                </a>
             </div>
-                </div>
+        </div>
             <!-- /.home--services -->   
                 
         </div>
@@ -127,7 +127,7 @@
                     
                     <!-- /.cta-three__text -->
                     
-                    <a href="aboutus.html" class="thm-btn">المزيد</a><!-- /.thm-btn -->
+                    <a href="{{route('frontend.aboutus')}}" class="thm-btn">المزيد</a><!-- /.thm-btn -->
                 </div><!-- /.cta-three__content -->
             </div><!-- /.col-lg-6 -->
         </div><!-- /.row -->
@@ -143,98 +143,33 @@
             </div><!-- /.block-title -->
             
             <div class="course-one__carousel owl-carousel owl-theme" style="direction: ltr;">
-                <div class="item">
-                    <div class="team-one__single team-one__content" >
-                        <div class="team-one__image">
-                            <img src="{{asset('assets/images/alaa-eskandar.jpg')}}" alt="">
-                            <p class="team-one__designation">التخصص</p><!-- /.team-one__designation -->
-
-                        </div><!-- /.team-one__image -->
-                        <div class="">
-                            <h2 class="team-one__name"><a href="team-details.html">محمد احمد عبد العزيز</a></h2>
-                            <!-- /.team-one__name -->
-                                <p class="team-one__text">شرح مختصر للتخصص </p>
-
-                            <div class="rate"><img src="{{asset('assets/images/stars.png')}}"></div>
-                                <p class="team-one__text"> شارك في 12 فعالية <span><i class="fab fa-staylinked"></i></span>  </p>
-                            <a href="#" class="course-one__link">المزيد</a>
-                            <!-- /.team-one__text -->
-                        </div><!-- /.team-one__content -->
-                        
-                    </div>
-                </div><!-- /.item -->
-                
-                
-                
+                @foreach($caders as $cader)
                     <div class="item">
-                    <div class="team-one__single team-one__content" >
-                        <div class="team-one__image">
-                            <img src="{{asset('assets/images/adel-berbaaa.png')}}" alt="">
-                            <p class="team-one__designation">التخصص</p><!-- /.team-one__designation -->
+                        <div class="team-one__single team-one__content" >
+                            <div class="team-one__image">
+                                @if($cader->user->photo)
+                                    <img src="{{asset($cader->user->photo->getUrl('thumb'))}}" alt="">
+                                @else 
+                                    <img src="{{asset('user.png')}}" alt="">
+                                @endif
+                                <p class="team-one__designation">{{$cader->specializations ? $cader->specializations->first()->name_ar ?? "" : ""}}</p><!-- /.team-one__designation -->
 
-                        </div><!-- /.team-one__image -->
-                        <div class="">
-                            <h2 class="team-one__name"><a href="team-details.html">محمد احمد عبد العزيز</a></h2>
-                            <!-- /.team-one__name -->
-                                <p class="team-one__text">شرح مختصر للتخصص </p>
+                            </div><!-- /.team-one__image -->
+                            <div class="">
+                                <h2 class="team-one__name"><a href="team-details.html">{{$cader->user->first_name . " " . $cader->user->last_name}}</a></h2>
+                                <!-- /.team-one__name --> 
 
-                            <div class="rate"><img src="{{asset('assets/images/stars.png')}}"></div>
-                                <p class="team-one__text"> شارك في 12 فعالية <span><i class="fab fa-staylinked"></i></span>  </p>
-                            <a href="#" class="course-one__link">المزيد</a>
-                            <!-- /.team-one__text -->
-                        </div><!-- /.team-one__content -->
-                        
-                    </div>
-                </div><!-- /.item -->
-                
-                
-                
-                
-                    <div class="item">
-                    <div class="team-one__single team-one__content" >
-                        <div class="team-one__image">
-                            <img src="{{asset('assets/images/badr.png')}}" alt="">
-                            <p class="team-one__designation">التخصص</p><!-- /.team-one__designation -->
-
-                        </div><!-- /.team-one__image -->
-                        <div class="">
-                            <h2 class="team-one__name"><a href="team-details.html">محمد احمد عبد العزيز</a></h2>
-                            <!-- /.team-one__name -->
-                                <p class="team-one__text">شرح مختصر للتخصص </p>
-
-                            <div class="rate"><img src="{{asset('assets/images/stars.png')}}"></div>
-                                <p class="team-one__text"> شارك في 12 فعالية <span><i class="fab fa-staylinked"></i></span>  </p>
-                            <a href="#" class="course-one__link">المزيد</a>
-                            <!-- /.team-one__text -->
-                        </div><!-- /.team-one__content -->
-                        
-                    </div>
-                </div><!-- /.item -->
-                
-                
-                
-                
-                
-                        <div class="item">
-                    <div class="team-one__single team-one__content" >
-                        <div class="team-one__image">
-                            <img src="{{asset('assets/images/alaa-eskandar.jpg')}}" alt="">
-                            <p class="team-one__designation">التخصص</p><!-- /.team-one__designation -->
-
-                        </div><!-- /.team-one__image -->
-                        <div class="">
-                            <h2 class="team-one__name"><a href="team-details.html">محمد احمد عبد العزيز</a></h2>
-                            <!-- /.team-one__name -->
-                                <p class="team-one__text">شرح مختصر للتخصص </p>
-
-                            <div class="rate"><img src="{{asset('assets/images/stars.png')}}"></div>
-                                <p class="team-one__text"> شارك في 12 فعالية <span><i class="fab fa-staylinked"></i></span>  </p>
-                            <a href="#" class="course-one__link">المزيد</a>
-                            <!-- /.team-one__text -->
-                        </div><!-- /.team-one__content -->
-                        
-                    </div>
-                </div><!-- /.item -->
+                                <div class="rate">
+                                    <img src="{{asset('assets/images/stars.png')}}">
+                                </div>
+                                <p class="team-one__text"> شارك في {{$cader->events_count}} فعالية <span><i class="fab fa-staylinked"></i></span>  </p>
+                                <a href="#" class="course-one__link">المزيد</a>
+                                <!-- /.team-one__text -->
+                            </div><!-- /.team-one__content -->
+                            
+                        </div>
+                    </div><!-- /.item -->
+                @endforeach
             </div><!-- /.course-one__carousel -->
         </div><!-- /.container -->
     </section><!-- /.course-one course-page -->

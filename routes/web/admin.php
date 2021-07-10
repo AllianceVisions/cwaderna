@@ -41,7 +41,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Audit Logs
     Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
 
-    // Events 
+    // Events   
+    Route::post('events/partials/add_cader', 'EventsController@partials_add_cader')->name('events.partials.add_cader');
+    Route::get('events/send_pricing/{id}', 'EventsController@send_pricing')->name('events.send_pricing');
+    Route::post('events/delete_cader', 'EventsController@delete_cader')->name('events.delete_cader');
+    Route::post('events/update_cader', 'EventsController@update_cader')->name('events.update_cader');
+    Route::post('events/add_cader', 'EventsController@add_cader')->name('events.add_cader');
+    Route::post('events/update_item', 'EventsController@update_item')->name('events.update_item');
     Route::post('events/media', 'EventsController@storeMedia')->name('events.storeMedia');
     Route::post('events/ckmedia', 'EventsController@storeCKEditorImages')->name('events.storeCKEditorImages');
     Route::resource('events', 'EventsController');
@@ -54,6 +60,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Cader
     Route::post('caders/new_previous_experience', 'CaderController@new_previous_experience')->name('caders.new_previous_experience');
+    Route::post('caders/new_acadmeic_degree', 'CaderController@new_acadmeic_degree')->name('caders.new_academic_degree');
     Route::post('caders/partials/previous_experience', 'CaderController@previous_experience')->name('caders.partials.previous_experience');
     Route::post('caders/update_approved', 'CaderController@update_approved')->name('caders.update_approved');
     Route::post('caders/media', 'CaderController@storeMedia')->name('caders.storeMedia');

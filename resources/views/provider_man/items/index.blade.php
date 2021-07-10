@@ -1,4 +1,4 @@
-@extends('provider_man.layout.provider_man')
+@extends('layouts.provider_man')
 @section('content') 
 
 <div style="margin-bottom: 10px;" class="row">

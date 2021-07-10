@@ -17,7 +17,6 @@ class CreateCadersTable extends Migration
             $table->bigIncrements('id');
             $table->foreignId('user_id')->constrained();
             $table->double('rating',15,2)->default(0);
-            $table->string('specialization')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();

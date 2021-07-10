@@ -1,4 +1,4 @@
-@extends('cader.layout.cader')
+@extends('layouts.cader')
 @section('content')
 <div class="content">
     #Cader

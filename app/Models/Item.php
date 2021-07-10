@@ -8,6 +8,7 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Models\Media;
 use \DateTimeInterface;
+use Carbon\Carbon;
 
 class Item extends Model implements HasMedia
 {
@@ -22,7 +23,7 @@ class Item extends Model implements HasMedia
     ];
 
     protected $appends = [
-        'photo',
+        'photo', 
     ];
 
     protected $fillable = [
@@ -41,7 +42,36 @@ class Item extends Model implements HasMedia
         return $date->format('Y-m-d H:i:s');
     }
 
-    
+    //times pivot
+    public function getStartAttendanceAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format(config('panel.time_format')) : null;
+    }
+
+    public function setStartAttendanceAttribute($value)
+    {
+        $this->attributes['start_attendance'] = $value ? Carbon::createFromFormat(config('panel.time_format'), $value)->format('H:i:s') : null;
+    }
+
+    public function getEndAttendanceAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format(config('panel.time_format')) : null;
+    }
+
+    public function setEndAttendanceAttribute($value)
+    {
+        $this->attributes['end_attendance'] = $value ? Carbon::createFromFormat(config('panel.time_format'), $value)->format('H:i:s') : null;
+    }
+
+    //pivots
+    public function pivot_start_attendance()
+    { 
+        return $this->pivot->start_attendance ? Carbon::createFromFormat('Y-m-d H:i:s', $this->pivot->start_attendance)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
+    }
+    public function pivot_end_attendance()
+    { 
+        return $this->pivot->end_attendance ? Carbon::createFromFormat('Y-m-d H:i:s', $this->pivot->end_attendance)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
+    }
 
     public function registerMediaConversions(Media $media = null)
     {

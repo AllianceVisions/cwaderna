@@ -56,11 +56,8 @@ class StoreEventRequest extends FormRequest
                 'required',
                 'date_format:' . config('panel.time_format'),
             ],
-            'photo' => [
-                'required',
-            ],
             'specializations.*' => [
-                'integer',
+                'array',
             ],
             'specializations'   => [
                 'required',

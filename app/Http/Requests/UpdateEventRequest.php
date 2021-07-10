@@ -30,7 +30,7 @@ class UpdateEventRequest extends FormRequest
                 'date_format:' . config('panel.date_format'),
             ],
             'end_date' => [
-                'string',
+                'date_format:' . config('panel.date_format'),
                 'required',
             ],
             'city_id'  => [
@@ -57,7 +57,7 @@ class UpdateEventRequest extends FormRequest
                 'date_format:' . config('panel.time_format'),
             ],
             'specializations.*' => [
-                'integer',
+                'array',
             ],
             'specializations'   => [
                 'required',

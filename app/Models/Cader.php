@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use \DateTimeInterface;
+use Carbon\Carbon;
 
 class Cader extends Model
 {
     use SoftDeletes;
 
     public $table = 'caders';
+
 
     protected $dates = [
         'created_at',
@@ -21,12 +23,21 @@ class Cader extends Model
     protected $fillable = [
         'user_id',
         'rating',
-        'specialization',
         'description',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
+
+    //pivots
+    public function pivot_start_attendance()
+    { 
+        return $this->pivot->start_attendance ? Carbon::createFromFormat('Y-m-d H:i:s', $this->pivot->start_attendance)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
+    }
+    public function pivot_end_attendance()
+    { 
+        return $this->pivot->end_attendance ? Carbon::createFromFormat('Y-m-d H:i:s', $this->pivot->end_attendance)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
+    }
     
     protected function serializeDate(DateTimeInterface $date)
     {

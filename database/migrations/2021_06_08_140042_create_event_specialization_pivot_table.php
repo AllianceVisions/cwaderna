@@ -17,6 +17,9 @@ class CreateEventSpecializationPivotTable extends Migration
             $table->foreignId('specialization_id')->constrained()->onDelete('cascade');
             $table->foreignId('event_id')->constrained()->onDelete('cascade');
             $table->integer('num_of_caders');
+            $table->double('budget',15,2);
+            $table->datetime('start_attendance')->nullable();
+            $table->datetime('end_attendance')->nullable();
         });
     }
 

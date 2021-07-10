@@ -29,15 +29,29 @@ class Event extends Model implements HasMedia
         'photo',
     ];
 
-    public const STATUS_SELECT = [
+    public const ITEM_STATUS_SELECT = [
+        'pending' => 'Pending', 
+        'ordered' => 'Ordered',
+    ];
+
+    public const CADER_STATUS_SELECT = [
         'pending' => 'Pending',
         'refused' => 'Refused',
         'accepted' => 'Accepted',
     ];
 
+    public const EVENT_STATUS_SELECT = [
+        'pending' => 'Pending',
+        'request_to_pricing' => 'Request To Pricing',
+        'pending_owner_accept' => 'Pending Owner Accept',
+        'accept' => 'Accept',
+        'refused' => 'Refused',
+    ];
+
     public const REQUEST_TYPE_SELECT = [
         'by_cader' => 'By Cader',
-        'by_event_organizer' => 'By Event Organizer'
+        'by_event_organizer' => 'By Event Organizer',
+        'by_admin' => 'By Admin'
     ];
 
     protected $fillable = [
@@ -47,6 +61,7 @@ class Event extends Model implements HasMedia
         'start_date',
         'end_date',
         'address',
+        'status',
         'longitude',
         'latitude',
         'description',
@@ -56,8 +71,33 @@ class Event extends Model implements HasMedia
         'created_at',
         'updated_at',
         'deleted_at',
-    ];
+    ]; 
     
+    
+    
+    
+    //times
+    public function getStartAttendanceAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format(config('panel.time_format')) : null;
+    }
+
+    public function setStartAttendanceAttribute($value)
+    {
+        $this->attributes['start_attendance'] = $value ? Carbon::createFromFormat(config('panel.time_format'), $value)->format('H:i:s') : null;
+    }
+
+    public function getEndAttendanceAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format(config('panel.time_format')) : null;
+    }
+
+    public function setEndAttendanceAttribute($value)
+    {
+        $this->attributes['end_attendance'] = $value ? Carbon::createFromFormat(config('panel.time_format'), $value)->format('H:i:s') : null;
+    }
+
+    //dates
     public function getStartDateAttribute($value)
     {
         return $value ? Carbon::parse($value)->format(config('panel.date_format')) : null;
@@ -77,6 +117,8 @@ class Event extends Model implements HasMedia
     {
         $this->attributes['end_date'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
     }
+
+
 
     protected function serializeDate(DateTimeInterface $date)
     {
@@ -107,7 +149,12 @@ class Event extends Model implements HasMedia
 
     public function caders()
     {
-        return $this->belongsToMany(Cader::class,'events_caders','event_id','cader_id')->withpivot(['specialization_id','status','request_type','price','profit','start_attendance','end_attendance']);
+        return $this->belongsToMany(Cader::class,'events_caders_pivot','event_id','cader_id')->withpivot(['specialization_id','status','request_type','price','profit','start_attendance','end_attendance']);
+    }
+
+    public function items()
+    {
+        return $this->belongsToMany(Item::class,'events_items_pivot','event_id','item_id')->withpivot(['status','price','profit','start_attendance','end_attendance']);
     }
 
     public function event_organizer(){
@@ -120,7 +167,7 @@ class Event extends Model implements HasMedia
 
     public function specializations()
     {
-        return $this->belongsToMany(Specialization::class,'event_specialization_pivot','event_id','specialization_id')->withpivot('num_of_caders');
+        return $this->belongsToMany(Specialization::class,'event_specialization_pivot','event_id','specialization_id')->withpivot(['budget','num_of_caders','start_attendance','end_attendance']);
     }
 
     // relationship for staff to manage many events

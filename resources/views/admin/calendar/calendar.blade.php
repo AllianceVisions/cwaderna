@@ -1,4 +1,4 @@
-@extends('admin.layout.admin')
+@extends('layouts.admin')
 @section('content')
 <h3 class="page-title">{{ trans('global.systemCalendar') }}</h3>
 <div class="card">
@@ -27,9 +27,7 @@
             events={!! json_encode($events) !!};
             $('#calendar').fullCalendar({
                 // put your options and callbacks here
-                events: events,
-
-
+                events: events, 
             })
         });
 </script>

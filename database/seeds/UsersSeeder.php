@@ -113,7 +113,6 @@ class UsersSeeder extends Seeder
 
         Cader::create([
             'user_id' => 2,
-            'specialization' => 'test1',
             'description' => 'test2',
         ]);
 
@@ -136,7 +135,7 @@ class UsersSeeder extends Seeder
             'company_name' => 'W Z',
         ]);
 
-        ProviderMan::create(['user_id' => 4]);
+        ProviderMan::create(['user_id' => 4,'company_name'=> 'test','website'=>'tesst','commerical_reg_num'=>'tesst','working_field'=>'tesst']);
     }
 }
 

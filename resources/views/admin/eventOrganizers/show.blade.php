@@ -1,4 +1,4 @@
-@extends('admin.layout.admin')
+@extends('layouts.admin')
 @section('content')
 
 <div class="card">
@@ -66,6 +66,30 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.user.fields.nationality') }}
+                        </th>
+                        <td>
+                            {{ $eventOrganizer->user ? $eventOrganizer->user->nationality : "" }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.national_id') }}
+                        </th>
+                        <td>
+                            {{ $eventOrganizer->user ? $eventOrganizer->user->national_id : "" }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.gender') }}
+                        </th>
+                        <td>
+                            {{ $eventOrganizer->user ? App\Models\User::GENDER_SELECT[$eventOrganizer->user->gender] : "" }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.user.fields.photo') }}
                         </th>
                         <td>
@@ -82,6 +106,30 @@
                         </th>
                         <td>
                             {{ $eventOrganizer->company_name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.eventOrganizer.fields.identity') }}
+                        </th>
+                        <td>
+                            @if($eventOrganizer->identity)
+                                <a href="{{ asset($eventOrganizer->identity->getUrl()) }}" target="_blank">
+                                    {{ trans('global.view_file') }}
+                                </a>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.eventOrganizer.fields.commerical_reg') }}
+                        </th>
+                        <td>
+                            @if($eventOrganizer->commerical_reg)
+                                <a href="{{ asset($eventOrganizer->commerical_reg->getUrl()) }}" target="_blank">
+                                    {{ trans('global.view_file') }}
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 </tbody>

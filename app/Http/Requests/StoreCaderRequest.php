@@ -66,23 +66,7 @@ class StoreCaderRequest extends FormRequest
             'skills'   => [
                 'required',
                 'array',
-            ],
-
-            // 'company_name' => [
-            //     'string',
-            // ],
-            
-            // 'job_type' => [
-            //     'string',
-            // ],
-
-            // 'start_date' => [
-            //     'date_format:' . config('panel.date_format'),
-            // ],
-
-            // 'end_date' => [
-            //     'date_format:' . config('panel.date_format'),
-            // ],
+            ], 
         ];
     }
 }

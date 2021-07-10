@@ -1,4 +1,4 @@
-@extends('admin.layout.admin')
+@extends('layouts.admin')
 @section('content')
 @can('event_organizer_create')
     <div style="margin-bottom: 10px;" class="row">
@@ -104,7 +104,7 @@
                                 @endcan 
 
                                 @can('event_organizer_delete')   
-                                    <form style=" display:inline" action="{{ route('admin.event-organizers.destroy', $eventorganizer->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" >
+                                    <form  action="{{ route('admin.event-organizers.destroy', $eventorganizer->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" >
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">  
                                         <button class="btn btn-outline-danger btn-pill action-buttons-delete" type="submit" title="{{ trans('global.delete') }}" ><i  class="fa fa-trash actions-custom-i"></i> </button>

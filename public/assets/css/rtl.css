@@ -1908,13 +1908,13 @@ a:visited {
 
 .course-one__link {
   background-color: #f1f1f1;
-  
+  border-left:  solid thin #fff;
   color: #81868a;
   font-size: 14px;
   font-weight: 600;
-  display: block;
+  display: inline-block;
   text-align: center;
-  padding: 11.5px 0;
+  padding: 3px 15px;
   -webkit-transition: all .4s ease;
   transition: all .4s ease;
   margin-top: 15px;
@@ -4272,4 +4272,51 @@ padding-right: 30px;
 }
 
 .abouticon { text-align: center; text-align: center; float: right; margin-left: 10px; border-left: solid thin #a0a0a0; }
+.note   { color: red; font-size: 12px; padding: 10px 0px;}
 
+
+
+.table>tbody>tr>td, .table>tfoot>tr>td{
+    vertical-align: middle;
+}
+@media screen and (max-width: 600px) {
+    table#cart tbody td .form-control{
+		width:20%;
+		display: inline !important;
+	}
+	.actions .btn{
+		width:36%;
+		margin:1.5em 0;
+	}
+	
+	.actions .btn-info{
+		float:left;
+	}
+	.actions .btn-danger{
+		float:right;
+	}
+	
+	table#cart thead { display: none; }
+	table#cart tbody td { display: block; padding: .6rem; min-width:320px;}
+	table#cart tbody tr td:first-child { background: #e8e8e8;}
+	table#cart tbody td:before {
+		content: attr(data-th); font-weight: bold;
+		display: inline-block; width: 8rem;
+	}
+	
+	
+	
+	table#cart tfoot td{display:block; }
+	table#cart tfoot td .btn{display:block;}
+	
+}
+
+
+.datee { font-size: 12px; font-family: sans-serif;}
+.btn  { border-radius: 0;}
+.btn-warning { color: #212529;background-color: #028e91;border-color: #028e91; color: #fff;}
+
+.btn-success { color: #fff;background-color: #f36c30;border-color:#f36c30;}
+
+
+.thead-primary { background: #028e91; color: #fff;}

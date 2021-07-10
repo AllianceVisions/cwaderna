@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
             CitiesSeeder::class,
             UsersSeeder::class,
             RoleUserSeeder::class,
-            EventSeeder::class,
             SkillsSeeder::class,
             SpecializationSeeder::class,
         ]);

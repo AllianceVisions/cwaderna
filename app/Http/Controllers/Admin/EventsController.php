@@ -10,15 +10,100 @@ use App\Models\Event;
 use App\Models\City;
 use App\Models\Specialization;
 use App\Models\EventOrganizer;
+use App\Models\Cader;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Carbon\Carbon;
 
 class EventsController extends Controller
 {
-    use MediaUploadingTrait;
+    use MediaUploadingTrait; 
+
+    public function add_cader(Request $request){
+        $event = Event::findOrFail($request->event_id); 
+        $start = $request->start_attendance ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->start_attendance)->format('Y-m-d H:i:s') : null;
+        $end = $request->end_attendance ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->end_attendance)->format('Y-m-d H:i:s') : null; 
+        $event->caders()->syncWithoutDetaching([ $request->cader_id =>
+                                    [
+                                        'start_attendance' => $start,
+                                        'end_attendance' => $end,
+                                        'specialization_id' => $request->specialize_id,
+                                        'profit' => $request->profit,
+                                        'price' => $request->price,
+                                        'status' => 'pending',
+                                        'request_type' => 'by_admin',
+                                    ]
+                                ]);
+        flash('تم أضافة الكادر للفعالية')->success();
+        return redirect()->route('admin.events.show',$request->event_id);
+    }
+
+    public function partials_add_cader(Request $request){
+        global $specialize_id;
+        $specialize_id = $request->specialize_id;
+
+        $event_caders = Event::with('caders')->findOrFail($request->event_id)->caders->pluck('id');
+
+        $caders = Cader::whereHas('specializations', function ($query) {
+            $query->where('id', $GLOBALS['specialize_id']);
+        })->with('user')->whereNotIn('id',$event_caders)->get();
+
+        return view('admin.events.partials.add_cader',compact('caders'));
+    }
+
+    public function send_pricing($id){
+        $event = Event::findOrFail($id);
+        $event->status = 'pending_owner_accept';
+        $event->save();
+        flash('تم الأرسال')->success();
+        return redirect()->route('admin.events.show',$id);
+    }
+    
+    public function update_cader(Request $request){
+        $event = Event::findOrFail($request->event_id);  
+        $start = $request->start_attendance ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->start_attendance)->format('Y-m-d H:i:s') : null;
+        $end = $request->end_attendance ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->end_attendance)->format('Y-m-d H:i:s') : null; 
+        $event->caders()->syncWithoutDetaching([ $request->cader_id =>
+                                    [
+                                        'profit' => $request->profit,
+                                        'price' => $request->price, 
+                                        'start_attendance' => $start,
+                                        'end_attendance' => $end,
+                                    ]
+                                ]);
+
+        flash('تم التعديل')->success();
+        return redirect()->route('admin.events.show',$request->event_id);
+    }
+
+    
+    public function delete_cader(Request $request){
+        $event = Event::findOrFail($request->event_id);
+        $event->caders()->wherePivot('cader_id','=',$request->cader_id)->detach();
+        flash('تم حذف الكادر من الفعالية');
+        return redirect()->route('admin.events.show',$request->event_id);
+    }
+    
+    public function update_item(Request $request){
+        $event = Event::findOrFail($request->event_id);  
+        $start = $request->start_attendance ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->start_attendance)->format('Y-m-d H:i:s') : null;
+        $end = $request->end_attendance ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->end_attendance)->format('Y-m-d H:i:s') : null; 
+
+        $event->items()->syncWithoutDetaching([ $request->item_id =>
+                                    [
+                                        'profit' => $request->profit,
+                                        'price' => $request->price, 
+                                        'start_attendance' => $start,
+                                        'end_attendance' => $end,
+                                    ]
+                                ]);
+
+        flash('تم التعديل')->success();
+        return redirect()->route('admin.events.show',$request->event_id);
+    }
 
     public function index(Request $request)
     {
@@ -38,12 +123,12 @@ class EventsController extends Controller
                 $crudRoutePart = 'events';
 
                 return view('partials.datatablesActions', compact(
-                'viewGate',
-                'editGate',
-                'deleteGate',
-                'crudRoutePart',
-                'row'
-            ));
+                    'viewGate',
+                    'editGate',
+                    'deleteGate',
+                    'crudRoutePart',
+                    'row'
+                ));
             });
 
             $table->editColumn('id', function ($row) {
@@ -65,6 +150,9 @@ class EventsController extends Controller
                 $address =  $row->address ? $row->address : "";
                 $city =  $row->city ? $row->city->$name : ""; 
                 return $city . ', ' . $address;
+            });
+            $table->editColumn('status', function ($row) {
+                return $row->status ? trans('global.event_status.'.$row->status) : '';
             });
             $table->editColumn('conditions', function ($row) {
                 return $row->conditions ? $row->conditions : '';
@@ -130,7 +218,15 @@ class EventsController extends Controller
 
         $event = Event::create($data);
 
-        $event->specializations()->sync($this->mapSpecializations($data['specializations']));
+        //change datetime format that match database
+        foreach($data['specializations'] as $key => $row){
+            if($data['specializations'][$key]['start_attendance'] ?? 0 && data['specializations'][$key]['end_attendance'] ?? 0){ 
+                $data['specializations'][$key]['start_attendance'] = Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $data['specializations'][$key]['start_attendance'])->format('Y-m-d H:i:s');
+                $data['specializations'][$key]['end_attendance'] = Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $data['specializations'][$key]['end_attendance'])->format('Y-m-d H:i:s');
+            }
+        } 
+        
+        $event->specializations()->sync($data['specializations']);
 
         if ($request->input('photo', false)) {
             $event->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
@@ -141,14 +237,7 @@ class EventsController extends Controller
         }
 
         return redirect()->route('admin.events.index');
-    }
-
-    private function mapSpecializations($specializations)
-    {
-        return collect($specializations)->map(function ($i) {
-            return ['num_of_caders' => $i];
-        });
-    }
+    } 
 
     public function edit(Event $event)
     {
@@ -159,7 +248,12 @@ class EventsController extends Controller
 
         $event->load(['event_organizer','specializations']); 
         $specializations = Specialization::get()->map(function($specialize) use ($event) {
-            $specialize->value = data_get($event->specializations->firstWhere('id', $specialize->id), 'pivot.num_of_caders') ?? null;
+            $specialize->num_of_caders = data_get($event->specializations->firstWhere('id', $specialize->id), 'pivot.num_of_caders') ?? null;
+            $specialize->budget = data_get($event->specializations->firstWhere('id', $specialize->id), 'pivot.budget') ?? null;
+            $specialize->start_attendance = data_get($event->specializations->firstWhere('id', $specialize->id), 'pivot.start_attendance') ?? null;
+            $specialize->start_attendance = $specialize->start_attendance ? Carbon::createFromFormat('Y-m-d H:i:s', $specialize->start_attendance)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
+            $specialize->end_attendance = data_get($event->specializations->firstWhere('id', $specialize->id), 'pivot.end_attendance') ?? null;
+            $specialize->end_attendance = $specialize->end_attendance ? Carbon::createFromFormat('Y-m-d H:i:s', $specialize->end_attendance)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
             return $specialize;
         }); 
         
@@ -170,9 +264,17 @@ class EventsController extends Controller
     {
         $data = $request->validated();
 
-        $event->update($data);
+        $event->update($data); 
 
-        $event->specializations()->sync($this->mapSpecializations($data['specializations']));
+        //change datetime format that match database
+        foreach($data['specializations'] as $key => $row){
+            if($data['specializations'][$key]['start_attendance'] ?? 0 && data['specializations'][$key]['end_attendance'] ?? 0){ 
+                $data['specializations'][$key]['start_attendance'] = Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $data['specializations'][$key]['start_attendance'])->format('Y-m-d H:i:s');
+                $data['specializations'][$key]['end_attendance'] = Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $data['specializations'][$key]['end_attendance'])->format('Y-m-d H:i:s');
+            }
+        }
+
+        $event->specializations()->sync($data['specializations']);
 
         if ($request->input('photo', false)) {
             if (!$event->photo || $request->input('photo') !== $event->photo->file_name) {

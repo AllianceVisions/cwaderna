@@ -16,6 +16,10 @@ class CreateProviderManTable extends Migration
         Schema::create('provider_man', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('user_id')->constrained();
+            $table->string('company_name');
+            $table->string('commerical_reg_num');
+            $table->string('working_field');
+            $table->string('website');
             $table->timestamps();
             $table->softDeletes();
         });

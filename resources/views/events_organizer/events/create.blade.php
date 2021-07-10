@@ -1,4 +1,4 @@
-@extends('events_organizer.layout.events_organizer')
+@extends('layouts.events_organizer')
 @section('content')
 
 <div class="card">

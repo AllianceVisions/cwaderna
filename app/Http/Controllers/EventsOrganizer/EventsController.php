@@ -20,6 +20,27 @@ class EventsController extends Controller
 {
     use MediaUploadingTrait;
 
+    public function change_status($id, $status){
+        $event = Event::findOrFail($id);
+        $event->load(['items']); 
+        if($status == 'accept'){
+            $event->status = 'accept';
+            foreach($event->items as $item){
+                $item->pivot->status = 'ordered';
+                $item->pivot->save();
+            }
+        }elseif($status == 'refused'){ 
+            $event->status = 'refused';
+        }else{
+            flash('حدث خطأ')->error();
+            return redirect()->route('events-organizer.events.show',$id);
+        }
+        $event->save();
+        
+        flash('تم التغديل')->success();
+        return redirect()->route('events-organizer.events.show',$id);
+    }
+
     public function index(Request $request)
     { 
         if ($request->ajax()) {

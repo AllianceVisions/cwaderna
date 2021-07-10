@@ -12,6 +12,7 @@ use App\Models\Skill;
 use App\Models\City;
 use App\Models\Specialization;
 use App\Models\PreviousExperience;
+use App\Models\AcademicDegree;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,17 @@ class CaderController extends Controller
             'user_id' => $request->user_id,
             'company_name' => $request->company_name,
             'job_type' => $request->job_type,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+        ]); 
+        return redirect()->route('admin.caders.index');
+    }
+
+    public function new_acadmeic_degree(Request $request){
+        $acadmeic_degree = AcademicDegree::create([
+            'user_id' => $request->user_id,
+            'university_name' => $request->university_name,
+            'degree' => $request->degree,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
         ]); 
@@ -73,20 +85,12 @@ class CaderController extends Controller
         
         $validated_requests = $request->validated();
         $validated_requests['password'] = bcrypt($request->password);
-        $validated_requests['user_type'] = 'events_organizer';
+        $validated_requests['user_type'] = 'cader';
         $validated_requests['approved'] = 1;
         $user = User::create($validated_requests);
         $cader = Cader::create([
             'user_id' => $user->id,
             'description' => $validated_requests['description'],
-        ]);
-
-        $previous_experience = PreviousExperience::create([
-            'user_id' => $user->id,
-            'company_name' => $request->company_name,
-            'job_type' => $request->job_type,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
         ]); 
 
         $cader->specializations()->sync($request->input('specializations', []));

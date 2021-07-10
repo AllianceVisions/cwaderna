@@ -1,4 +1,4 @@
-@extends('events_organizer.layout.events_organizer')
+@extends('layouts.events_organizer')
 @section('content')
 
     <div style="margin-bottom: 10px;" class="row">
@@ -101,6 +101,9 @@
             },{
                 visible: false,
                 targets: 6
+            },{
+                visible: false,
+                targets: 7
             },{
                 orderable: false,
                 className: 'select-checkbox',

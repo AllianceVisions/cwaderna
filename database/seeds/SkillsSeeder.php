@@ -14,10 +14,13 @@ class SkillsSeeder extends Seeder
     {
         $faker = Faker\Factory::create(); 
 
-        for ($i = 1 ; $i <= 50 ; $i++) {
+        $ar = ['اللفة العربية','اللفة الأنجليزية','اللفة الفرنسية'];
+        $en = ['Arabic Language','English Language','French Language'];
+
+        for ($i = 1 ; $i <= 2 ; $i++) {
             $skill = new Skill;
-            $skill->name_en = $faker->jobTitle;
-            $skill->name_ar = $faker->jobTitle;
+            $skill->name_en = $en[$i];
+            $skill->name_ar = $ar[$i];
             $skill->save();
         }
     }

@@ -23,6 +23,8 @@ class EventOrganizer extends Model implements HasMedia
 
     protected $appends = [
         'photo',
+        'commerical_reg',
+        'identity',
     ];
 
     protected $fillable = [
@@ -45,9 +47,9 @@ class EventOrganizer extends Model implements HasMedia
         $this->addMediaConversion('new_preview')->fit('crop', 300, 300);
     }
 
-    public function getPhotoAttribute()
+    public function getCommericalRegAttribute()
     {
-        $file = $this->getMedia('photo')->last();
+        $file = $this->getMedia('commerical_reg')->last();
 
         if ($file) {
             $file->url              = $file->getUrl();
@@ -59,12 +61,39 @@ class EventOrganizer extends Model implements HasMedia
         return $file;
     }
 
+    public function getIdentityAttribute()
+    {
+        $file = $this->getMedia('identity')->last();
+
+        if ($file) {
+            $file->url              = $file->getUrl();
+            $file->thumbnail        = $file->getUrl('thumb');
+            $file->preview          = $file->getUrl('preview');
+            $file->new_preview      = $file->getUrl('new_preview');
+        }
+
+        return $file;
+    }
+
+    public function getCvAttribute()
+    {
+        $file = $this->getMedia('cv')->last();
+
+        if ($file) {
+            $file->url              = $file->getUrl();
+            $file->thumbnail        = $file->getUrl('thumb');
+            $file->preview          = $file->getUrl('preview');
+            $file->new_preview      = $file->getUrl('new_preview');
+        }
+        return $file;
+    }
+
     public function user()
     {
         return $this->BelongsTo(User::class);
     }
 
-    public function evetns(){
+    public function events(){
         return $this->hasMany(Event::class);
     }
 }

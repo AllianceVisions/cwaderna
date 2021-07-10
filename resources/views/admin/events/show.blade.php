@@ -1,4 +1,4 @@
-@extends('admin.layout.admin')
+@extends('layouts.admin')
 @section('content')
 
 <div class="card">
@@ -16,7 +16,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <table class="table table-bordered table-striped">
                         <tbody>
                             <tr>
@@ -107,18 +107,7 @@
                                 <td>
                                     {{ $event->end_attendance }}
                                 </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    {{ trans('cruds.event.fields.specializations') }}
-                                </th>
-                                <td>
-                                    @php $name = 'name_'.app()->getLocale(); @endphp
-                                    @foreach ($event->specializations as $specialize)
-                                        <span class="badge bg-secondary">{{$specialize->$name}} <span class="badge bg-success text-white">{{$specialize->pivot->num_of_caders}}</span></span>
-                                    @endforeach
-                                </td>
-                            </tr>
+                            </tr> 
                             <tr>
                                 <th>
                                     {{ trans('cruds.event.fields.photo') }}
@@ -134,8 +123,363 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
+                    @if($event->status != 'pending')  
 
+                        <!-- Modal add cader-->
+                        <div class="modal fade" id="add_cader_modal" tabindex="1" role="dialog" aria-labelledby="add_cader_modalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="add_cader_modalLabel">{{trans('cruds.event.others.add_cader_to_event')}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{route('admin.events.add_cader')}}" method="POST">
+                                            @csrf 
+
+                                            {{-- cader_id --}}
+                                            <div id="caders_select"></div> 
+
+                                            <input type="hidden" value="{{$event->id}}" name="event_id">
+                                            <input type="hidden" id="event_specialize"  name="specialize_id">
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    {{-- profit --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="profit">{{ trans('cruds.event.others.profit') }}</label>
+                                                        <input class="form-control {{ $errors->has('profit') ? 'is-invalid' : '' }}" type="number" name="profit" id="profit_modal" value="{{ old('profit') }}" required>
+                                                        @if($errors->has('profit'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('profit') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{-- price --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="price">{{ trans('cruds.event.others.price') }}</label>
+                                                        <input class="form-control {{ $errors->has('price') ? 'is-invalid' : '' }}" type="number" name="price" id="price_modal" value="{{ old('price') }}" required>
+                                                        @if($errors->has('price'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('price') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    {{-- start_attendance --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="start_attendance">{{ trans('cruds.event.fields.start_attendance') }}</label>
+                                                        <input class="form-control datetime {{ $errors->has('start_attendance') ? 'is-invalid' : '' }}" type="text" name="start_attendance" id="start_attendance_modal" value="{{ old('start_attendance') }}" required>
+                                                        @if($errors->has('start_attendance'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('start_attendance') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{-- end_attendance --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="end_attendance">{{ trans('cruds.event.fields.end_attendance') }}</label>
+                                                        <input class="form-control datetime {{ $errors->has('end_attendance') ? 'is-invalid' : '' }}" type="text" name="end_attendance" id="end_attendance_modal" value="{{ old('end_attendance') }}" required>
+                                                        @if($errors->has('end_attendance'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('end_attendance') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <hr>
+                                            <button type="submit" class="btn btn-success">{{trans('global.save')}}</button>
+                                        </form>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal edit cader -->
+                        <div class="modal fade" id="edit_cader_modal" tabindex="1" role="dialog" aria-labelledby="edit_cader_modalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="edit_cader_modalLabel">{{trans('cruds.event.others.edit_cader_in_event')}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{route('admin.events.update_cader')}}" method="POST" id="edit_cader_form">
+                                            @csrf 
+
+                                            <input type="hidden" value="{{$event->id}}" name="event_id"> 
+                                            <input type="hidden" value="" name="cader_id" id="cader_id">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    {{-- profit --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="profit">{{ trans('cruds.event.others.profit') }}</label>
+                                                        <input class="form-control {{ $errors->has('profit') ? 'is-invalid' : '' }}" type="number" name="profit" id="profit_modal" value="{{ old('profit') }}" required>
+                                                        @if($errors->has('profit'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('profit') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{-- price --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="price">{{ trans('cruds.event.others.price') }}</label>
+                                                        <input class="form-control {{ $errors->has('price') ? 'is-invalid' : '' }}" type="number" name="price" id="price_modal" value="{{ old('price') }}" required>
+                                                        @if($errors->has('price'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('price') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    {{-- start_attendance --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="start_attendance">{{ trans('cruds.event.fields.start_attendance') }}</label>
+                                                        <input class="form-control datetime {{ $errors->has('start_attendance') ? 'is-invalid' : '' }}" type="text" name="start_attendance" id="start_attendance_modal" value="{{ old('start_attendance') }}" required>
+                                                        @if($errors->has('start_attendance'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('start_attendance') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{-- end_attendance --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="end_attendance">{{ trans('cruds.event.fields.end_attendance') }}</label>
+                                                        <input class="form-control datetime {{ $errors->has('end_attendance') ? 'is-invalid' : '' }}" type="text" name="end_attendance" id="end_attendance_modal" value="{{ old('end_attendance') }}" required>
+                                                        @if($errors->has('end_attendance'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('end_attendance') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <hr>
+                                            <button type="submit" class="btn btn-success">{{trans('global.save')}}</button>
+                                        </form>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal edit service -->
+                        <div class="modal fade" id="edit_service_modal" tabindex="1" role="dialog" aria-labelledby="edit_service_modalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="edit_service_modalLabel">{{trans('cruds.event.others.edit_service_in_event')}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{route('admin.events.update_item')}}" method="POST" id="edit_service_form">
+                                            @csrf 
+
+                                            <input type="hidden" value="{{$event->id}}" name="event_id"> 
+                                            <input type="hidden" value="" name="item_id" id="item_id">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    {{-- profit --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="profit">{{ trans('cruds.event.others.profit') }}</label>
+                                                        <input class="form-control {{ $errors->has('profit') ? 'is-invalid' : '' }}" type="number" name="profit" id="profit_modal" value="{{ old('profit') }}" required>
+                                                        @if($errors->has('profit'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('profit') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{-- price --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="price">{{ trans('cruds.event.others.price') }}</label>
+                                                        <input class="form-control {{ $errors->has('price') ? 'is-invalid' : '' }}" type="number" name="price" id="price_modal" value="{{ old('price') }}" required>
+                                                        @if($errors->has('price'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('price') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    {{-- start_attendance --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="start_attendance">{{ trans('cruds.event.fields.start_attendance') }}</label>
+                                                        <input class="form-control datetime {{ $errors->has('start_attendance') ? 'is-invalid' : '' }}" type="text" name="start_attendance" id="start_attendance_modal" value="{{ old('start_attendance') }}" required>
+                                                        @if($errors->has('start_attendance'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('start_attendance') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{-- end_attendance --}}
+                                                    <div class="form-group">
+                                                        <label class="required" for="end_attendance">{{ trans('cruds.event.fields.end_attendance') }}</label>
+                                                        <input class="form-control datetime {{ $errors->has('end_attendance') ? 'is-invalid' : '' }}" type="text" name="end_attendance" id="end_attendance_modal" value="{{ old('end_attendance') }}" required>
+                                                        @if($errors->has('end_attendance'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('end_attendance') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <hr>
+                                            <button type="submit" class="btn btn-success">{{trans('global.save')}}</button>
+                                        </form>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        @if($event->status == 'request_to_pricing')
+                            <a href="{{ route('admin.events.send_pricing',$event->id) }}" class="btn btn-danger mb-3">{{ trans('cruds.event.others.send_price') }}</a>
+                        @elseif($event->status == 'pending_owner_accept') 
+                            <button class="btn btn-danger mb-3" disabled>{{trans('global.event_status.pending_owner_accept')}}</button>
+                        @elseif($event->status == 'accept')
+                            <button class="btn btn-success mb-3" disabled>{{trans('global.event_status.accept')}}</button>
+                        @elseif($event->status == 'refused')
+                            <button class="btn btn-warning text-white mb-3" disabled>{{trans('global.event_status.refused')}}</button>
+                        @endif
+
+
+
+                        {{-- specialization --}}
+                        <div class="partials-scrollable" style="max-height: 450px">
+                            <label>{{ trans('cruds.specialization.title') }}</label>
+
+                            @php $name = 'name_'.app()->getLocale(); @endphp
+                            <div id="accordion">
+                                @foreach ($event->specializations as $key => $specialize)
+                                    <div class="card">
+                                        <div class="card-header" id="heading{{$key}}" style="border:0">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link btn-block" data-toggle="collapse" data-target="#collapse{{$key}}" aria-expanded="true" aria-controls="collapse{{$key}}">
+                                                    
+                                                    <div class="row"> 
+                                                        <div class="col-md-3">{{$specialize->$name}}</div>
+                                                        <div class="col-md-3"><span class="badge bg-success text-white">{{$specialize->pivot->num_of_caders}}</span></div>
+                                                        <div class="col-md-3"><span class="badge bg-warning text-white">{{$specialize->pivot_budget()}}</span></div>  
+                                                        <div class="col-md-3">
+                                                            <span class="badge bg-secondary text-dark">{{$specialize->pivot_start_attendance()}}</span><br>
+                                                            <span class="badge bg-secondary text-dark">{{$specialize->pivot_end_attendance()}}</span>
+                                                        </div>  
+                                                    </div>
+                                                </button>
+                                            </h5>
+                                        </div>
+                                    
+                                        <div id="collapse{{$key}}" class="collapse" aria-labelledby="heading{{$key}}" data-parent="#accordion">
+                                            <div class="card-body"> 
+                                                <table class="table"> 
+                                                    <thead>
+                                                        <tr>
+                                                            <td>{{trans('cruds.user.fields.name')}}</td>
+                                                            <td>{{trans('cruds.event.others.attendance')}}</td> 
+                                                            <td>{{trans('cruds.event.others.profit')}}</td>
+                                                            <td>{{trans('cruds.event.others.price')}}</td>
+                                                            <td> 
+                                                                <a role="button" href="#" class="btn btn-info" onclick="showmodal({{$specialize->id}},'{{$specialize->pivot_start_attendance()}}','{{$specialize->pivot_end_attendance()}}')">
+                                                                    {{trans('cruds.event.others.add_cader')}}
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                    @foreach($event->caders as $cader)
+                                                        @if($cader->pivot->specialization_id == $specialize->id) 
+                                                            <tr> 
+                                                                <td>{{$cader->user->first_name . " " . $cader->user->last_name}}</td>
+                                                                <td>
+                                                                    {{$cader->pivot_start_attendance()}} <br>
+                                                                    {{$cader->pivot_end_attendance()}} 
+                                                                </td> 
+                                                                <td>{{$cader->pivot->profit}}</td>
+                                                                <td>{{$cader->pivot->price}}</td>
+                                                                <td> 
+                                                                    <button type="button" class="btn btn-outline-info" onclick="showmodal2({{$cader->pivot->price ?? 0}},{{$cader->pivot->profit ?? 0}},'{{$cader->pivot_start_attendance()}}','{{$cader->pivot_end_attendance()}}',{{$cader->id}})">{{ trans('global.edit') }}</button>
+                                                                    <form style="display: inline" action="{{ route('admin.events.delete_cader') }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');">
+                                                                        @csrf
+                                                                        <input type="hidden" name="cader_id" value="{{$cader->id}}">
+                                                                        <input type="hidden" name="event_id" value="{{$event->id}}">
+                                                                        <button class="btn btn-outline-danger" type="submit">{{ trans('global.delete') }}</button>
+                                                                    </form>
+                                                                </td>
+                                                            </tr> 
+                                                        @endif
+                                                    @endforeach
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>  
+                                @endforeach
+                            </div>
+
+                        </div>
+
+                        {{-- services --}}
+                        <div class="partials-scrollable mt-3">
+                            <label>{{ trans('cruds.item.title') }}</label>
+                            <table class="table"> 
+                                <thead>
+                                    <tr>
+                                        <td>{{trans('cruds.providerMan.title_singular')}}</td>
+                                        <td>{{trans('cruds.providerMan.others.item_name')}}</td>
+                                        <td>{{trans('cruds.providerMan.others.attendance')}}</td>
+                                        <td>{{trans('cruds.providerMan.others.profit')}}</td>
+                                        <td>{{trans('cruds.providerMan.others.price')}}</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                @foreach($event->items as $item)
+                                    <form action="{{ route('admin.events.update_item') }}" method="POST">
+                                        @csrf
+                                        <tr> 
+                                            <td>{{$item->provider_man->company_name}}</td>
+                                            <td>{{$item->title}}</td>
+                                            <td>
+                                                {{$item->pivot_start_attendance()}} <br>
+                                                {{$item->pivot_end_attendance()}} 
+                                            </td>
+                                            <td>{{$item->pivot->profit ? $item->pivot->profit : $item->price}}</td>
+                                            <td>{{$item->pivot->price}}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-outline-info" onclick="showmodal3({{$item->pivot->price ?? 0}},{{$item->pivot->profit ?? 0}},'{{$item->pivot_start_attendance()}}','{{$item->pivot_end_attendance()}}',{{$item->id}})">{{ trans('global.edit') }}</button>
+                                            </td>
+                                        </tr>
+                                    </form>
+                                @endforeach
+                            </table>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -144,10 +488,58 @@
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
+
         </div>
     </div>
 </div>
 
 
 
+@endsection
+
+@section('scripts')
+@parent
+<script> 
+    function showmodal(id,start_attendance,end_attendance){
+        $('#add_cader_modal').modal('show')
+        $('#add_cader_modal #start_attendance_modal').val(null);
+        $('#add_cader_modal #start_attendance_modal').val(start_attendance);
+        $('#add_cader_modal #end_attendance_modal').val(null);
+        $('#add_cader_modal #end_attendance_modal').val(end_attendance);
+        $('#event_specialize').val(null);
+        $('#event_specialize').val(id);
+        $.post('{{ route('admin.events.partials.add_cader') }}', {_token:'{{ csrf_token() }}', specialize_id:id,event_id:'{{$event->id}}'}, function(data){
+            $('#caders_select').html(null);
+            $('#caders_select').html(data);
+        });
+    }
+
+    function showmodal2(price,profit,start_attendance,end_attendance,cader_id){
+        $('#edit_cader_modal').modal('show')
+        $('#edit_cader_modal #start_attendance_modal').val(null);
+        $('#edit_cader_modal #start_attendance_modal').val(start_attendance);
+        $('#edit_cader_modal #end_attendance_modal').val(null);
+        $('#edit_cader_modal #end_attendance_modal').val(end_attendance);
+        $('#edit_cader_modal #price_modal').val(null);
+        $('#edit_cader_modal #price_modal').val(price);
+        $('#edit_cader_modal #profit_modal').val(null);
+        $('#edit_cader_modal #profit_modal').val(profit); 
+        $('#edit_cader_modal #cader_id').val(null);
+        $('#edit_cader_modal #cader_id').val(cader_id); 
+    }
+
+    function showmodal3(price,profit,start_attendance,end_attendance,item_id){
+        $('#edit_service_modal').modal('show')
+        $('#edit_service_modal #start_attendance_modal').val(null);
+        $('#edit_service_modal #start_attendance_modal').val(start_attendance);
+        $('#edit_service_modal #end_attendance_modal').val(null);
+        $('#edit_service_modal #end_attendance_modal').val(end_attendance);
+        $('#edit_service_modal #price_modal').val(null);
+        $('#edit_service_modal #price_modal').val(price);
+        $('#edit_service_modal #profit_modal').val(null);
+        $('#edit_service_modal #profit_modal').val(profit); 
+        $('#edit_service_modal #item_id').val(null);
+        $('#edit_service_modal #item_id').val(item_id); 
+    }
+</script>
 @endsection

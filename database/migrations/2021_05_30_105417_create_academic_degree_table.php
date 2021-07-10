@@ -18,6 +18,8 @@ class CreateAcademicDegreeTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('university_name');
             $table->string('degree');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
             $table->softDeletes();
         });

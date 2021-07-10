@@ -65,6 +65,13 @@ class EventOrganizerController extends Controller
             $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
         }
 
+        if ($request->input('identity', false)) {
+            $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('identity'))))->toMediaCollection('identity');
+        }
+        if ($request->input('commerical_reg', false)) {
+            $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('commerical_reg'))))->toMediaCollection('commerical_reg');
+        }
+        
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $user->id]);
         }
@@ -98,6 +105,28 @@ class EventOrganizerController extends Controller
             }
         } elseif ($user->photo) {
             $user->photo->delete();
+        }
+
+        if ($request->input('identity', false)) {
+            if (!$eventOrganizer->identity || $request->input('identity') !== $eventOrganizer->identity->file_name) {
+                if ($eventOrganizer->identity) {
+                    $eventOrganizer->identity->delete();
+                }
+                $eventOrganizer->addMedia(storage_path('tmp/uploads/' . basename($request->input('identity'))))->toMediaCollection('identity');
+            }
+        } elseif ($eventOrganizer->identity) {
+            $eventOrganizer->identity->delete();
+        }
+
+        if ($request->input('commerical_reg', false)) {
+            if (!$eventOrganizer->commerical_reg || $request->input('commerical_reg') !== $eventOrganizer->commerical_reg->file_name) {
+                if ($eventOrganizer->commerical_reg) {
+                    $eventOrganizer->commerical_reg->delete();
+                }
+                $eventOrganizer->addMedia(storage_path('tmp/uploads/' . basename($request->input('commerical_reg'))))->toMediaCollection('commerical_reg');
+            }
+        } elseif ($eventOrganizer->commerical_reg) {
+            $eventOrganizer->commerical_reg->delete();
         }
 
         flash(trans('global.flash.user.updated'))->success();

@@ -46,7 +46,7 @@ class LoginController extends Controller
         }elseif($user->user_type == 'events_organizer'){
             return redirect()->route('events-organizer.home') ;
         }elseif($user->user_type == 'cader'){
-            return redirect()->route('cader.home') ;
+            return redirect()->route('logout');
         }
     }
 }

@@ -20,8 +20,6 @@ class EventsOrganizer
             return redirect()->route('provider-man.home');
         }elseif(Auth::user()->user_type == 'staff'){ 
             return redirect()->route('admin.home');
-        }elseif(Auth::user()->user_type == 'cader'){ 
-            return redirect()->route('cader.home');
         }
         return $next($request);
     }

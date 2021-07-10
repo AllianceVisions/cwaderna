@@ -1,4 +1,4 @@
-@extends('admin.layout.admin')
+@extends('layouts.admin')
 @section('content')
 @can('event_create')
     <div style="margin-bottom: 10px;" class="row">
@@ -53,6 +53,9 @@
                     <th>
                         {{ trans('cruds.event.fields.photo') }}
                     </th>
+                    <th>
+                        {{ trans('cruds.event.fields.status') }}
+                    </th>
                     <th>  
                     </th>
                 </tr>
@@ -91,6 +94,7 @@
                 { data: 'date', name: 'date', sortable: false, searchable: false },
                 { data: 'attendance', name: 'attendance' , sortable: false, searchable: false},
                 { data: 'photo', name: 'photo', sortable: false, searchable: false },
+                { data: 'status', name: 'status', },
                 { data: 'actions', name: '{{ trans('global.actions') }}' }
             ],
             columnDefs: [{
@@ -105,6 +109,9 @@
             },{
                 visible: false,
                 targets: 7
+            },{
+                visible: false,
+                targets: 8
             },{
                 orderable: false,
                 className: 'select-checkbox',

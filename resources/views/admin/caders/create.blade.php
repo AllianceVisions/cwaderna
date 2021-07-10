@@ -1,4 +1,4 @@
-@extends('admin.layout.admin')
+@extends('layouts.admin')
 @section('content')
 
 <div class="card">
@@ -90,7 +90,12 @@
                         <div class="col-md-6"> 
                             <div class="form-group">
                                 <label class="required" for="nationality">{{ trans('cruds.user.fields.nationality') }}</label>
-                                <input class="form-control {{ $errors->has('nationality') ? 'is-invalid' : '' }}" type="text" name="nationality" id="nationality" value="{{ old('nationality', '') }}" required>
+                                <select class="form-control select2 {{ $errors->has('nationality') ? 'is-invalid' : '' }}" name="nationality" id="nationality" required>
+                                    <option value disabled {{ old('gender', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                                    @foreach(App\Models\User::NATIONALITY_SELECT as $label)
+                                        <option value="{{ $label }}" {{ old('nationality', '') === (string) $label ? 'selected' : '' }}>{{ trans('global.nationality.'.$label) }}</option>
+                                    @endforeach
+                                </select>
                                 @if($errors->has('nationality'))
                                     <div class="invalid-feedback">
                                         {{ $errors->first('nationality') }}
@@ -473,52 +478,52 @@ Dropzone.options.certificatesDropzone = {
 </script>
 <script>
     Dropzone.options.cvDropzone = {
-    url: '{{ route('admin.users.storeMedia') }}',
-    maxFilesize: 2, // MB
-    maxFiles: 1,
-    addRemoveLinks: true,
-    headers: {
-      'X-CSRF-TOKEN': "{{ csrf_token() }}"
-    },
-    params: {
-      size: 2
-    },
-    success: function (file, response) {
-      $('form').find('input[name="cv"]').remove()
-      $('form').append('<input type="hidden" name="cv" value="' + response.name + '">')
-    },
-    removedfile: function (file) {
-      file.previewElement.remove()
-      if (file.status !== 'error') {
+        url: '{{ route('admin.users.storeMedia') }}',
+        maxFilesize: 2, // MB
+        maxFiles: 1,
+        addRemoveLinks: true,
+        headers: {
+        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+        },
+        params: {
+        size: 2
+        },
+        success: function (file, response) {
         $('form').find('input[name="cv"]').remove()
-        this.options.maxFiles = this.options.maxFiles + 1
-      }
-    },
-    init: function () {
-@if(isset($cader->user) && $cader->user->cv)
-      var file = {!! json_encode($cader->user->cv) !!}
-          this.options.addedfile.call(this, file)
-      file.previewElement.classList.add('dz-complete')
-      $('form').append('<input type="hidden" name="cv" value="' + file.file_name + '">')
-      this.options.maxFiles = this.options.maxFiles - 1
-@endif
-    },
-     error: function (file, response) {
-         if ($.type(response) === 'string') {
-             var message = response //dropzone sends it's own error messages in string
-         } else {
-             var message = response.errors.file
-         }
-         file.previewElement.classList.add('dz-error')
-         _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
-         _results = []
-         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-             node = _ref[_i]
-             _results.push(node.textContent = message)
-         }
+        $('form').append('<input type="hidden" name="cv" value="' + response.name + '">')
+        },
+        removedfile: function (file) {
+        file.previewElement.remove()
+        if (file.status !== 'error') {
+            $('form').find('input[name="cv"]').remove()
+            this.options.maxFiles = this.options.maxFiles + 1
+        }
+        },
+        init: function () {
+    @if(isset($cader->user) && $cader->user->cv)
+        var file = {!! json_encode($cader->user->cv) !!}
+            this.options.addedfile.call(this, file)
+        file.previewElement.classList.add('dz-complete')
+        $('form').append('<input type="hidden" name="cv" value="' + file.file_name + '">')
+        this.options.maxFiles = this.options.maxFiles - 1
+    @endif
+        },
+        error: function (file, response) {
+            if ($.type(response) === 'string') {
+                var message = response //dropzone sends it's own error messages in string
+            } else {
+                var message = response.errors.file
+            }
+            file.previewElement.classList.add('dz-error')
+            _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+            _results = []
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                node = _ref[_i]
+                _results.push(node.textContent = message)
+            }
 
-         return _results
-     }
-}
+            return _results
+        }
+    }
 </script>
 @endsection

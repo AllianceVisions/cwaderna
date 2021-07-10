@@ -20,6 +20,10 @@ class ProviderMan extends Model
 
     protected $fillable = [
         'user_id',
+        'company_name',
+        'commerical_reg_num',
+        'working_field',
+        'website', 
         'created_at',
         'updated_at',
         'deleted_at',
