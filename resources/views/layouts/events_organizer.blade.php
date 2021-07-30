@@ -131,6 +131,12 @@
         })
     }
 
+    function notificationRead(id){ 
+        $.post('{{ route('events-organizer.alert.read') }}', {_token:'{{ csrf_token() }}', id:id}, function(data){
+          
+        });
+      }
+
     $("document").ready(function(){   
           //perevent submittig multiple times
           $("body").on("submit", "form", function() {

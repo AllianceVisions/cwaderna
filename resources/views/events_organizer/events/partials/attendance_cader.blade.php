@@ -19,7 +19,7 @@
             @foreach($attendance as $raw) 
                 @if($i->format('Y-m-d') == $raw->pivot->attendance1)
                     <tr> 
-                        <td>{{$raw->pivot->attendance2}}</td>
+                        <td>{{\Carbon\Carbon::parse($raw->pivot->attendance2)->format(config('panel.time_format'))}}</td>
                         <td>
                             {{$raw->pivot->longitude}} <br>
                             {{$raw->pivot->latitude}}

@@ -17,6 +17,8 @@ Route::group(['prefix' => 'events-organizer', 'as' => 'events-organizer.', 'name
 
     Route::get('/', 'HomeController@index')->name('home'); 
 
+    Route::post('user-alerts/read', 'UserAlertsController@read')->name('alert.read');
+    
     // Events 
     Route::post('events/partials/attendance_cader', 'EventsController@partials_attendance_cader')->name('events.partials.attendance_cader');
     Route::get('events/change_status/{id}/{status}', 'EventsController@change_status')->name('events.change_status');
