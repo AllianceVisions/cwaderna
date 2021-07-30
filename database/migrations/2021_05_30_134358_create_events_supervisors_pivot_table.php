@@ -16,6 +16,7 @@ class CreateEventsSupervisorsPivotTable extends Migration
         Schema::create('events_supervisors_pivot', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('event_id')->constrained()->onDelete('cascade');
+            $table->timestamps(); 
         });
     }
 

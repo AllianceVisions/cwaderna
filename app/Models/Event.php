@@ -36,6 +36,8 @@ class Event extends Model implements HasMedia
 
     public const CADER_STATUS_SELECT = [
         'pending' => 'Pending',
+        'request' => 'Request',
+        'send_pricing' => 'Send Pricing',
         'refused' => 'Refused',
         'accepted' => 'Accepted',
     ];
@@ -44,7 +46,7 @@ class Event extends Model implements HasMedia
         'pending' => 'Pending',
         'request_to_pricing' => 'Request To Pricing',
         'pending_owner_accept' => 'Pending Owner Accept',
-        'accept' => 'Accept',
+        'accepted' => 'Accepted',
         'refused' => 'Refused',
     ];
 
@@ -64,6 +66,7 @@ class Event extends Model implements HasMedia
         'status',
         'longitude',
         'latitude',
+        'area',
         'description',
         'conditions',
         'start_attendance',
@@ -146,12 +149,23 @@ class Event extends Model implements HasMedia
 
     public function caders()
     {
-        return $this->belongsToMany(Cader::class,'events_caders_pivot','event_id','cader_id')->withpivot(['specialization_id','status','request_type','price','profit','start_attendance','end_attendance']);
+        return $this->belongsToMany(Cader::class,'events_caders_pivot','event_id','cader_id')
+                    ->withpivot(['specialization_id','status','request_type','price','profit','start_attendance','end_attendance'])
+                    ->withTimestamps();
+    }
+
+    public function attendance()
+    {
+        return $this->belongsToMany(Cader::class,'event_attendance_pivot','event_id','cader_id')
+                    ->withpivot(['type','out_of_zone','attendance1','attendance2','longitude','latitude','distance'])
+                    ->withTimestamps();
     }
 
     public function items()
     {
-        return $this->belongsToMany(Item::class,'events_items_pivot','event_id','item_id')->withpivot(['status','price','profit','start_attendance','end_attendance']);
+        return $this->belongsToMany(Item::class,'events_items_pivot','event_id','item_id')
+                    ->withpivot(['status','price','profit','start_attendance','end_attendance'])
+                    ->withTimestamps();
     }
 
     public function event_organizer(){
@@ -164,7 +178,9 @@ class Event extends Model implements HasMedia
 
     public function specializations()
     {
-        return $this->belongsToMany(Specialization::class,'event_specialization_pivot','event_id','specialization_id')->withpivot(['budget','num_of_caders','start_attendance','end_attendance']);
+        return $this->belongsToMany(Specialization::class,'event_specialization_pivot','event_id','specialization_id')
+                    ->withpivot(['budget','num_of_caders','start_attendance','end_attendance'])
+                    ->withTimestamps();
     }
 
     // relationship for staff to manage many events

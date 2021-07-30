@@ -21,6 +21,7 @@ class CreateEventsItemsPivotTable extends Migration
             $table->double('price')->nullable();
             $table->double('profit')->nullable();
             $table->string('status')->nullable();
+            $table->timestamps(); 
         });
     }
 

@@ -20,7 +20,7 @@ class CreateCadersReviewsPivotTable extends Migration
             $table->text('comment');
             $table->boolean('status')->default(1);
             $table->boolean('viewed')->default(1);
-            $table->timestamps();
+            $table->timestamps(); 
         });
     }
 

@@ -11,6 +11,7 @@ use App\Models\City;
 use App\Models\Nationality;
 use App\Models\Specialization;
 use Auth;
+use Alert;
 
 class CadersController extends Controller
 {
@@ -58,7 +59,7 @@ class CadersController extends Controller
 
         $cader->specializations()->sync($request->input('specializations', []));
 
-        flash('تم ارسال طلب الأنضمام بنجاح');
+        Alert::success('تم ارسال طلب الأنضمام بنجاح');
         return back();
     }
 
@@ -99,8 +100,8 @@ class CadersController extends Controller
     {
         $event = Event::findOrFail($request->event_id);
         $collection = collect($event->specializations);
-        if (!$collection->contains('id', $request->specialization_id)) {
-            flash('لا تتضمن الفعالية هدا التخصص اختر تخصص اخر للكادر')->error();
+        if (!$collection->contains('id', $request->specialization_id)) { 
+            Alert::error('لا تتضمن الفعالية هذا التخصص اختر تخصص اخنر للكادر');
             return back();
         } else {
             $start = $request->start_attendance
@@ -120,7 +121,7 @@ class CadersController extends Controller
                 ],
             ]);
 
-            flash('تم اضاقة الكادر للفعالية')->success();
+            Alert::success('تم اضاقة الكادر للفعالية');
             return back();
         }
     }

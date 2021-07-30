@@ -72,10 +72,9 @@
         }
         $.post('{{ route('admin.users.update_approved') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){
             if(data == 1){
-                location.reload();
-            }
-            else{
-                location.reload();
+                showFrontendAlert('success',"{{ trans('global.flash.user.approve') }}");
+            }else{
+                showFrontendAlert('error',"{{ trans('global.flash.error') }}");
             }
         });
     }

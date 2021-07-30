@@ -118,7 +118,7 @@
                                 <label class="required" for="nationality_id">{{ trans('cruds.user.fields.nationality_id') }}</label>
                                 <select class="form-control select2 {{ $errors->has('nationality_id') ? 'is-invalid' : '' }}" name="nationality_id" id="nationality_id" required>
                                     @foreach($nationalites as $id => $name)
-                                        <option value="{{ $id }}"  {{ old('nationality_id','') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                        <option value="{{ $id }}"  {{ old('nationality_id',$user->nationality_id) == $id ? 'selected' : '' }}>{{ $name }}</option>
                                     @endforeach
                                 </select>
                                 @if($errors->has('nationality_id'))

@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Cader;
+use App\Models\User;
+use App\Models\UserAlert;
 use Auth;
+use Alert;
 
 class EventsController extends Controller
 {
@@ -26,22 +29,32 @@ class EventsController extends Controller
     public function cader_destroy(Request $request){
         $event = Event::findOrFail($request->event_id);
         $event->caders()->wherePivot('cader_id','=',$request->cader_id)->detach();
-        flash('تم حذف الكادر من الفعالية');
+        Alert::success('تم حذف الكادر من الفعالية');
         return redirect()->route('frontend.my_list');
     }
 
     public function service_destroy(Request $request){
         $event = Event::findOrFail($request->event_id);
-        $event->items()->wherePivot('item_id','=',$request->item_id)->detach();
-        flash('تم حذف الخدمة من الفعالية');
+        $event->items()->wherePivot('item_id','=',$request->item_id)->detach(); 
+        Alert::success('تم حذف الخدمة من الفعالية');
         return redirect()->route('frontend.my_list');
     }
 
     public function event_request($id){
+        
         $event = Event::findOrFail($id);
         $event->status = 'request_to_pricing';
-        $event->save();
-        flash('تم طلب التسعير');
+        $event->save(); 
+
+        $users = User::where('user_type','staff')->get()->pluck('id');
+
+        $userAlert = UserAlert::create([
+            'alert_text' => 'طلب تسعيرة جديدة من ' . $event->event_organizer->company_name,
+            'alert_link' => $event->id,
+            'type' => 'event',
+        ]);
+        $userAlert->users()->sync($users);
+        Alert::success('تم طلب التسعير');
         return redirect()->route('frontend.my_list');
     }
 }

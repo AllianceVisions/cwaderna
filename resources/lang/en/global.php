@@ -355,9 +355,21 @@ return [
         'pending' => 'Pending',
         'request_to_pricing' => 'Request To Pricing',
         'pending_owner_accept' => 'Pending Owner Accept',
-        'accept' => 'Accept',
+        'accepted' => 'Accept',
         'refused' => 'Refused',
     ], 
+    'cader_status' => [ 
+        'pending' => 'Pending',
+        'request' => 'Holding',
+        'send_pricing' => 'Request Approvment',
+        'refused' => 'Refused',
+        'accepted' => 'Accepted',
+    ],  
+    'event_request_by' => [
+        'by_event_organizer' => 'Event Organizer',
+        'by_admin' => 'System',
+        'by_cader' => 'Cader',
+    ],
     'academic_degree' => [
         'degree' => [
             'high' => 'High Education', 
@@ -369,7 +381,14 @@ return [
     'flash' => [
         '404' => 'Not Found !!',
         'error' => 'Something Went Wrong !!',
-        'success' => 'Success !!',
+        'success' => 'Success',
+        'created' => 'Added Successfully',
+        'updated' => 'Updated Successfully',
+        'deleted' => 'Deleted Successfully',
+        'delete_' => 'Delete?',
+        'sure_' => 'Please ensure and then confirm!',
+        'yes_' => 'Yes, delete it!',
+        'no_' => 'No, cancel!',
         'fix_errors' => 'Fix Errors Below',
         'city' => [
             'status' => 'City Status Updated Successfully',

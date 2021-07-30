@@ -22,6 +22,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.0/css/perfect-scrollbar.min.css" rel="stylesheet" /> 
     <link href="{{ asset('admin/custom.css') }}" rel="stylesheet" />
+    @if(app()->getLocale() == 'ar')
+      <style>
+        .c-sidebar-nav .c-sidebar-nav-dropdown-items{
+          padding-right: 8%; 
+        }
+      </style>
+    @else
+      <style>
+        .c-sidebar-nav .c-sidebar-nav-dropdown-items{
+          padding-left: 8%; 
+        }
+      </style>
+    @endif
     @yield('styles')
 </head>
 
@@ -32,17 +45,10 @@
     <div class="c-wrapper">
       
       @include('inc.admin_nav')
-      
       <div class="c-body">
           <main class="c-main"> 
-              <div class="container-fluid">
-                  @if(session('message'))
-                      <div class="row mb-2">
-                          <div class="col-lg-12">
-                              <div class="alert alert-success" role="alert">{{ session('message') }}</div>
-                          </div>
-                      </div>
-                  @endif
+              <div class="container-fluid">  
+                
                   @if($errors->count() > 0)
                       <div class="alert alert-warning">
                           {{trans('global.flash.fix_errors')}}
@@ -53,17 +59,7 @@
                           @endforeach
                         </div>
                   @endif
-                      
-                  <div class="flash_messages" 
-                  @if(app()->getLocale() == 'ar')
-                    style="position: fixed; top: 49px; left: 0; z-index: 9999999;font-size:15px;font-weight:bolder"
-                  @else
-                    style="position: fixed; top: 49px; right: 0; z-index: 9999999;font-size:15px;font-weight:bolder"
-                  @endif
-                  >
-                    @include('flash::message') 
-                  </div>
-
+                  
                   @yield('content')
               </div> 
 
@@ -73,6 +69,9 @@
           </form>
       </div>
     </div>
+
+    
+    @include('sweetalert::alert')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -95,31 +94,77 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script> 
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+
     <script src="{{ asset('admin/main.js') }}"></script>
     <script>
       
+      function showFrontendAlert(type, title, message){
+          swal({ 
+            title: title,
+            text: message,
+            type: type, 
+            showConfirmButton: 'Okay',
+            timer: 3000
+        });
+      }
+
       
-      $("document").ready(function(){  
-          setTimeout(function(){
-            $(".flash_messages div").remove();
-          }, 5000 ); // 5 sec
-          
+    function deleteConfirmation(route) {
+      console.log(route);
+        swal({
+            title: "{{trans('global.flash.delete_')}}",
+            text: "{{trans('global.flash.sure_')}}",
+            type: "warning",
+            showCancelButton: !0,
+            confirmButtonText: "{{trans('global.flash.yes_')}}",
+            cancelButtonText: "{{trans('global.flash.no_')}}",
+            reverseButtons: !0
+        }).then(function (e) {
+
+            if (e.value === true) { 
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: route,
+                    data: { _token: '{{ csrf_token() }}' }, 
+                    success: function (results) { 
+                      location.reload(); 
+                    }
+                });
+
+            } else {
+                e.dismiss;
+            }
+
+        }, function (dismiss) {
+            return false;
+        })
+    }
+
+      $("document").ready(function(){   
           //perevent submittig multiple times
           $("body").on("submit", "form", function() {
               $(this).submit(function() {
                   return false;
               });
               return true;
-          });
-          
-      });
+          }); 
 
-      function frontendflash(message,type){ 
-        $('.flash_messages').append("<div class='alert alert-"+ type +"' role='alert'>"+ message +"</div>"); 
-        setTimeout(function() {
-            $('.flash_messages div').remove();
-        }, 4000);
+      }); 
+
+      function notificationRead(id){ 
+        $.post('{{ route('admin.alert.read') }}', {_token:'{{ csrf_token() }}', id:id}, function(data){
+          
+        });
       }
+
+      function goBack() {
+          window.history.back();
+      } 
 
         $(function() {
           let copyButtonTrans = '{{ trans('global.datatables.copy') }}'
@@ -220,22 +265,7 @@
           $.fn.dataTable.ext.classes.sPageButton = '';
         });
         
-    </script>
-    <script>
-      $(document).ready(function () {
-        $(".notifications-menu").on('click', function () {
-            if (!$(this).hasClass('open')) {
-                $('.notifications-menu .label-warning').hide();
-                $.get('/admin/user-alerts/read');
-            }
-        });
-      });
-
-      function goBack() {
-            window.history.back();
-        } 
-      
-    </script>
+    </script> 
     @yield('scripts')
 </body>
 

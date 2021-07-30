@@ -10,6 +10,7 @@ use Auth;
 use App\Models\User;
 use App\Http\Controllers\Traits\MediaUploadingTrait;  
 use Spatie\MediaLibrary\Models\Media;
+use Alert;
 
 class ProfileController extends Controller
 {
@@ -51,13 +52,13 @@ class ProfileController extends Controller
         $user = Auth::user();  
         
         $hashedPassword = $user->password;
-        if(!\Hash::check($request->old_password, $hashedPassword)){
-            flash('Old Password Not Correct')->error();
+        if(!\Hash::check($request->old_password, $hashedPassword)){ 
+            Alert::error('Old Password Not Correct');
             return redirect()->route('events-organizer.profile.edit');
         }else{
             $user->password = bcrypt($request->password);
             $user->save();
-            flash('Success Changed Password');
+            Alert::success('Success Changed Password');
             return redirect()->route('admin.profile.edit');
         }
     }

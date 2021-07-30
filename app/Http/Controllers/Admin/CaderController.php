@@ -18,6 +18,8 @@ use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class CaderController extends Controller
 {
@@ -52,20 +54,15 @@ class CaderController extends Controller
     public function update_approved(Request $request){
         $user = User::find($request->id);
         $user->approved = $request->status;
-        if($user->save()){
-            
-            flash(trans('global.flash.user.approve'))->success();
-            return 1;
-        }
-        flash(trans('global.flash.error'))->error();
-        return 0;
+        $user->save();
+        return 1; 
     }
 
     public function index()
     {
         abort_if(Gate::denies('cader_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $caders = Cader::with(['user.city'])->get();
+        $caders = Cader::with(['user.city'])->get(); 
 
         return view('admin.caders.index', compact('caders'));
     }
@@ -115,7 +112,7 @@ class CaderController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $user->id]);
         }
 
-        flash(trans('global.flash.user.success'))->success(); 
+        Alert::success( trans('global.flash.user.success'));
         return redirect()->route('admin.caders.index');
     }
 
@@ -190,7 +187,7 @@ class CaderController extends Controller
             $user->cv->delete();
         }
 
-        flash(trans('global.flash.user.updated'))->success();
+        Alert::success( trans('global.flash.user.updated'));
         return redirect()->route('admin.caders.index');
     }
 
@@ -207,7 +204,8 @@ class CaderController extends Controller
 
         $cader->delete();
 
-        return back();
+        Alert::success(trans('global.flash.user.deleted'));
+        return 1;
     } 
 
     public function storeCKEditorImages(Request $request)

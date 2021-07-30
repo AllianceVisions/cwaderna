@@ -9,6 +9,7 @@ use App\Models\City;
 use Auth;
 use App\Http\Controllers\Traits\MediaUploadingTrait;  
 use Spatie\MediaLibrary\Models\Media;
+use Alert;
 
 class ProfileController extends Controller
 {
@@ -37,6 +38,7 @@ class ProfileController extends Controller
             $user->photo->delete();
         }
 
+        Alert::success( trans('global.flash.updated'));
         return redirect()->route('admin.profile.edit')->with('message', __('global.update_profile_success'));
     }
 

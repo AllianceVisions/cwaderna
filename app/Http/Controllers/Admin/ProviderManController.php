@@ -12,17 +12,18 @@ use App\Models\Nationality;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Alert;
 
 class ProviderManController extends Controller
 {
     public function update_approved(Request $request){
         $user = User::find($request->id);
         $user->approved = $request->status;
-        if($user->save()){
-            return ['message' => trans('global.flash.user.approve') , 'type' => 'success'];
-        }
-        return ['message' => trans('global.flash.error') , 'type' => 'danger'];
+        $user->save(); 
+        Alert::success( trans('global.flash.user.approve')); 
+        return 1; 
     }
+
     public function index()
     {
         abort_if(Gate::denies('provider_man_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -58,6 +59,7 @@ class ProviderManController extends Controller
             'website' => $request->website,
         ]);
 
+        Alert::success( trans('global.flash.created'));
         return redirect()->route('admin.provider-men.index');
     }
 
@@ -80,6 +82,7 @@ class ProviderManController extends Controller
         $providerMan = ProviderMan::where('user_id',$user->id)->first();
         $providerMan->update($request->all()); 
         
+        Alert::success( trans('global.flash.updated'));
         return redirect()->route('admin.provider-men.index');
     }
 
@@ -98,6 +101,7 @@ class ProviderManController extends Controller
 
         $providerMan->delete();
 
-        return back();
+        Alert::success( trans('global.flash.deleted'));
+        return 1;
     } 
 }

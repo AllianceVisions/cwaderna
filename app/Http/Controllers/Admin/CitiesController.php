@@ -9,6 +9,7 @@ use App\Models\City;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Alert;
 
 class CitiesController extends Controller
 { 
@@ -33,7 +34,7 @@ class CitiesController extends Controller
     {
         $city = City::create($request->all()); 
 
-        flash(trans('global.flash.city.success'))->success();
+        Alert::success( trans('global.flash.city.success'));
         return redirect()->route('admin.cities.index');
     }
 
@@ -48,7 +49,7 @@ class CitiesController extends Controller
     {
         $city->update($request->all());
 
-        flash(trans('global.flash.city.updated'))->success();
+        Alert::success( trans('global.flash.city.updated'));
         return redirect()->route('admin.cities.index');
     }
 
@@ -65,7 +66,7 @@ class CitiesController extends Controller
 
         $city->delete();
 
-        flash(trans('global.flash.city.deleted'))->warning();
-        return back();
+        Alert::success( trans('global.flash.city.deleted'));
+        return 1;
     } 
 }

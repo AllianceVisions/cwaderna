@@ -49,10 +49,7 @@ class StoreCaderRequest extends FormRequest
             ],
             'description' => [
                 'required',
-            ], 
-            'photo' => [
-                'required',
-            ],
+            ],  
             'specializations.*' => [
                 'integer',
             ],

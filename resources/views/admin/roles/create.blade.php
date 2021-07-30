@@ -1,33 +1,43 @@
 @extends('layouts.admin')
 @section('content')
-
-<div class="card">
-    <div class="card-header">
-        {{ trans('global.create') }} {{ trans('cruds.specialization.title_singular') }}
+<div class="card" style=" text-align: center; font-size: 24px; box-shadow: 1px 2px 5px grey;"> 
+    
+    <div class="card-body">
+        {{ trans('global.create') }} {{ trans('cruds.role.title_singular') }}
     </div>
+</div>
+<div class="card">
 
     <div class="card-body">
-        <form method="POST" action="{{ route("admin.specializations.store") }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route("admin.roles.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label class="required" for="name_en">{{ trans('cruds.specialization.fields.name_en') }}</label>
-                <input class="form-control {{ $errors->has('name_en') ? 'is-invalid' : '' }}" type="text" name="name_en" id="name_en" value="{{ old('name_en', '') }}" required>
-                @if($errors->has('name_en'))
+                <label class="required" for="title">{{ trans('cruds.role.fields.title') }}</label>
+                <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title" id="title" value="{{ old('title', '') }}" required>
+                @if($errors->has('title'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('name_en') }}
+                        {{ $errors->first('title') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.specialization.fields.name_en_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.role.fields.title_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="name_ar">{{ trans('cruds.specialization.fields.name_ar') }}</label>
-                <input class="form-control {{ $errors->has('name_ar') ? 'is-invalid' : '' }}" type="text" name="name_ar" id="name_ar" value="{{ old('name_ar', '') }}" required>
-                @if($errors->has('name_ar'))
+                <label class="required" for="permissions">{{ trans('cruds.role.fields.permissions') }}</label>
+                <div style="padding-bottom: 4px">
+                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                </div>
+                <select class="form-control select2 {{ $errors->has('permissions') ? 'is-invalid' : '' }}" name="permissions[]" id="permissions" multiple required>
+                    @foreach($permissions as $id => $permissions)
+                        <option value="{{ $id }}" {{ in_array($id, old('permissions', [])) ? 'selected' : '' }}>{{ $permissions }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('permissions'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('name_ar') }}
+                        {{ $errors->first('permissions') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.specialization.fields.name_ar_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.role.fields.permissions_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

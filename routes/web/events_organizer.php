@@ -18,6 +18,7 @@ Route::group(['prefix' => 'events-organizer', 'as' => 'events-organizer.', 'name
     Route::get('/', 'HomeController@index')->name('home'); 
 
     // Events 
+    Route::post('events/partials/attendance_cader', 'EventsController@partials_attendance_cader')->name('events.partials.attendance_cader');
     Route::get('events/change_status/{id}/{status}', 'EventsController@change_status')->name('events.change_status');
     Route::post('events/media', 'EventsController@storeMedia')->name('events.storeMedia');
     Route::post('events/ckmedia', 'EventsController@storeCKEditorImages')->name('events.storeCKEditorImages');

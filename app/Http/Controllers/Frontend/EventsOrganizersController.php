@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Nationality;
 use App\Http\Controllers\Traits\MediaUploadingTrait; 
 use Spatie\MediaLibrary\Models\Media;
+use Alert;
 
 class EventsOrganizersController extends Controller
 {
@@ -60,8 +61,8 @@ class EventsOrganizersController extends Controller
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $user->id]);
         }
-        
-        flash('تم ارسال طلب الأنضمام بنجاح');
+
+        Alert::success('تم ارسال طلب الأنضمام بنجاح');
         return back();
     }
 

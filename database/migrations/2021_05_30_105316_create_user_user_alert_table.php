@@ -17,6 +17,7 @@ class CreateUserUserAlertTable extends Migration
             $table->foreignId('user_alert_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->boolean('read')->default(0);
+            $table->timestamps(); 
         });
     }
 

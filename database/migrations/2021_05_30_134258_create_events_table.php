@@ -24,6 +24,7 @@ class CreateEventsTable extends Migration
             $table->string('status')->default('pending');
             $table->double('longitude')->nullable();
             $table->double('latitude')->nullable();
+            $table->double('area')->nullable();
             $table->text('description');
             $table->text('conditions');
             $table->time('start_attendance');

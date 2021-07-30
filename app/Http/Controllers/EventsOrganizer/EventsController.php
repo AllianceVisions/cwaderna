@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Alert; 
+use Carbon\Carbon;
 
 class EventsController extends Controller
 {
@@ -23,22 +25,29 @@ class EventsController extends Controller
     public function change_status($id, $status){
         $event = Event::findOrFail($id);
         $event->load(['items']); 
-        if($status == 'accept'){
-            $event->status = 'accept';
+        if($status == 'accepted'){
+            $event->status = 'accepted';
             foreach($event->items as $item){
                 $item->pivot->status = 'ordered';
                 $item->pivot->save();
             }
+            Alert::success('تم الموافقة علي التسعيرة');
         }elseif($status == 'refused'){ 
             $event->status = 'refused';
-        }else{
-            flash('حدث خطأ')->error();
+            Alert::success('تم رفض التسعيرة');
+        }else{ 
+            Alert::error('حدث خطأ');
             return redirect()->route('events-organizer.events.show',$id);
         }
         $event->save();
         
-        flash('تم التغديل')->success();
         return redirect()->route('events-organizer.events.show',$id);
+    }
+
+    public function partials_attendance_cader(Request $request){
+        $event = Event::findOrFail($request->event_id); 
+        $attendance = $event->attendance()->wherePivot('cader_id',$request->cader_id)->orderBy('pivot_created_at','asc')->get();   
+        return view('events_organizer.events.partials.attendance_cader',compact('attendance','event'));
     }
 
     public function index(Request $request)
@@ -144,7 +153,15 @@ class EventsController extends Controller
 
         $event = Event::create($data);
 
-        $event->specializations()->sync($this->mapSpecializations($data['specializations']));
+        //change datetime format that match database
+        foreach($data['specializations'] as $key => $row){
+            if($data['specializations'][$key]['start_attendance'] ?? 0 && data['specializations'][$key]['end_attendance'] ?? 0){ 
+                $data['specializations'][$key]['start_attendance'] = Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $data['specializations'][$key]['start_attendance'])->format('Y-m-d H:i:s');
+                $data['specializations'][$key]['end_attendance'] = Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $data['specializations'][$key]['end_attendance'])->format('Y-m-d H:i:s');
+            }
+        } 
+        
+        $event->specializations()->sync($data['specializations']);
 
         if ($request->input('photo', false)) {
             $event->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
@@ -154,25 +171,30 @@ class EventsController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $event->id]);
         }
 
+        Alert::success( trans('global.flash.created'));
         return redirect()->route('events-organizer.events.index');
     }
 
-    private function mapSpecializations($specializations)
-    {
-        return collect($specializations)->map(function ($i) {
-            return ['num_of_caders' => $i];
-        });
-    }
 
     public function edit(Event $event)
     { 
+
+        if(in_array($event->status,['accepted','refused','pending_owner_accept'])){
+            Alert::error('لايمكن تعديل الفعالية');
+            return back();
+        }
 
         $event_organizers = EventOrganizer::all()->pluck('company_name', 'id')->prepend(trans('global.pleaseSelect'), '');
         $cities = City::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
 
         $event->load(['event_organizer','specializations']); 
         $specializations = Specialization::get()->map(function($specialize) use ($event) {
-            $specialize->value = data_get($event->specializations->firstWhere('id', $specialize->id), 'pivot.num_of_caders') ?? null;
+            $specialize->num_of_caders = data_get($event->specializations->firstWhere('id', $specialize->id), 'pivot.num_of_caders') ?? null;
+            $specialize->budget = data_get($event->specializations->firstWhere('id', $specialize->id), 'pivot.budget') ?? null;
+            $specialize->start_attendance = data_get($event->specializations->firstWhere('id', $specialize->id), 'pivot.start_attendance') ?? null;
+            $specialize->start_attendance = $specialize->start_attendance ? Carbon::createFromFormat('Y-m-d H:i:s', $specialize->start_attendance)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
+            $specialize->end_attendance = data_get($event->specializations->firstWhere('id', $specialize->id), 'pivot.end_attendance') ?? null;
+            $specialize->end_attendance = $specialize->end_attendance ? Carbon::createFromFormat('Y-m-d H:i:s', $specialize->end_attendance)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
             return $specialize;
         }); 
         
@@ -183,9 +205,17 @@ class EventsController extends Controller
     {
         $data = $request->validated();
 
-        $event->update($data);
+        $event->update($data); 
 
-        $event->specializations()->sync($this->mapSpecializations($data['specializations']));
+        //change datetime format that match database
+        foreach($data['specializations'] as $key => $row){
+            if($data['specializations'][$key]['start_attendance'] ?? 0 && data['specializations'][$key]['end_attendance'] ?? 0){ 
+                $data['specializations'][$key]['start_attendance'] = Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $data['specializations'][$key]['start_attendance'])->format('Y-m-d H:i:s');
+                $data['specializations'][$key]['end_attendance'] = Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $data['specializations'][$key]['end_attendance'])->format('Y-m-d H:i:s');
+            }
+        }
+
+        $event->specializations()->sync($data['specializations']);
 
         if ($request->input('photo', false)) {
             if (!$event->photo || $request->input('photo') !== $event->photo->file_name) {
@@ -197,6 +227,8 @@ class EventsController extends Controller
         } elseif ($event->photo) {
             $event->photo->delete();
         }
+
+        Alert::success( trans('global.flash.updated'));
 
         return redirect()->route('events-organizer.events.index');
     }
@@ -212,9 +244,15 @@ class EventsController extends Controller
     public function destroy(Event $event)
     { 
 
+        if(in_array($event->status,['accepted','refused','pending_owner_accept'])){
+            Alert::error('لايمكن تعديل الفعالية');
+            return back();
+        }
+
         $event->delete();
 
-        return back();
+        Alert::success( trans('global.flash.deleted'));
+        return 1;
     }
 
     public function storeCKEditorImages(Request $request)

@@ -31,31 +31,31 @@
 </section>
 
 <div class="about">
-    <div class="container"> 
+    <div class="container">  
         <form method="POST" action="{{ route('login') }}"> 
             @csrf
             <div class="col-6" style="margin: 0 auto;"> 
                 <div class="row row-space">
                     <div class="col-12">
                         <div class="input-group">
-                            <label class="label">{{ __('E-Mail Address') }}</label>
+                            <label class="label">البريد الألكتروني</label>
                             <input id="email" type="email" class="input--style-4 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                            @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            @if($errors->has('email'))
+                                <div class="text-danger" style="font-weight: bolder">
+                                    {{ $errors->first('email') }}
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="input-group">
-                            <label class="label">{{ __('Password') }}</label>
+                            <label class="label">كلمة المرور</label>
                             <input id="password" type="password" class="input--style-4 @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            @if($errors->has('password'))
+                                <div class="text-danger" style="font-weight: bolder">
+                                    {{ $errors->first('password') }}
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                 
                 <div style="text-align: center;"> 
                     <div class="p-t-15">
-                        <button type="submit" class="contact-one__btn thm-btn">{{ __('Login') }}</button>
+                        <button type="submit" class="contact-one__btn thm-btn">تسجبل الدخول</button>
                     </div>
                 </div>
             </div> 

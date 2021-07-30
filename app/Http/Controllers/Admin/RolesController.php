@@ -10,6 +10,7 @@ use App\Models\Role;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Alert;
 
 class RolesController extends Controller
 {
@@ -36,7 +37,7 @@ class RolesController extends Controller
         $role = Role::create($request->all());
         $role->permissions()->sync($request->input('permissions', []));
 
-        flash(trans('global.flash.role.success'))->success();
+        Alert::success( trans('global.flash.role.success'));
         return redirect()->route('admin.roles.index');
     }
 
@@ -44,10 +45,10 @@ class RolesController extends Controller
     {
         abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        // if($role->title == 'Admin'){
-        //     flash('Cant Edit')->error();
-        //     return back();
-        // }
+        if($role->title == 'Admin'){ 
+            Alert::error(trans('global.flash.error'), trans('Cant Edit'));
+            return back();
+        }
 
         $permissions = Permission::all()->pluck('title', 'id');
 
@@ -61,7 +62,7 @@ class RolesController extends Controller
         $role->update($request->all());
         $role->permissions()->sync($request->input('permissions', []));
 
-        flash(trans('global.flash.role.success'))->success();
+        Alert::success( trans('global.flash.updated'));
         return redirect()->route('admin.roles.index');
     }
 
@@ -78,14 +79,14 @@ class RolesController extends Controller
     {
         abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        if($role->title == 'Admin'){
-            flash('Cant Delete')->error();
+        if($role->title == 'Admin'){ 
+            Alert::error(trans('global.flash.error'), 'Cant Delete');
             return back();
         }
 
         $role->delete();
 
-        flash(trans('global.flash.role.deleted'))->warning();
-        return back();
+        Alert::success( trans('global.flash.deleted'));
+        return 1;
     } 
 }

@@ -118,13 +118,33 @@
                 <div class="col-md-8">
                     @if($event->status != 'pending') 
                         @if($event->status == 'pending_owner_accept')
-                            <a href="{{ route('events-organizer.events.change_status',['id' => $event->id,'status' => 'accept']) }}" class="btn btn-success mb-3">الموافقة علي التسعيرة</a>
+                            <a href="{{ route('events-organizer.events.change_status',['id' => $event->id,'status' => 'accepted']) }}" class="btn btn-success mb-3">الموافقة علي التسعيرة</a>
                             <a href="{{ route('events-organizer.events.change_status',['id' => $event->id,'status' => 'refused']) }}" class="btn btn-warning text-white mb-3">رفض التسعيرة</a>
                         @elseif($event->status == 'accept')
                             <button class="btn btn-success mb-3" disabled>تم الموافقة</button>
                         @elseif($event->status == 'refused')
                             <button class="btn btn-warning text-white mb-3" disabled>تم الرفض</button>
                         @endif
+
+
+                        
+                        <!-- Modal attendance cader -->
+                        <div class="modal fade bd-example-modal-lg" id="attendance_modal" tabindex="1" role="dialog" aria-labelledby="attendance_modalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="attendance_modalLabel">{{trans('cruds.event.others.attendance_in_event')}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body"> 
+                                        <div id="attendance_cader"></div> 
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+
 
                         {{-- specialization --}}
                         <div class="partials-scrollable" style="max-height: 450px">
@@ -160,6 +180,7 @@
                                                             <td>{{trans('cruds.event.others.attendance')}}</td> 
                                                             <td>{{trans('cruds.event.others.profit')}}</td>
                                                             <td>{{trans('cruds.event.others.price')}}</td> 
+                                                            <td></td>
                                                         </tr>
                                                     </thead>
                                                     @foreach($event->caders as $cader)
@@ -172,6 +193,11 @@
                                                                 </td> 
                                                                 <td>{{$cader->pivot->profit}}</td>
                                                                 <td>{{$cader->pivot->price}}</td> 
+                                                                <td> 
+                                                                    @if($event->status == 'accepted' && $cader->pivot->status == 'accepted')  
+                                                                        <button type="button" class="btn btn-outline-info" onclick="showmodal4({{$cader->id}})">سجل الحضور</button>
+                                                                    @endif
+                                                                </td>
                                                             </tr> 
                                                         @endif
                                                     @endforeach
@@ -222,4 +248,17 @@
 
 
 
+@endsection
+
+@section('scripts')
+@parent
+<script>  
+    function showmodal4(cader_id){
+        $('#attendance_modal').modal('show') 
+        $.post('{{ route('events-organizer.events.partials.attendance_cader') }}', {_token:'{{ csrf_token() }}', cader_id:cader_id,event_id:'{{$event->id}}'}, function(data){
+            $('#attendance_cader').html(null);
+            $('#attendance_cader').html(data);
+        });
+    } 
+</script>
 @endsection

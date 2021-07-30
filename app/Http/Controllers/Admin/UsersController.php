@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Alert;
 
 class UsersController extends Controller
 {
@@ -25,13 +26,9 @@ class UsersController extends Controller
     public function update_approved(Request $request){
         $user = User::find($request->id);
         $user->approved = $request->status;
-        if($user->save()){
-            
-            flash(trans('global.flash.user.approve'))->success();
-            return 1;
-        }
-        flash(trans('global.flash.error'))->error();
-        return 0;
+        $user->save(); 
+        Alert::success( trans('global.flash.user.approve')); 
+        return 1; 
     }
 
     public function index(Request $request)
@@ -146,7 +143,7 @@ class UsersController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $user->id]);
         }
             
-        flash(trans('global.flash.user.success'))->success();
+        Alert::success( trans('global.flash.user.success'));
         return redirect()->route('admin.users.index');
     }
 
@@ -180,7 +177,7 @@ class UsersController extends Controller
             $user->photo->delete();
         }
 
-        flash(trans('global.flash.user.updated'))->success();
+        Alert::success( trans('global.flash.user.updated'));
         return redirect()->route('admin.users.index');
     }
 
@@ -199,8 +196,9 @@ class UsersController extends Controller
 
         $user->delete();
 
-        flash(trans('global.flash.user.deleted'))->warning();
-        return back();
+
+        Alert::success( trans('global.flash.user.deleted'));
+        return 1;
     } 
 
     public function storeCKEditorImages(Request $request)

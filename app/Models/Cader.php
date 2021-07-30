@@ -51,21 +51,35 @@ class Cader extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class,'caders_reviews_pivot','cader_id','user_id')->withpivot(['rating','comment','status','viewed']);
+        return $this->belongsToMany(User::class,'caders_reviews_pivot','cader_id','user_id')
+                    ->withpivot(['rating','comment','status','viewed'])
+                    ->withTimestamps();;
     }
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class,'caders_skills_pivot','cader_id','skill_id')->withpivot('progress');
+        return $this->belongsToMany(Skill::class,'caders_skills_pivot','cader_id','skill_id')
+                    ->withpivot('progress')
+                    ->withTimestamps();
     }
 
     public function events()
     {
-        return $this->belongsToMany(Event::class,'events_caders_pivot','cader_id','event_id')->withpivot(['specialization_id','status','request_type','price','profit','start_attendance','end_attendance']);
+        return $this->belongsToMany(Event::class,'events_caders_pivot','cader_id','event_id')
+                    ->withpivot(['specialization_id','status','request_type','price','profit','start_attendance','end_attendance'])
+                    ->withTimestamps();
+    }
+
+    public function attendance()
+    {
+        return $this->belongsToMany(Cader::class,'event_attendance_pivot','cader_id','event_id')
+                    ->withpivot(['type','out_of_zone','attendance1','attendance2','longitude','latitude','distance'])
+                    ->withTimestamps();
     }
 
     public function specializations()
     {
-        return $this->belongsToMany(Specialization::class,'cader_specialization_pivot','cader_id','specialization_id');
+        return $this->belongsToMany(Specialization::class,'cader_specialization_pivot','cader_id','specialization_id')
+                    ->withTimestamps();
     }
 }

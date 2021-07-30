@@ -85,12 +85,11 @@
                                     <a href="{{ route('admin.items.edit', $item->id) }}" class="btn btn-outline-success btn-pill action-buttons-edit"   title="{{ trans('global.edit') }}"><i  class="fa fa-edit actions-custom-i"></i></a>
                                 @endcan
 
-                                @can('item_delete')
-                                    <form action="{{ route('admin.items.destroy', $item->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <button  class="btn btn-outline-danger btn-pill action-buttons-delete"  type="submit" title="{{ trans('global.delete') }}" ><i  class="fa fa-trash actions-custom-i"></i> </button>
-                                    </form>
+                                @can('item_delete') 
+                                    <?php $route = route('admin.items.destroy', $item->id); ?>
+                                    <a  href="#" onclick="deleteConfirmation('{{$route}}')" class="btn btn-outline-danger btn-pill action-buttons-delete">
+                                        <i  class="fa fa-trash actions-custom-i"></i>
+                                    </a> 
                                 @endcan
 
                             </td>

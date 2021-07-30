@@ -46,10 +46,7 @@
     <div class="page-wrapper">
 
         @include('inc.frontend_nav') 
-            
-        <div class="flash_messages" style="position: fixed; top: 49px; right: 0; z-index: 9999999;font-size:15px;font-weight:bolder">
-            @include('flash::message') 
-        </div>
+    
         @yield('content')
 
         @include('inc.frontend_footer')
@@ -59,6 +56,9 @@
         {{ csrf_field() }}
     </form>
         
+    
+    @include('sweetalert::alert')
+    
     <!-- plugin scripts -->
     <script src="https://kit.fontawesome.com/e0387e9a75.js"></script>
     <script src="{{asset('assets/js/jquery.min.js')}}"></script>
@@ -74,22 +74,57 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script> 
 
     <!-- template scripts -->
-    <script src="{{asset('assets/js/theme.js')}}"></script> 
+    <script src="{{asset('assets/js/theme.js')}}"></script>  
+    
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+    
     <script>
-        $("document").ready(function(){  
-            setTimeout(function(){
-                $(".flash_messages div").remove();
-            }, 5000 ); // 5 sec  
-        });
+        
+        function showFrontendAlert(type, title, message){
+            swal({ 
+                title: title,
+                text: message,
+                type: type, 
+                showConfirmButton: 'Okay',
+                timer: 3000
+            });
+        }
 
-        function frontendflash(message,type){ 
-            $('.flash_messages').append("<div class='alert alert-"+ type +"' role='alert'>"+ message +"</div>"); 
-            setTimeout(function() {
-                $('.flash_messages div').remove();
-            }, 4000);
+        
+        function deleteConfirmation(route) {
+        console.log(route);
+            swal({
+                title: "{{trans('global.flash.delete_')}}",
+                text: "{{trans('global.flash.sure_')}}",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "{{trans('global.flash.yes_')}}",
+                cancelButtonText: "{{trans('global.flash.no_')}}",
+                reverseButtons: !0
+            }).then(function (e) {
+
+                if (e.value === true) { 
+
+                    $.ajax({
+                        type: 'DELETE',
+                        url: route,
+                        data: { _token: '{{ csrf_token() }}' }, 
+                        success: function (results) { 
+                        location.reload(); 
+                        }
+                    });
+
+                } else {
+                    e.dismiss;
+                }
+
+            }, function (dismiss) {
+                return false;
+            })
         }
     </script>
-    
     @yield('scripts')
 </body>
 

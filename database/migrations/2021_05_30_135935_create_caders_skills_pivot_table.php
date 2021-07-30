@@ -17,6 +17,7 @@ class CreateCadersSkillsPivotTable extends Migration
             $table->foreignId('cader_id')->constrained()->onDelete('cascade');
             $table->foreignId('skill_id')->constrained()->onDelete('cascade');
             $table->integer('progress');
+            $table->timestamps(); 
         });
     }
 

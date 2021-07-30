@@ -35,14 +35,8 @@
       
       <div class="c-body">
           <main class="c-main"> 
-              <div class="container-fluid">
-                  @if(session('message'))
-                      <div class="row mb-2">
-                          <div class="col-lg-12">
-                              <div class="alert alert-success" role="alert">{{ session('message') }}</div>
-                          </div>
-                      </div>
-                  @endif
+              <div class="container-fluid"> 
+                
                   @if($errors->count() > 0)
                       <div class="alert alert-warning">
                           {{trans('global.flash.fix_errors')}}
@@ -53,11 +47,6 @@
                           @endforeach
                         </div>
                   @endif
-                      
-                  <div class="flash_messages" style="position: fixed; top: 49px; right: 0; z-index: 9999999;font-size:15px;font-weight:bolder">
-                    @include('flash::message') 
-                  </div>
-
                   @yield('content')
               </div> 
 
@@ -67,6 +56,8 @@
           </form>
       </div>
     </div>
+
+    @include('sweetalert::alert')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -89,24 +80,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script> 
+    
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+    
     <script src="{{ asset('admin/main.js') }}"></script>
     <script>
       
       
-      $("document").ready(function(){  
-          setTimeout(function(){
-            $(".flash_messages div").remove();
-          }, 5000 ); // 5 sec
-
-          
-      });
-
-      function frontendflash(message,type){ 
-        $('.flash_messages').append("<div class='alert alert-"+ type +"' role='alert'>"+ message +"</div>"); 
-        setTimeout(function() {
-            $('.flash_messages div').remove();
-        }, 4000);
-      }
 
         $(function() {
           let copyButtonTrans = '{{ trans('global.datatables.copy') }}'

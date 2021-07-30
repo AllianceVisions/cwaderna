@@ -29,6 +29,7 @@ class UserAlert extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class,'user_user_alert_pivot');
+        return $this->belongsToMany(User::class,'user_user_alert_pivot')
+                    ->withTimestamps();
     }
 }

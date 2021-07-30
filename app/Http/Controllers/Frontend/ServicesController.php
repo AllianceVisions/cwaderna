@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\ProviderMan;
 use App\Models\Nationality;
 use Auth;
+use Alert;
 
 class ServicesController extends Controller
 {
@@ -33,7 +34,7 @@ class ServicesController extends Controller
                                     ]
                                 ]);
 
-        flash('تم اضاقة الخدمة للفعاية')->success();
+        Alert::success('تم اضاقة الخدمة للفعاية');
         return back();
     }
 
@@ -68,8 +69,8 @@ class ServicesController extends Controller
             'commerical_reg_num' => $validated_requests['commerical_reg_num'],
             'working_field' => $validated_requests['working_field'],
         ]);  
-        
-        flash('تم ارسال طلب الأنضمام بنجاح');
+
+        Alert::success('تم ارسال طلب الأنضمام بنجاح');
         return back();
     }
     public function services(){

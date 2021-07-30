@@ -83,106 +83,14 @@
                                 <td>
                                     {{ $cader->user ? $cader->user->email : "" }}
                                 </td>
-                            </tr> 
-                            <tr>
-                                <th>
-                                    {{ trans('cruds.user.fields.city_id') }}
-                                </th>
-                                <td>
-                                    {{ $cader->user->city ? $cader->user->city->$name : "" }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    {{ trans('cruds.cader.fields.description') }}
-                                </th>
-                                <td>
-                                    {{ $cader->description }}
-                                </td>
-                            </tr>
-                            
-                            <th>
-                                {{ trans('cruds.cader.fields.specializations') }}
-                            </th>
-                            <td>
-                                @foreach ($cader->specializations as $specialize)
-                                    <span class="badge bg-secondary">{{$specialize->$name}}</span>
-                                @endforeach
-                            </td>
-                            <tr>
-                                <th>
-                                    {{ trans('cruds.user.fields.phone') }}
-                                </th>
-                                <td>
-                                    {{ $cader->user ? $cader->user->phone : "" }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    {{ trans('cruds.user.fields.photo') }}
-                                </th>
-                                <td>
-                                    @if($cader->user && $cader->user->photo)
-                                        <a href="{{ asset($cader->user->photo->getUrl()) }}" target="_blank" style="display: inline-block">
-                                            <img src="{{ asset($cader->user->photo->getUrl('thumb')) }}">
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    {{ trans('cruds.user.fields.certificates') }}
-                                </th>
-                                <td>
-                                    @if($cader->user && $cader->user->certificates)
-                                        @foreach($cader->user->certificates as $key => $media)
-                                            <a href="{{ asset($media->getUrl()) }}" target="_blank" style="display: inline-block">
-                                                <img src="{{ asset($media->getUrl('thumb')) }}">
-                                            </a>
-                                        @endforeach
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    {{ trans('cruds.user.fields.cv') }}
-                                </th>
-                                <td>
-                                    @if($cader->user && $cader->user->cv)
-                                        <a href="{{ asset($cader->user->cv->getUrl()) }}" target="_blank">
-                                            {{ trans('global.view_file') }}
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
+                            </tr>  
                         </tbody>
                     </table>
-                </div>
-                <div class="col-md-6 mt-4">
 
-                    <div class="mb-4">
-                        <label class="text-center" >{{ trans('cruds.skill.title') }}</label>
-                        <hr width="70%" style="margin: 7px 0px 14px 0px;">
-                        <div class="partials-scrollable">
-                            @foreach($cader->skills as $skill) 
-                                <div class="progress-group">
-                                    <div class="progress-group-header">
-                                        <div>{{$skill->$name}}</div>
-                                        <div class="ml-auto font-weight-bold">{{$skill->pivot->progress}}%</div>
-                                    </div>
-                                    <div class="progress-group-bars">
-                                        <div class="progress progress-xs">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{$skill->pivot->progress}}%" aria-valuenow="{{$skill->pivot->progress}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div> 
-
+                    
                     <div>
                         <label class="text-center" >{{ trans('cruds.previous_experience.title') }}</label>
-                        <button class="btn btn-warning text-white add-more-previous-experience text-right" onclick="AddMore()"> Add More+</button> 
+                        <button class="btn btn-info text-white add-more-previous-experience text-right" onclick="AddMore()"> Add More+</button> 
                         <hr width="70%" style="margin: 7px 0px 14px 0px;">
                         <div class="partials-scrollable">
                             <form id="previous-experience-form" method="POST" style="display: none" action="{{route('admin.caders.new_previous_experience')}}">
@@ -269,10 +177,115 @@
                             @endif
                         </div>
                     </div>
+                </div>
+                <div class="col-md-6 ">
+                    
+                    <table class="table table-bordered table-striped">
+                        <tbody> 
+                            <tr>
+                                <th>
+                                    {{ trans('cruds.user.fields.city_id') }}
+                                </th>
+                                <td>
+                                    {{ $cader->user->city ? $cader->user->city->$name : "" }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    {{ trans('cruds.cader.fields.description') }}
+                                </th>
+                                <td>
+                                    {{ $cader->description }}
+                                </td>
+                            </tr>
+                            
+                            <th>
+                                {{ trans('cruds.cader.fields.specializations') }}
+                            </th>
+                            <td>
+                                @foreach ($cader->specializations as $specialize)
+                                    <span class="badge bg-secondary">{{$specialize->$name}}</span>
+                                @endforeach
+                            </td>
+                            <tr>
+                                <th>
+                                    {{ trans('cruds.user.fields.phone') }}
+                                </th>
+                                <td>
+                                    {{ $cader->user ? $cader->user->phone : "" }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    {{ trans('cruds.user.fields.photo') }}
+                                </th>
+                                <td>
+                                    @if($cader->user && $cader->user->photo)
+                                        <a href="{{ asset($cader->user->photo->getUrl()) }}" target="_blank" style="display: inline-block">
+                                            <img src="{{ asset($cader->user->photo->getUrl('thumb')) }}">
+                                        </a>
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    {{ trans('cruds.user.fields.certificates') }}
+                                </th>
+                                <td>
+                                    @if($cader->user && $cader->user->certificates)
+                                        @foreach($cader->user->certificates as $key => $media)
+                                            <a href="{{ asset($media->getUrl()) }}" target="_blank" style="display: inline-block">
+                                                <img src="{{ asset($media->getUrl('thumb')) }}">
+                                            </a>
+                                        @endforeach
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    {{ trans('cruds.user.fields.cv') }}
+                                </th>
+                                <td>
+                                    @if($cader->user && $cader->user->cv)
+                                        <a href="{{ asset($cader->user->cv->getUrl()) }}" target="_blank">
+                                            {{ trans('global.view_file') }}
+                                        </a>
+                                    @endif
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="mb-4">
+                        <label class="text-center" >{{ trans('cruds.skill.title') }}</label>
+                        <hr width="70%" style="margin: 7px 0px 14px 0px;">
+                        <div class="partials-scrollable">
+                            @if($cader->skills)
+                                <span class="text-center">
+                                    {{trans('cruds.skill.fields.not_added')}}
+                                </span>
+                            @else 
+                                @foreach($cader->skills as $skill) 
+                                    <div class="progress-group">
+                                        <div class="progress-group-header">
+                                            <div>{{$skill->$name}}</div>
+                                            <div class="ml-auto font-weight-bold">{{$skill->pivot->progress}}%</div>
+                                        </div>
+                                        <div class="progress-group-bars">
+                                            <div class="progress progress-xs">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: {{$skill->pivot->progress}}%" aria-valuenow="{{$skill->pivot->progress}}" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div> 
+
 
                     <div>
                         <label class="text-center" >{{ trans('cruds.academic_degree.title') }}</label>
-                        <button class="btn btn-warning text-white add-more-acadmeic-degree text-right" onclick="AddMore2()"> Add More+</button> 
+                        <button class="btn btn-info text-white add-more-acadmeic-degree text-right" onclick="AddMore2()"> Add More+</button> 
                         <hr width="70%" style="margin: 7px 0px 14px 0px;">
                         <div class="partials-scrollable">
                             <form id="acadmeic-degree-form" method="POST" style="display: none" action="{{route('admin.caders.new_academic_degree')}}">
@@ -362,12 +375,7 @@
                     </div>
 
                 </div>
-            </div>
-            <div class="form-group">
-                <a class="btn btn-default" href="{{ route('admin.caders.index') }}">
-                    {{ trans('global.back_to_list') }}
-                </a>
-            </div>
+            </div> 
         </div>
     </div>
 </div>

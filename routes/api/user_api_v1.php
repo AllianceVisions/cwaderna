@@ -56,8 +56,24 @@ Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User
         // events
         Route::group(['prefix' =>'events'],function(){
             Route::get('/','EventsApiController@index') ;
+            Route::get('search/{search}','EventsApiController@search') ;
             Route::post('join','EventsApiController@join') ; 
         }); 
+
+        // events
+        Route::group(['prefix' =>'cader/events'],function(){
+            Route::get('/','CaderEventsApiController@index') ; 
+            Route::post('response','CaderEventsApiController@response') ;  
+            Route::get('accepted','CaderEventsApiController@accepted') ; 
+            Route::get('refused','CaderEventsApiController@refused') ; 
+            Route::get('incoming','CaderEventsApiController@incoming') ; 
+            Route::get('canceled','CaderEventsApiController@canceled') ; 
+            Route::get('pending','CaderEventsApiController@pending') ; 
+            Route::post('attend','CaderEventsApiController@attend') ; 
+        });  
+
+        // notifications
+        Route::get('notifications','NotificationsApiController@index');
 
     });
 });

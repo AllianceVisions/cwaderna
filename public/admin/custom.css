@@ -1,19 +1,21 @@
 
 /* my custom design */
-.action-buttons-view{
-    display: inline;
+.action-buttons-view{ 
     box-shadow: 0px 0px 7px #3399ff9e;
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
 
-.action-buttons-edit{
-    display: inline;
+.action-buttons-edit{ 
     box-shadow: 0px 0px 7px #2fc2a29e;
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
 
 .action-buttons-delete{
     box-shadow: 0px 0px 7px #d444639e;
-    margin-top: 14px;
-    margin-bottom: 14px;
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
 
 .partials-scrollable{

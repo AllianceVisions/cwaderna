@@ -17,6 +17,8 @@ use Spatie\MediaLibrary\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
+use Alert;
+use DateTime;
 
 class EventsController extends Controller
 {
@@ -24,6 +26,9 @@ class EventsController extends Controller
 
     public function add_cader(Request $request){
         $event = Event::findOrFail($request->event_id); 
+        // $num_of_caders = $event->caders->where('pivot.specialization_id',$request->specialize_id)->count();
+        // $num_of_caders2 =  $event->specializations->where('pivot.specialization_id',$request->specialize_id)->first()->pivot->num_of_caders ?? 0;
+        
         $start = $request->start_attendance ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->start_attendance)->format('Y-m-d H:i:s') : null;
         $end = $request->end_attendance ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $request->end_attendance)->format('Y-m-d H:i:s') : null; 
         $event->caders()->syncWithoutDetaching([ $request->cader_id =>
@@ -36,9 +41,10 @@ class EventsController extends Controller
                                         'status' => 'pending',
                                         'request_type' => 'by_admin',
                                     ]
-                                ]);
-        flash('تم أضافة الكادر للفعالية')->success();
+                                ]); 
+        Alert::success( 'تم أضافة الكادر للفعالية');
         return redirect()->route('admin.events.show',$request->event_id);
+        
     }
 
     public function partials_add_cader(Request $request){
@@ -54,12 +60,35 @@ class EventsController extends Controller
         return view('admin.events.partials.add_cader',compact('caders'));
     }
 
+    public function partials_attendance_cader(Request $request){
+        $event = Event::findOrFail($request->event_id); 
+        $attendance = $event->attendance()->wherePivot('cader_id',$request->cader_id)->orderBy('pivot_created_at','asc')->get();   
+        return view('admin.events.partials.attendance_cader',compact('attendance','event'));
+    }
+
     public function send_pricing($id){
         $event = Event::findOrFail($id);
-        $event->status = 'pending_owner_accept';
-        $event->save();
-        flash('تم الأرسال')->success();
-        return redirect()->route('admin.events.show',$id);
+        $check_status_caders_status = $event->caders()->wherePivotIn('status',['pending','request','send_pricing'])->get(); 
+        if($check_status_caders_status->count() == 0 ){
+            $event->status = 'pending_owner_accept';
+            $event->save(); 
+            Alert::success( trans('تم الأرسال'));
+            return redirect()->route('admin.events.show',$id);
+        }else{
+            Alert::error('لايمكن اتمام العملية','لابد ان تكون حالة كل الكوادر اما تم الموافقة او تم الرفض');
+            return redirect()->route('admin.events.show',$id);
+        }
+    }
+
+    public function send_pricing_to_cader($event_id,$cader_id){
+        $event = Event::findOrFail($event_id);
+        $event->caders()->syncWithoutDetaching([ $cader_id =>
+                                    [
+                                        'status' => 'send_pricing',
+                                    ]
+                                ]);
+        Alert::success( trans('تم الأرسال'));
+        return redirect()->route('admin.events.show',$event_id);
     }
     
     public function update_cader(Request $request){
@@ -75,15 +104,15 @@ class EventsController extends Controller
                                     ]
                                 ]);
 
-        flash('تم التعديل')->success();
+        Alert::success( trans('global.flash.updated'));
         return redirect()->route('admin.events.show',$request->event_id);
     }
 
     
     public function delete_cader(Request $request){
         $event = Event::findOrFail($request->event_id);
-        $event->caders()->wherePivot('cader_id','=',$request->cader_id)->detach();
-        flash('تم حذف الكادر من الفعالية');
+        $event->caders()->wherePivot('cader_id','=',$request->cader_id)->detach(); 
+        Alert::success( trans('تم حذف الكادر من الفعالية'));
         return redirect()->route('admin.events.show',$request->event_id);
     }
     
@@ -101,7 +130,7 @@ class EventsController extends Controller
                                     ]
                                 ]);
 
-        flash('تم التعديل')->success();
+        Alert::success( trans('global.flash.updated'));
         return redirect()->route('admin.events.show',$request->event_id);
     }
 
@@ -236,12 +265,18 @@ class EventsController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $event->id]);
         }
 
+        Alert::success( trans('global.flash.created'));
         return redirect()->route('admin.events.index');
     } 
 
     public function edit(Event $event)
     {
         abort_if(Gate::denies('event_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        if(in_array($event->status,['accepted','refused','pending_owner_accept'])){
+            Alert::error('لايمكن تعديل الفعالية');
+            return back();
+        }
 
         $event_organizers = EventOrganizer::all()->pluck('company_name', 'id')->prepend(trans('global.pleaseSelect'), '');
         $cities = City::get()->pluck('name_'.app()->getLocale(), 'id')->prepend(trans('global.pleaseSelect'), ''); 
@@ -271,11 +306,11 @@ class EventsController extends Controller
             if($data['specializations'][$key]['start_attendance'] ?? 0 && data['specializations'][$key]['end_attendance'] ?? 0){ 
                 $data['specializations'][$key]['start_attendance'] = Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $data['specializations'][$key]['start_attendance'])->format('Y-m-d H:i:s');
                 $data['specializations'][$key]['end_attendance'] = Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $data['specializations'][$key]['end_attendance'])->format('Y-m-d H:i:s');
-            }
+            } 
         }
 
         $event->specializations()->sync($data['specializations']);
-
+        
         if ($request->input('photo', false)) {
             if (!$event->photo || $request->input('photo') !== $event->photo->file_name) {
                 if ($event->photo) {
@@ -287,6 +322,7 @@ class EventsController extends Controller
             $event->photo->delete();
         }
 
+        Alert::success( trans('global.flash.updated'));
         return redirect()->route('admin.events.index');
     }
 
@@ -303,9 +339,15 @@ class EventsController extends Controller
     {
         abort_if(Gate::denies('event_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        if(in_array($event->status,['accepted','refused','pending_owner_accept'])){
+            Alert::error('لايمكن تعديل الفعالية');
+            return back();
+        }
+        
         $event->delete();
 
-        return back();
+        Alert::success( trans('global.flash.deleted'));
+        return 1;
     }
 
     public function storeCKEditorImages(Request $request)

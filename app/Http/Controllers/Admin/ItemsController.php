@@ -13,6 +13,7 @@ use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
+use Alert;
 
 class ItemsController extends Controller
 {
@@ -50,6 +51,7 @@ class ItemsController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $item->id]);
         }
 
+        Alert::success( trans('global.flash.created'));
         return redirect()->route('admin.items.index');
     }
 
@@ -81,6 +83,7 @@ class ItemsController extends Controller
             $item->photo->delete();
         }
 
+        Alert::success( trans('global.flash.updated'));
         return redirect()->route('admin.items.index');
     }
 
@@ -99,7 +102,8 @@ class ItemsController extends Controller
 
         $item->delete();
 
-        return back();
+        Alert::success( trans('global.flash.deleted'));
+        return 1;
     } 
 
     public function storeCKEditorImages(Request $request)

@@ -9,6 +9,7 @@ use App\Models\Category;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Alert;
 
 class CategoriesController extends Controller
 {
@@ -32,6 +33,7 @@ class CategoriesController extends Controller
     {
         $category = Category::create($request->all());
 
+        Alert::success( trans('global.flash.created'));
         return redirect()->route('admin.categories.index');
     }
 
@@ -46,6 +48,7 @@ class CategoriesController extends Controller
     {
         $category->update($request->all());
 
+        Alert::success( trans('global.flash.updated'));
         return redirect()->route('admin.categories.index');
     }
 
@@ -62,6 +65,7 @@ class CategoriesController extends Controller
 
         $category->delete();
 
-        return back();
+        Alert::success( trans('global.flash.deleted'));
+        return 1;
     } 
 }

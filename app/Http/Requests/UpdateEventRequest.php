@@ -36,6 +36,15 @@ class UpdateEventRequest extends FormRequest
             'city_id'  => [
                 'required',
             ],
+            'latitude'  => [
+                'required',
+            ],
+            'longitude'  => [
+                'required',
+            ],
+            'area'  => [
+                'required',
+            ],
             'address' => [
                 'string',
                 'required',

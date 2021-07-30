@@ -23,12 +23,12 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js'></script>
 <script>
     $(document).ready(function () {
-            // page is now ready, initialize the calendar...
-            events={!! json_encode($events) !!};
-            $('#calendar').fullCalendar({
-                // put your options and callbacks here
-                events: events, 
-            })
-        });
+        // page is now ready, initialize the calendar...
+        events={!! json_encode($events) !!};
+        $('#calendar').fullCalendar({
+            // put your options and callbacks here
+            events: events, 
+        })
+    });
 </script>
 @stop

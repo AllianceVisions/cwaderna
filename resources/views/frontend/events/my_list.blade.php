@@ -24,7 +24,7 @@
         <br /><br /><br />
         <div class="table-responsive">
             @foreach($events as $event)
-                <table class="table"> 
+                <table class="table datatable"> 
                     <thead class="thead-primary">
                         <tr>
                             <th scope="col" colspan="2">{{$event->title}}</th>

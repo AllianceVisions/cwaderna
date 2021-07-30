@@ -173,12 +173,14 @@ class User extends Authenticatable implements HasMedia
 
     public function userUserAlerts()
     {
-        return $this->belongsToMany(UserAlert::class,'user_user_alert_pivot');
+        return $this->belongsToMany(UserAlert::class,'user_user_alert_pivot')
+                    ->withTimestamps();
     }
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class,'role_user_pivot');
+        return $this->belongsToMany(Role::class,'role_user_pivot')
+                    ->withTimestamps();
     }
 
     public function cader()
@@ -207,7 +209,9 @@ class User extends Authenticatable implements HasMedia
 
     public function caders()
     {
-        return $this->belongsToMany(Cader::class,'cader_reviews_pivot','user_id','cader_id')->withpivot(['rating','comment','status','viewed']);
+        return $this->belongsToMany(Cader::class,'cader_reviews_pivot','user_id','cader_id')
+                    ->withpivot(['rating','comment','status','viewed'])
+                    ->withTimestamps();
     }
 
     public function academic_degree(){
@@ -221,6 +225,7 @@ class User extends Authenticatable implements HasMedia
     // relationship for staff to manage many events
     public function events()
     {
-        return $this->belongsToMany(Event::class,'events_supervisors_pivot','user_id','event_id');
+        return $this->belongsToMany(Event::class,'events_supervisors_pivot','user_id','event_id')
+                    ->withTimestamps();
     }
 }

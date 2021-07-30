@@ -79,15 +79,11 @@
                                     </a>
                                 @endcan
                                 
-                                @can('skill_delete')
-                                    <form style="display: inline" id="delete-{{ $skill->id }}" action="{{ route('admin.skills.destroy', $skill->id) }}" method="POST">
-                                        @method('DELETE')
-                                        @csrf
-                                    </form>
-                                    <a style="display: inline" title="{{ trans('global.delete') }}" class="btn btn-outline-danger btn-pill action-buttons-delete"  href="#" onclick="if(confirm('{{ trans('global.areYouSure') }}')) document.getElementById('delete-{{ $skill->id }}').submit()">
-                                        <i class="fa fa-trash actions-custom-i"></i>
-                                        
-                                    </a>
+                                @can('skill_delete') 
+                                    <?php $route = route('admin.skills.destroy', $skill->id); ?>
+                                    <a  href="#" onclick="deleteConfirmation('{{$route}}')" class="btn btn-outline-danger btn-pill action-buttons-delete">
+                                        <i  class="fa fa-trash actions-custom-i"></i>
+                                    </a> 
                                 @endcan 
                             
                             </td> 

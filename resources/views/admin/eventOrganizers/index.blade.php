@@ -103,12 +103,11 @@
                                     </a>
                                 @endcan 
 
-                                @can('event_organizer_delete')   
-                                    <form  action="{{ route('admin.event-organizers.destroy', $eventorganizer->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" >
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">  
-                                        <button class="btn btn-outline-danger btn-pill action-buttons-delete" type="submit" title="{{ trans('global.delete') }}" ><i  class="fa fa-trash actions-custom-i"></i> </button>
-                                    </form>  
+                                @can('event_organizer_delete')
+                                    <?php $route = route('admin.event-organizers.destroy', $eventorganizer->id); ?>
+                                    <a  href="#" onclick="deleteConfirmation('{{$route}}')" class="btn btn-outline-danger btn-pill action-buttons-delete">
+                                        <i  class="fa fa-trash actions-custom-i"></i>
+                                    </a> 
                                 @endcan   
                             </td>
 
@@ -132,12 +131,11 @@
         else{
             var status = 0;
         }
-        $.post('{{ route('admin.event-organizers.update_approved') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){
+        $.post('{{ route('admin.event-organizers.update_approved') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){ 
             if(data == 1){
-                location.reload();
-            }
-            else{
-                location.reload();
+                showFrontendAlert('success',"{{ trans('global.flash.user.approve') }}");
+            }else{
+                showFrontendAlert('error',"{{ trans('global.flash.error') }}");
             }
         });
     }

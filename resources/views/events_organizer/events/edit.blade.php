@@ -16,6 +16,7 @@
             <div class="row">
 
                 <div class="col-md-6">
+                    
                     {{-- title --}}
                     <div class="form-group">
                         <label class="required" for="title">{{ trans('cruds.event.fields.title') }}</label>
@@ -51,7 +52,7 @@
                     </div>
 
                     <div class="partials-scrollable">
-                        @include('events_organizer.events.partials.specializations')
+                        @include('admin.events.partials.specializations')
                     </div>
 
                     {{-- <button onclick="getLocation()" type="button">Try It</button>
@@ -127,6 +128,49 @@
                         <span class="help-block">{{ trans('cruds.event.fields.city_id_helper') }}</span>
                     </div> 
 
+                    
+                    <div class="row">
+                        <div class="col-md-4"> 
+                            {{-- latitude --}}
+                            <div class="form-group">
+                                <label class="required" for="latitude">{{ trans('cruds.event.fields.latitude') }}</label>
+                                <input class="form-control {{ $errors->has('latitude') ? 'is-invalid' : '' }}" type="number" step="0.00000001" name="latitude" id="latitude" value="{{ old('latitude', $event->latitude) }}" required>
+                                @if($errors->has('latitude'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('latitude') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.event.fields.latitude_helper') }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            {{-- longitude --}}
+                            <div class="form-group">
+                                <label class="required" for="longitude">{{ trans('cruds.event.fields.longitude') }}</label>
+                                <input class="form-control {{ $errors->has('longitude') ? 'is-invalid' : '' }}" type="number" step="0.00000001" name="longitude" id="longitude" value="{{ old('longitude', $event->longitude) }}" required>
+                                @if($errors->has('longitude'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('longitude') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.event.fields.longitude_helper') }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            {{-- area --}}
+                            <div class="form-group">
+                                <label class="required" for="area">{{ trans('cruds.event.fields.area') }}</label>
+                                <input class="form-control {{ $errors->has('area') ? 'is-invalid' : '' }}" type="number" step="0.00000001" name="area" id="area" value="{{ old('area', $event->area) }}" required>
+                                @if($errors->has('area'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('area') }}
+                                    </div>
+                                @endif
+                                <span class="help-block" style="font-size: 10px">{{ trans('cruds.event.fields.area_helper') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
                     {{-- address --}}
                     <div class="form-group">
                         <label class="required" for="address">{{ trans('cruds.event.fields.address') }}</label>

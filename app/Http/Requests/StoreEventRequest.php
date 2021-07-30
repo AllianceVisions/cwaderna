@@ -36,6 +36,15 @@ class StoreEventRequest extends FormRequest
             'city_id'  => [
                 'required',
             ],
+            'latitude'  => [
+                'required',
+            ],
+            'longitude'  => [
+                'required',
+            ],
+            'area'  => [
+                'required',
+            ],
             'address' => [
                 'string',
                 'required',
@@ -47,7 +56,7 @@ class StoreEventRequest extends FormRequest
             'conditions' => [
                 'string',
                 'required',
-            ],
+            ], 
             'start_attendance' => [
                 'required',
                 'date_format:' . config('panel.time_format'),

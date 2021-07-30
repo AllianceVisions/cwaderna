@@ -16,6 +16,7 @@ class CreateCaderSpecializationPivotTable extends Migration
         Schema::create('cader_specialization_pivot', function (Blueprint $table) {
             $table->foreignId('specialization_id')->constrained()->onDelete('cascade');
             $table->foreignId('cader_id')->constrained()->onDelete('cascade');
+            $table->timestamps(); 
         });
     }
 

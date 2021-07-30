@@ -14,8 +14,7 @@
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "fzaninotto/faker": "^1.9",
-        "guzzlehttp/guzzle": "^6.3",
-        "laracasts/flash": "^3.2",
+        "guzzlehttp/guzzle": "^6.3", 
         "laravel/dusk": "^5.9",
         "laravel/framework": "^7.0",
         "laravel/sanctum": "^2.8",
@@ -23,6 +22,7 @@
         "laravel/ui": "2.4",
         "laraveldaily/laravel-charts": "^0.1.14",
         "maatwebsite/excel": "^3.1",
+        "realrashid/sweet-alert": "^4.0",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-medialibrary": "7.19",
         "yajra/laravel-datatables-oracle": "^9.9"

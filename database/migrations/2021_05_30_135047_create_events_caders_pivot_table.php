@@ -16,13 +16,14 @@ class CreateEventsCadersPivotTable extends Migration
         Schema::create('events_caders_pivot', function (Blueprint $table) {
             $table->foreignId('cader_id')->constrained()->onDelete('cascade');
             $table->foreignId('event_id')->constrained()->onDelete('cascade');
-            $table->integer('specialization_id');
+            $table->foreignId('specialization_id')->references('specialization_id')->on('event_specialization_pivot')->onDelete('cascade');
             $table->datetime('start_attendance')->nullable();
             $table->datetime('end_attendance')->nullable();
             $table->double('price')->nullable();
             $table->double('profit')->nullable();
             $table->string('status')->nullable();
             $table->string('request_type')->nullable();
+            $table->timestamps(); 
         });
     }
 

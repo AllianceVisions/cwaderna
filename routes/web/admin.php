@@ -43,6 +43,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Events   
     Route::post('events/partials/add_cader', 'EventsController@partials_add_cader')->name('events.partials.add_cader');
+    Route::post('events/partials/attendance_cader', 'EventsController@partials_attendance_cader')->name('events.partials.attendance_cader');
+    Route::get('events/send_pricing_to_cader/{event_id}/{cader_id}', 'EventsController@send_pricing_to_cader')->name('events.send_pricing_to_cader');
     Route::get('events/send_pricing/{id}', 'EventsController@send_pricing')->name('events.send_pricing');
     Route::post('events/delete_cader', 'EventsController@delete_cader')->name('events.delete_cader');
     Route::post('events/update_cader', 'EventsController@update_cader')->name('events.update_cader');
@@ -82,9 +84,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     
     // User Alerts 
     Route::resource('user-alerts', 'UserAlertsController', ['except' => ['edit', 'update']]);
+    Route::post('user-alerts/read', 'UserAlertsController@read')->name('alert.read');
 
-    Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
-    Route::get('user-alerts/read', 'UserAlertsController@read');
+    Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar'); 
 
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () { 
         Route::get('/', 'ProfileController@edit')->name('edit');

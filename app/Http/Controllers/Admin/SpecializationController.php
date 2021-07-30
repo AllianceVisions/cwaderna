@@ -9,6 +9,7 @@ use App\Models\Specialization;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Alert;
 
 class SpecializationController extends Controller
 {
@@ -32,6 +33,7 @@ class SpecializationController extends Controller
     {
         $specialization = Specialization::create($request->all());
 
+        Alert::success( trans('global.flash.created'));
         return redirect()->route('admin.specializations.index');
     }
 
@@ -46,6 +48,7 @@ class SpecializationController extends Controller
     {
         $specialization->update($request->all());
 
+        Alert::success( trans('global.flash.updated'));
         return redirect()->route('admin.specializations.index');
     }
 
@@ -62,6 +65,7 @@ class SpecializationController extends Controller
 
         $specialization->delete();
 
-        return back();
+        Alert::success( trans('global.flash.deleted'));
+        return 1;
     } 
 }

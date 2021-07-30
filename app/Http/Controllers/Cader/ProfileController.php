@@ -10,6 +10,7 @@ use App\Models\User;
 use Auth;
 use App\Http\Controllers\Traits\MediaUploadingTrait;  
 use Spatie\MediaLibrary\Models\Media;
+use Alert;
 
 class ProfileController extends Controller
 {
@@ -52,12 +53,12 @@ class ProfileController extends Controller
         
         $hashedPassword = $user->password;
         if(!\Hash::check($request->old_password, $hashedPassword)){
-            flash('Old Password Not Correct')->error();
+            Alert::error('Old Password Not Correct');
             return redirect()->route('cader.profile.edit');
         }else{
             $user->password = bcrypt($request->password);
             $user->save();
-            flash('Success Changed Password');
+            Alert::success('Success Changed Password');
             return redirect()->route('cader.profile.edit');
         }
     }

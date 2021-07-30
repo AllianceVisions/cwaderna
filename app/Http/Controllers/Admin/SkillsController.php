@@ -9,6 +9,7 @@ use App\Models\Skill;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Alert;
 
 class SkillsController extends Controller
 {
@@ -33,7 +34,7 @@ class SkillsController extends Controller
     {
         $skill = skill::create($request->all()); 
 
-        flash(trans('global.flash.skill.success'))->success();
+        Alert::success( trans('global.flash.skill.success'));
         return redirect()->route('admin.skills.index');
     }
 
@@ -46,9 +47,9 @@ class SkillsController extends Controller
 
     public function update(UpdateSkillRequest $request, Skill $skill)
     {
-        $skill->update($request->all());
+        $skill->update($request->all()); 
 
-        flash(trans('global.flash.skill.updated'))->success();
+        Alert::success( trans('global.flash.skill.updated'));
         return redirect()->route('admin.skills.index');
     }
 
@@ -65,7 +66,7 @@ class SkillsController extends Controller
 
         $skill->delete();
 
-        flash(trans('global.flash.skill.deleted'))->warning();
-        return back();
+        Alert::success( trans('global.flash.deleted'));
+        return 1;
     } 
 }

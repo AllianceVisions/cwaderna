@@ -10,6 +10,7 @@ use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Alert;
 
 class UserAlertsController extends Controller
 {
@@ -81,8 +82,8 @@ class UserAlertsController extends Controller
     {
         $userAlert = UserAlert::create($request->all());
         $userAlert->users()->sync($request->input('users', []));
-
-        flash(trans('global.flash.user_alert.success'))->success();
+        
+        Alert::success( trans('global.flash.user_alert.success'));
         return redirect()->route('admin.user-alerts.index');
     }
 
@@ -101,18 +102,18 @@ class UserAlertsController extends Controller
 
         $userAlert->delete();
 
-        flash(trans('global.flash.user_alert.deleted'))->warning();
-        return back();
+        Alert::success( trans('global.flash.user_alert.deleted'));
+        return 1;
     } 
 
     public function read(Request $request)
     {
-        $alerts = \Auth::user()->userUserAlerts()->where('read', false)->get();
-
-        foreach ($alerts as $alert) {
-            $pivot       = $alert->pivot;
-            $pivot->read = true;
-            $pivot->save();
-        }
+        $alert = \Auth::user()->userUserAlerts()->where('user_alert_id', $request->id)->first();
+        
+        $pivot       = $alert->pivot;
+        $pivot->read = true;
+        $pivot->save();
+            
+        return 'success';
     }
 }

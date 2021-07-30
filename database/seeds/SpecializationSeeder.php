@@ -14,7 +14,7 @@ class SpecializationSeeder extends Seeder
     {
         $faker = Faker\Factory::create(); 
 
-        $ar = ['ممثل','حارث','مصمم','سائق'];
+        $ar = ['ممثل','حارس','مصمم','سائق'];
         $en = ['Actor','Security','Designer','Driver'];
 
         for ($i = 1 ; $i <= 3 ; $i++) {

@@ -48,6 +48,9 @@
                     <li class="{{ request()->is("/") || request()->is("/") ? "current" : "" }}">
                         <a href="{{route('frontend.home')}}">الرئيسية</a>    
                     </li>
+                    <li class="{{ request()->is("my_list") || request()->is("my_list") ? "current" : "" }}">
+                        <a href="{{route('frontend.my_list')}}">فعالياتي</a>    
+                    </li>
                     <li> 
                         <li class="{{ request()->is("cwaders") || request()->is("cwaders") ? "current" : "" }}"> 
                             <a href="{{route('frontend.cwaders')}}">كوادرنا</a> 

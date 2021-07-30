@@ -99,12 +99,11 @@
                                     <a href="{{ route('admin.provider-men.edit', $providerMan->id) }}" class="btn btn-outline-success btn-pill action-buttons-edit"   title="{{ trans('global.edit') }}"><i  class="fa fa-edit actions-custom-i"></i></a>
                                 @endcan
 
-                                @can('provider_man_delete')
-                                    <form action="{{ route('admin.provider-men.destroy', $providerMan->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <button  class="btn btn-outline-danger btn-pill action-buttons-delete"  type="submit" title="{{ trans('global.delete') }}" ><i  class="fa fa-trash actions-custom-i"></i> </button>
-                                    </form>
+                                @can('provider_man_delete') 
+                                    <?php $route = route('admin.provider-men.destroy', $providerMan->id); ?>
+                                    <a  href="#" onclick="deleteConfirmation('{{$route}}')" class="btn btn-outline-danger btn-pill action-buttons-delete">
+                                        <i  class="fa fa-trash actions-custom-i"></i>
+                                    </a> 
                                 @endcan
 
                             </td>
@@ -132,7 +131,11 @@
             var status = 0;
         }
         $.post('{{ route('admin.provider-men.update_approved') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){
-            frontendflash(data['message'],data['type']);
+            if(data == 1){
+                showFrontendAlert('success',"{{ trans('global.flash.user.approve') }}");
+            }else{
+                showFrontendAlert('error',"{{ trans('global.flash.error') }}");
+            }
         });
     } 
 

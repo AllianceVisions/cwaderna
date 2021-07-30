@@ -34,21 +34,21 @@
                         <th>
                             {{ trans('cruds.user.fields.email') }}
                         </th>
-                        <th>
+                        {{-- <th>
                             {{ trans('cruds.user.fields.date_of_birth') }}
                         </th>
                         <th>
                             {{ trans('cruds.user.fields.gender') }}
-                        </th>
+                        </th> --}}
                         <th>
                             {{ trans('cruds.user.fields.phone') }}
                         </th>
                         <th>
                             {{ trans('cruds.user.fields.nationality_id') }}
                         </th>
-                        <th>
+                        {{-- <th>
                             {{ trans('cruds.user.fields.identity_num') }}
-                        </th>
+                        </th> --}}
                         <th>
                             {{ trans('cruds.user.fields.approved') }}
                         </th> 
@@ -76,23 +76,23 @@
                             <td>
                                 {{ $cader->user->email ?? '' }}
                             </td>
-                            <td>
+                            {{-- <td>
                                 {{ $cader->user->date_of_birth ?? '' }}
                             </td>
                             <td>
                                 @if($cader->user)
                                     {{ $cader->user::GENDER_SELECT[$cader->user->gender] ?? '' }}
                                 @endif
-                            </td> 
+                            </td>  --}}
                             <td>
                                 {{ $cader->user->phone ?? '' }}
                             </td>
                             <td>
                                 {{ $cader->user->nationality ? $cader->user->nationality->$name : '' }}
                             </td>
-                            <td>
+                            {{-- <td>
                                 {{ $cader->user->identity_num ?? '' }}
-                            </td>
+                            </td> --}}
                             <td>
                                 <label class="c-switch c-switch-pill c-switch-success">
                                     <input onchange="update_approved(this)" value="{{$cader->user_id}}" type="checkbox" class="c-switch-input" {{ ($cader->user->approved ? 'checked' : null) }}>
@@ -101,7 +101,7 @@
                             </td>
                             <td>
                                 @can('cader_show')
-                                    <a class="btn btn-outline-info btn-pill action-buttons-view" href="{{ route('admin.caders.show', $cader->id) }}" >
+                                    <a href="{{ route('admin.caders.show', $cader->id) }}" class="btn btn-outline-info btn-pill action-buttons-view" >
                                         <i  class="fas fa-eye actions-custom-i"></i>
                                     </a>
                                 @endcan
@@ -113,13 +113,11 @@
                                 @endcan
 
                                 @can('cader_delete')
-                                    <form action="{{ route('admin.caders.destroy', $cader->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <button class="btn btn-outline-danger btn-pill action-buttons-delete" type="submit" title="{{ trans('global.delete') }}" ><i  class="fa fa-trash actions-custom-i"></i> </button>
-                                    </form>
-                                @endcan
-
+                                    <?php $route = route('admin.caders.destroy', $cader->id); ?>
+                                    <a  href="#" onclick="deleteConfirmation('{{$route}}')" class="btn btn-outline-danger btn-pill action-buttons-delete">
+                                        <i  class="fa fa-trash actions-custom-i"></i>
+                                    </a> 
+                                @endcan 
                             </td>
 
                         </tr>
@@ -142,13 +140,12 @@
         }
         else{
             var status = 0;
-        }
+        } 
         $.post('{{ route('admin.caders.update_approved') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){
             if(data == 1){
-                location.reload();
-            }
-            else{
-                location.reload();
+                showFrontendAlert('success',"{{ trans('global.flash.user.approve') }}");
+            }else{
+                showFrontendAlert('error',"{{ trans('global.flash.error') }}");
             }
         });
     }

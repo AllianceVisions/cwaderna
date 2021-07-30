@@ -79,15 +79,11 @@
                                     </a>
                                 @endcan
                                 
-                                @can('city_delete')
-                                    <form style="display: inline" id="delete-{{ $city->id }}" action="{{ route('admin.cities.destroy', $city->id) }}" method="POST">
-                                        @method('DELETE')
-                                        @csrf
-                                    </form>
-                                    <a style="display: inline" title="{{ trans('global.delete') }}" class="btn btn-outline-danger btn-pill action-buttons-delete"  href="#" onclick="if(confirm('{{ trans('global.areYouSure') }}')) document.getElementById('delete-{{ $city->id }}').submit()">
-                                        <i class="fa fa-trash actions-custom-i"></i>
-                                        
-                                    </a>
+                                @can('city_delete') 
+                                    <?php $route = route('admin.cities.destroy', $city->id); ?>
+                                    <a  href="#" onclick="deleteConfirmation('{{$route}}')" class="btn btn-outline-danger btn-pill action-buttons-delete">
+                                        <i  class="fa fa-trash actions-custom-i"></i>
+                                    </a> 
                                 @endcan 
                             
                             </td> 

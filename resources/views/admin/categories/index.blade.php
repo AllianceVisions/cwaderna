@@ -58,12 +58,11 @@
                                     </a>
                                 @endcan
 
-                                @can('category_delete')
-                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <button  class="btn btn-outline-danger btn-pill action-buttons-delete"  type="submit" title="{{ trans('global.delete') }}" ><i  class="fa fa-trash actions-custom-i"></i> </button>
-                                    </form>
+                                @can('category_delete') 
+                                    <?php $route = route('admin.categories.destroy', $category->id); ?>
+                                    <a  href="#" onclick="deleteConfirmation('{{$route}}')" class="btn btn-outline-danger btn-pill action-buttons-delete">
+                                        <i  class="fa fa-trash actions-custom-i"></i>
+                                    </a> 
                                 @endcan
 
                             </td>
