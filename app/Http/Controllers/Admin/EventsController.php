@@ -11,6 +11,7 @@ use App\Models\City;
 use App\Models\Specialization;
 use App\Models\EventOrganizer;
 use App\Models\Cader;
+use App\Models\UserAlert;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
@@ -72,7 +73,14 @@ class EventsController extends Controller
         if($check_status_caders_status->count() == 0 ){
             $event->status = 'pending_owner_accept';
             $event->save(); 
-            Alert::success( trans('تم الأرسال'));
+            Alert::success( trans('تم الأرسال')); 
+            $userAlert = UserAlert::create([
+                'alert_text' => 'تم تسعير الفعالية ' . $event->title,
+                'alert_link' => $event->id,
+                'type' => 'event',
+            ]);
+            $userAlert->users()->sync($event->event_organizer->user_id);
+
             return redirect()->route('admin.events.show',$id);
         }else{
             Alert::error('لايمكن اتمام العملية','لابد ان تكون حالة كل الكوادر اما تم الموافقة او تم الرفض');
@@ -87,7 +95,15 @@ class EventsController extends Controller
                                         'status' => 'send_pricing',
                                     ]
                                 ]);
-        Alert::success( trans('تم الأرسال'));
+        Alert::success( trans('تم الأرسال')); 
+
+        $userAlert = UserAlert::create([
+            'alert_text' => 'طلب موافقة علي الفعالية ' . $event->title,
+            'alert_link' => $event->id,
+            'type' => 'event',
+        ]);
+        $cader = Cader::find($cader_id);
+        $userAlert->users()->sync($cader->user_id);
         return redirect()->route('admin.events.show',$event_id);
     }
     
@@ -343,7 +359,7 @@ class EventsController extends Controller
             Alert::error('لايمكن تعديل الفعالية');
             return back();
         }
-        
+
         $event->delete();
 
         Alert::success( trans('global.flash.deleted'));

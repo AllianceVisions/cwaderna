@@ -88,6 +88,19 @@ class CaderEventsApiController extends Controller
     
 
     public function attend(Request $request){
+        $rules = [
+            'event_id' => 'required|integer', 
+            'latitude' => 'required', 
+            'longitude' => 'required', 
+            'type' => 'in:attend,leave', 
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return $this->returnError('401', $validator->errors());
+        }
+
         $event = Event::find($request->event_id); 
         $cader = Cader::where('user_id',Auth::id())->first();
         $distance = $this->twopoints_on_earth($event->latitude,$event->longitude,$request->latitude,$request->longitude);

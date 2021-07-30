@@ -69,6 +69,17 @@ class EventsApiController extends Controller
     }
 
     public function response(Request $request){
+        $rules = [
+            'event_id' => 'required|integer',
+            'type' => 'in:accepted,refused', 
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return $this->returnError('401', $validator->errors());
+        }
+
         $event = Event::find($request->event_id); 
         $cader = Cader::where('user_id',Auth::id())->first();
         $event->caders()->syncWithoutDetaching([
