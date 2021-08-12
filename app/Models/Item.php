@@ -102,4 +102,10 @@ class Item extends Model implements HasMedia
         return $this->belongsTo(Category::class);
     }
 
+    public function events()
+    {
+        return $this->belongsToMany(Event::class,'events_items_pivot','item_id','event_id')
+                    ->withpivot(['status','price','profit','start_attendance','end_attendance'])
+                    ->withTimestamps();
+    }
 }

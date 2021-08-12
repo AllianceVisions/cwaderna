@@ -13,7 +13,7 @@
                 <i class="c-sidebar-nav-icon fas fa-fw fa-tachometer-alt" style="color: #8E44AD">
 
                 </i>
-                {{ trans('global.dashboard') }}
+                {{ trans('global.systemCalendar') }}
             </a>
         </li>
 

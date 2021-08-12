@@ -50,6 +50,9 @@
                     <th>
                         {{ trans('cruds.event.fields.photo') }}
                     </th>
+                    <th>
+                        {{ trans('cruds.event.fields.status') }}
+                    </th>
                     <th>  
                     </th>
                 </tr>
@@ -87,6 +90,7 @@
                 { data: 'date', name: 'date', sortable: false, searchable: false },
                 { data: 'attendance', name: 'attendance' , sortable: false, searchable: false},
                 { data: 'photo', name: 'photo', sortable: false, searchable: false },
+                { data: 'status', name: 'status', },
                 { data: 'actions', name: '{{ trans('global.actions') }}' }
             ],
             columnDefs: [{

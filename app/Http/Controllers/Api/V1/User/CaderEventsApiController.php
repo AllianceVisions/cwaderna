@@ -17,10 +17,7 @@ class CaderEventsApiController extends Controller
 
     public function index(){
         $cader = Cader::where('user_id',Auth::id())->first();
-        $events = $cader->events()
-                        ->wherePivotIn('status',['accepted','refused','request']) // حالة الكادر في الفعالية نم الموافقة عليها او رفضها او لم يتم اتخاذ اجراء لها
-                        ->where('events.status','!=','refused') // حالة الفعالية لابد تكون غير مرفوضة
-                        ->paginate(10); 
+        $events = $cader->events()->paginate(10); 
         $new = CaderEventsResource::collection($events);
         return $this->returnPaginationData($new,$events,"success");
     } 

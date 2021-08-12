@@ -120,7 +120,7 @@
                         @if($event->status == 'pending_owner_accept')
                             <a href="{{ route('events-organizer.events.change_status',['id' => $event->id,'status' => 'accepted']) }}" class="btn btn-success mb-3">الموافقة علي التسعيرة</a>
                             <a href="{{ route('events-organizer.events.change_status',['id' => $event->id,'status' => 'refused']) }}" class="btn btn-warning text-white mb-3">رفض التسعيرة</a>
-                        @elseif($event->status == 'accept')
+                        @elseif($event->status == 'accepted')
                             <button class="btn btn-success mb-3" disabled>تم الموافقة</button>
                         @elseif($event->status == 'refused')
                             <button class="btn btn-warning text-white mb-3" disabled>تم الرفض</button>
@@ -178,27 +178,35 @@
                                                         <tr>
                                                             <td>{{trans('cruds.user.fields.name')}}</td>
                                                             <td>{{trans('cruds.event.others.attendance')}}</td> 
-                                                            <td>{{trans('cruds.event.others.profit')}}</td>
+                                                            <td>{{trans('cruds.event.others.by')}}</td>
                                                             <td>{{trans('cruds.event.others.price')}}</td> 
                                                             <td></td>
                                                         </tr>
                                                     </thead>
                                                     @foreach($event->caders as $cader)
                                                         @if($cader->pivot->specialization_id == $specialize->id) 
-                                                            <tr> 
-                                                                <td>{{$cader->user->first_name . " " . $cader->user->last_name}}</td>
-                                                                <td>
-                                                                    {{$cader->pivot_start_attendance()}} <br>
-                                                                    {{$cader->pivot_end_attendance()}} 
-                                                                </td> 
-                                                                <td>{{$cader->pivot->profit}}</td>
-                                                                <td>{{$cader->pivot->price}}</td> 
-                                                                <td> 
-                                                                    @if($event->status == 'accepted' && $cader->pivot->status == 'accepted')  
-                                                                        <button type="button" class="btn btn-outline-info" onclick="showmodal4({{$cader->id}})">سجل الحضور</button>
-                                                                    @endif
-                                                                </td>
-                                                            </tr> 
+                                                            @if($cader->pivot->status == 'accepted' || ( $cader->pivot->status == 'refused' && $cader->pivot->request_type == 'by_event_organizer' && $event->status != 'accepted') )  
+                                                                <tr> 
+                                                                    <td>{{$cader->user->first_name . " " . $cader->user->last_name}}</td>
+                                                                    <td>
+                                                                        {{$cader->pivot_start_attendance()}} <br>
+                                                                        {{$cader->pivot_end_attendance()}} 
+                                                                    </td> 
+                                                                    <td>{{ trans('global.event_request_by.'.$cader->pivot->request_type) }}</td>
+                                                                    <td>{{$cader->pivot->price}}</td> 
+                                                                    <td> 
+                                                                        @if($cader->pivot->status == 'accepted')  
+                                                                            @if($event->status == 'accepted')
+                                                                                <button type="button" class="btn btn-outline-info" onclick="showmodal4({{$cader->id}})">سجل الحضور</button>
+                                                                            @else
+                                                                                <span class="text-center text-white badge bg-success">تم الموافقة</span>
+                                                                            @endif
+                                                                        @elseif($cader->pivot->status == 'refused') 
+                                                                            <span class="text-center text-white badge bg-danger">تم الرفض من الكادر</span>                                                                        
+                                                                        @endif
+                                                                    </td>
+                                                                </tr> 
+                                                            @endif
                                                         @endif
                                                     @endforeach
                                                 </table>

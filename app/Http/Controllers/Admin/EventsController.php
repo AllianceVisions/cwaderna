@@ -69,8 +69,21 @@ class EventsController extends Controller
 
     public function send_pricing($id){
         $event = Event::findOrFail($id);
+        $name = 'name_' . app()->getLocale();
         $check_status_caders_status = $event->caders()->wherePivotIn('status',['pending','request','send_pricing'])->get(); 
         if($check_status_caders_status->count() == 0 ){
+
+            foreach($event->specializations as $event_specialize){
+                $num_of_caders = $event_specialize->pivot->num_of_caders;
+                $count_caders = $event->caders()->wherePivot('status','accepted')->wherePivot('specialization_id',$event_specialize->id)->get();
+                if($count_caders->count() < $num_of_caders){
+                    $title = 'لايمكن اتمام العملية';
+                    $body = ' لابد من أكتمال عدد الكوادر الموافقين في تخصص ' . $event_specialize->$name . ' إلي ' . $num_of_caders . ' كوادر';
+                    Alert::error($title,$body);
+                    return redirect()->route('admin.events.show',$id);
+                }
+            } 
+
             $event->status = 'pending_owner_accept';
             $event->save(); 
             Alert::success( trans('تم الأرسال')); 
@@ -83,7 +96,7 @@ class EventsController extends Controller
 
             return redirect()->route('admin.events.show',$id);
         }else{
-            Alert::error('لايمكن اتمام العملية','لابد ان تكون حالة كل الكوادر اما تم الموافقة او تم الرفض');
+            Alert::error('لايمكن اتمام العملية','لابد من أكتمال عدد الكوادر بالموافقة أو الرفض');
             return redirect()->route('admin.events.show',$id);
         }
     }
@@ -104,6 +117,25 @@ class EventsController extends Controller
         ]);
         $cader = Cader::find($cader_id);
         $userAlert->users()->sync($cader->user_id);
+        return redirect()->route('admin.events.show',$event_id);
+    }
+
+    public function cancel_cader($event_id,$cader_id){
+        $event = Event::findOrFail($event_id);
+        $event->caders()->syncWithoutDetaching([ $cader_id =>
+                                    [
+                                        'status' => 'cancel',
+                                    ]
+                                ]);
+        Alert::success( trans('تم الألغاء')); 
+
+        // $userAlert = UserAlert::create([
+        //     'alert_text' => 'طلب موافقة علي الفعالية ' . $event->title,
+        //     'alert_link' => $event->id,
+        //     'type' => 'event',
+        // ]);
+        // $cader = Cader::find($cader_id);
+        // $userAlert->users()->sync($cader->user_id);
         return redirect()->route('admin.events.show',$event_id);
     }
     

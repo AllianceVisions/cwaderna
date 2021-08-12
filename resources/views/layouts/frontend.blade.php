@@ -36,6 +36,9 @@
         .pagination li{
             margin: 0 10px; 
         }
+        .inner-banner__title{
+            padding:15px
+        }
     </style>
     
     @yield('styles')

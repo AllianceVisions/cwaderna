@@ -72,24 +72,20 @@ class CadersController extends Controller
             'specializations',
             'skills',
             'events',
-        ]);
+        ]); 
         return view('frontend.caders.cader_single', compact('cader'));
     }
 
     public function cwaders()
     {
-        $events = Event::where(
-            'event_organizer_id',
-            Auth::user()->events_organizer->id ?? 0
-        )
-            ->where('status', 'pending')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $events = Event::where('event_organizer_id',Auth::user()->events_organizer->id ?? 0)
+                        ->where('status', 'pending')
+                        ->orderBy('created_at', 'desc')
+                        ->get();
         $specializations = Specialization::all();
-        $caders = Cader::with(['specializations', 'user'])
-            ->withCount('events')
-            ->orderBy('created_at', 'desc')
-            ->paginate(8);
+        $caders = Cader::with(['specializations', 'user','events']) 
+                        ->orderBy('created_at', 'asc')
+                        ->paginate(8);  
         return view(
             'frontend.caders.cwaders',
             compact('events', 'caders', 'specializations')

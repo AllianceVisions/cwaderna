@@ -10,7 +10,7 @@
 
         <li class="c-sidebar-nav-item">
             <a href="{{ route("provider-man.home") }}" class="c-sidebar-nav-link">
-                <i class="c-sidebar-nav-icon fas fa-fw fa-tachometer-alt" style="color: #e6eef3">
+                <i class="c-sidebar-nav-icon fas fa-fw fa-tachometer-alt" style="color: #2980B9">
 
                 </i>
                 {{ trans('global.dashboard') }}
@@ -23,6 +23,15 @@
 
                 </i>
                 {{ trans('cruds.item.title') }}
+            </a>
+        </li> 
+
+        <li class="c-sidebar-nav-item">
+            <a href="{{ route("provider-man.orders.index") }}" class="c-sidebar-nav-link {{ request()->is("provider-man/orders") || request()->is("provider-man/orders/*") ? "c-active" : "" }}">
+                <i class="fa-fw fas fa-gift c-sidebar-nav-icon" style="color: #2980B9">
+
+                </i>
+                {{ trans('cruds.orders.title') }}
             </a>
         </li>
 

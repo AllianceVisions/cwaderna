@@ -16,17 +16,17 @@ trait api_return
             'status' => false,
             'errNum' => $errNum,
             'msg' => $msg
-        ]);
+        ],401);
     }
 
 
     public function returnSuccessMessage($msg = "")
     {
-        return [
+        return response()->json([
             'status' => true,
             'errNum' => "200",
             'msg' => $msg
-        ];
+        ],200);
     }
 
     public function returnData($value, $msg = "")
@@ -36,7 +36,7 @@ trait api_return
             'errNum' => "200",
             'msg' => $msg,
             'data' => $value
-        ]);
+        ],200);
     }
 
     public function returnPaginationData($value,$paginator, $msg = "")
@@ -64,7 +64,7 @@ trait api_return
                     'total_items' => $paginator->total()
                 ]
             ]
-        ]);
+        ],200);
     }
 
 

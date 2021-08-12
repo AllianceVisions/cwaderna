@@ -448,20 +448,31 @@
                                                             <td>{{ trans('global.event_request_by.'.$cader->pivot->request_type) }}</td>
                                                             <td class="text-center"> 
                                                                 @if($cader->pivot->status == 'send_pricing') 
+                                                                    <a href="{{route('admin.events.cancel_cader',[$event->id,$cader->id])}}" class="btn btn-outline-warning">ألغاء</a> <br>
                                                                     <span class="text-center text-white badge bg-warning">في أنتظار رد الكادر</span>
                                                                 @elseif($cader->pivot->status == 'accepted') 
                                                                     <span class="text-center text-white badge bg-success">تم الموافقة</span>
                                                                 @elseif($cader->pivot->status == 'refused') 
                                                                     <span class="text-center text-white badge bg-danger">تم الرفض من الكادر</span>
+                                                                @elseif($cader->pivot->status == 'cancel') 
+                                                                    <span class="text-center text-white badge bg-danger">تم ألغاء الكادر</span> <br> 
+                                                                    @if($event->status == 'request_to_pricing')
+                                                                        <a href="{{route('admin.events.send_pricing_to_cader',[$event->id,$cader->id])}}" class="btn btn-outline-success">أرسال تسعيرة مرة أخري</a> 
+                                                                        <button type="button" class="btn btn-outline-info" onclick="showmodal2({{$cader->pivot->price ?? 0}},{{$cader->pivot->profit ?? 0}},'{{$cader->pivot_start_attendance()}}','{{$cader->pivot_end_attendance()}}',{{$cader->id}})">{{ trans('global.edit') }}</button>
+                                                                    @endif
                                                                 @else 
                                                                     <a href="{{route('admin.events.send_pricing_to_cader',[$event->id,$cader->id])}}" class="btn btn-outline-success">أرسال تسعيرة للكادر</a>
                                                                     <button type="button" class="btn btn-outline-info" onclick="showmodal2({{$cader->pivot->price ?? 0}},{{$cader->pivot->profit ?? 0}},'{{$cader->pivot_start_attendance()}}','{{$cader->pivot_end_attendance()}}',{{$cader->id}})">{{ trans('global.edit') }}</button>
-                                                                    <form style="display: inline" action="{{ route('admin.events.delete_cader') }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');">
-                                                                        @csrf
-                                                                        <input type="hidden" name="cader_id" value="{{$cader->id}}">
-                                                                        <input type="hidden" name="event_id" value="{{$event->id}}">
-                                                                        <button class="btn btn-outline-danger" type="submit">{{ trans('global.delete') }}</button>
-                                                                    </form>
+                                                                    @if($cader->pivot->request_type == 'by_admin')
+                                                                        <form style="display: inline" action="{{ route('admin.events.delete_cader') }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');">
+                                                                            @csrf
+                                                                            <input type="hidden" name="cader_id" value="{{$cader->id}}">
+                                                                            <input type="hidden" name="event_id" value="{{$event->id}}">
+                                                                            <button class="btn btn-outline-danger" type="submit">{{ trans('global.delete') }}</button>
+                                                                        </form>
+                                                                    @else 
+                                                                        <a href="{{route('admin.events.cancel_cader',[$event->id,$cader->id])}}" class="btn btn-outline-warning">ألغاء</a> <br>
+                                                                    @endif
                                                                 @endif
 
                                                                 @if($event->status == 'accepted' && $cader->pivot->status == 'accepted') 
@@ -508,7 +519,9 @@
                                         <td>{{$item->pivot->profit ? $item->pivot->profit : $item->price}}</td>
                                         <td>{{$item->pivot->price}}</td>
                                         <td>
-                                            <button type="button" class="btn btn-outline-info" onclick="showmodal3({{$item->pivot->price ?? 0}},{{$item->pivot->profit ?? 0}},'{{$item->pivot_start_attendance()}}','{{$item->pivot_end_attendance()}}',{{$item->id}})">{{ trans('global.edit') }}</button>
+                                            @if($event->status == 'request_to_pricing')
+                                                <button type="button" class="btn btn-outline-info" onclick="showmodal3({{$item->pivot->price ?? 0}},{{$item->pivot->profit ?? 0}},'{{$item->pivot_start_attendance()}}','{{$item->pivot_end_attendance()}}',{{$item->id}})">{{ trans('global.edit') }}</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 </form>

@@ -113,8 +113,7 @@
       }
 
       
-    function deleteConfirmation(route) {
-      console.log(route);
+    function deleteConfirmation(route) { 
         swal({
             title: "{{trans('global.flash.delete_')}}",
             text: "{{trans('global.flash.sure_')}}",

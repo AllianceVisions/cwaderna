@@ -22,6 +22,9 @@ Route::group(['prefix' => 'provider-man', 'as' => 'provider-man.', 'namespace' =
     Route::post('items/ckmedia', 'ItemsController@storeCKEditorImages')->name('items.storeCKEditorImages');
     Route::resource('items', 'ItemsController');
 
+    // orders
+    Route::resource('orders', 'OrdersController');
+
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () { 
         Route::get('/', 'ProfileController@edit')->name('edit');
         Route::post('/', 'ProfileController@updateProfile')->name('update');

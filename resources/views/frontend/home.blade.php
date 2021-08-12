@@ -159,11 +159,9 @@
                                 <h2 class="team-one__name"><a href="team-details.html">{{$cader->user->first_name . " " . $cader->user->last_name}}</a></h2>
                                 <!-- /.team-one__name --> 
 
-                                <div class="rate">
-                                    <img src="{{asset('assets/images/stars.png')}}">
-                                </div>
-                                <p class="team-one__text"> شارك في {{$cader->events_count}} فعالية <span><i class="fab fa-staylinked"></i></span>  </p>
-                                <a href="#" class="course-one__link">المزيد</a>
+                                <br>
+                                <p class="team-one__text"> شارك في {{$cader->events()->where('events.status','accepted')->wherePivot('status','accepted')->get()->count()}} فعالية <span><i class="fab fa-staylinked"></i></span>  </p>
+                                <a href="{{route('frontend.cader.single',$cader->id)}}" class="course-one__link">المزيد</a>
                                 <!-- /.team-one__text -->
                             </div><!-- /.team-one__content -->
                             

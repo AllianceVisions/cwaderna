@@ -16,7 +16,7 @@ class EventsApiController extends Controller
     use api_return;
 
     public function index(){
-        $events = Event::whereIn('status',['pending','request_to_pricing'])->orderBy('created_at','desc')->paginate(10);
+        $events = Event::with('caders')->whereIn('status',['pending','request_to_pricing'])->orderBy('created_at','desc')->paginate(10);
         $new = EventsResource::collection($events);
         return $this->returnPaginationData($new,$events,"success");
     }

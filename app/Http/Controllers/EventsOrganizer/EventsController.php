@@ -8,6 +8,9 @@ use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use App\Models\City;
+use App\Models\ProviderMan;
+use App\Models\UserAlert;
+use App\Models\User;
 use App\Models\Specialization;
 use App\Models\EventOrganizer;
 use Gate;
@@ -30,7 +33,22 @@ class EventsController extends Controller
             foreach($event->items as $item){
                 $item->pivot->status = 'ordered';
                 $item->pivot->save();
-            }
+                $provider_man = ProviderMan::find($item->provider_man_id);
+                $userAlert2 = UserAlert::create([
+                    'alert_text' => 'لديك طلب جديد للفعالية ' . $event->title,
+                    'alert_link' => $event->id,
+                    'type' => 'event',
+                ]);
+                $userAlert2->users()->sync($provider_man->user_id);
+            } 
+            $users = User::where('user_type','staff')->get()->pluck('id');
+
+            $userAlert = UserAlert::create([
+                'alert_text' => 'تم الموافقة علي التسعيرة للفعالية ' . $event->title,
+                'alert_link' => $event->id,
+                'type' => 'event',
+            ]);
+            $userAlert->users()->sync($users);
             Alert::success('تم الموافقة علي التسعيرة');
         }elseif($status == 'refused'){ 
             $event->status = 'refused';
@@ -106,6 +124,9 @@ class EventsController extends Controller
                 }
 
                 return implode(' ', $labels);
+            });
+            $table->editColumn('status', function ($row) {
+                return $row->status ? trans('global.event_status.'.$row->status) : '';
             });
             $table->editColumn('date', function ($row) {
                 $start = $row->start_date ? $row->start_date : '';

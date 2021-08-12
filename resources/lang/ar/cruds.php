@@ -325,6 +325,10 @@ return [
             'deleted_at_helper' => ' ',
         ],
     ],
+    'orders' => [
+        'title'          => 'الطلبات',
+        'title_singular' => 'طلب',
+    ],
     'item' => [
         'title'          => 'الخدمات',
         'title_singular' => 'خدمة',

@@ -11,7 +11,7 @@ use Auth;
 class FrontendController extends Controller
 {
     public function home(){
-        $caders = Cader::with(['specializations','user'])->withCount('events')->orderBy('created_at','desc')->get()->take(8);
+        $caders = Cader::with(['specializations','user'])->withCount('events')->orderBy('created_at','asc')->get()->take(8);
         return view('frontend.home',compact('caders'));
     }
     public function aboutus(){

@@ -40,6 +40,7 @@ class Event extends Model implements HasMedia
         'send_pricing' => 'Send Pricing',
         'refused' => 'Refused',
         'accepted' => 'Accepted',
+        'cancel' => 'Canceled',
     ];
 
     public const EVENT_STATUS_SELECT = [

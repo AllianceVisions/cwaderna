@@ -329,6 +329,10 @@ return [
             'test_helper'       => ' ',
         ],
     ],
+    'orders' => [
+        'title'          => 'Orders',
+        'title_singular' => 'Order',
+    ],
     'item' => [
         'title'          => 'Items',
         'title_singular' => 'Item',

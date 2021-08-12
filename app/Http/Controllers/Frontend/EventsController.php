@@ -14,11 +14,7 @@ use Alert;
 class EventsController extends Controller
 {
     public function my_list(){
-        $events = Event::with(['caders.user','items','city'])
-                        ->where(function($query) {
-                            $query->whereHas('caders')
-                            ->orWhereHas('items');
-                        })
+        $events = Event::with(['caders.user','items','city']) 
                         ->where('status','pending')
                         ->where('event_organizer_id',Auth::user()->events_organizer->id ?? 0)
                         ->orderBy('created_at','desc')
@@ -49,12 +45,12 @@ class EventsController extends Controller
         $users = User::where('user_type','staff')->get()->pluck('id');
 
         $userAlert = UserAlert::create([
-            'alert_text' => 'طلب تسعيرة جديدة من ' . $event->event_organizer->company_name,
+            'alert_text' => 'طلب تسعيرة جديدة من ' . $event->event_organizer->company_name . ' للفعالية ' . $event->title ,
             'alert_link' => $event->id,
             'type' => 'event',
         ]);
         $userAlert->users()->sync($users);
-        Alert::success('تم طلب التسعير');
+        Alert::success('تم طلب التسعير','سيتم الرد خلال 24 ساعة');
         return redirect()->route('frontend.my_list');
     }
 }
