@@ -7,7 +7,7 @@
         <section class="banner-two banner-carousel__one no-dots owl-theme owl-carousel">
             @if($sliders->count() > 0)
                 @foreach($sliders as $slider)
-                    <div class="banner-two__slide banner-two__slide-one" style="background-image: url('{{asset($slider->slider->getUrl())}}');"> 
+                    <div class="banner-two__slide banner-two__slide-one" style="background-image: url('{{$slider->slider->getUrl()}}');"> 
                         <div class="darklayer">
                         <div class="container">
                             <div class="row no-gutters">
@@ -152,7 +152,7 @@
                         <div class="team-one__single team-one__content" >
                             <div class="team-one__image">
                                 @if($cader->user->photo)
-                                    <img src="{{asset($cader->user->photo->getUrl('thumb'))}}" alt="">
+                                    <img src="{{$cader->user->photo->getUrl('thumb')}}" alt="">
                                 @else 
                                     <img src="{{asset('user.png')}}" alt="">
                                 @endif

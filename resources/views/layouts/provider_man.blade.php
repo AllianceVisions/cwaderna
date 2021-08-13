@@ -13,7 +13,7 @@
     @if($general_settings)
       <title>{{$general_settings->site_name}}</title>
       @if($general_settings->logo)
-        <link name="favicon" type="image/x-icon" href="{{ asset($general_settings->logo->getUrl()) }}" rel="shortcut icon" />
+        <link name="favicon" type="image/x-icon" href="{{ $general_settings->logo->getUrl() }}" rel="shortcut icon" />
       @endif
     @else
       <title>{{ trans('panel.site_title') }}</title>

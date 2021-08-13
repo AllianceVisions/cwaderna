@@ -106,8 +106,8 @@
                                 </th>
                                 <td>
                                     @if($event->photo)
-                                        <a href="{{ asset($event->photo->getUrl()) }}" target="_blank" style="display: inline-block">
-                                            <img src="{{ asset($event->photo->getUrl('thumb')) }}">
+                                        <a href="{{ $event->photo->getUrl() }}" target="_blank" style="display: inline-block">
+                                            <img src="{{ $event->photo->getUrl('thumb') }}">
                                         </a>
                                     @endif
                                 </td>

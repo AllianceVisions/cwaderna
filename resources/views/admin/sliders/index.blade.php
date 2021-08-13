@@ -80,8 +80,8 @@
                             </td>
                             <td> 
                                 @if($slider->slider)
-                                    <a href="{{ asset($slider->slider->getUrl()) }}" target="_blank" style="display: inline-block">
-                                        <img src="{{ asset($slider->slider->getUrl('thumb')) }}">
+                                    <a href="{{ $slider->slider->getUrl() }}" target="_blank" style="display: inline-block">
+                                        <img src="{{ $slider->slider->getUrl('thumb') }}">
                                     </a>
                                 @endif
                             </td>

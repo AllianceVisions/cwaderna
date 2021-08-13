@@ -74,7 +74,7 @@
             <li class="c-header-nav-item dropdown d-md-down-none" style=" background: #EBEDEF; border-radius: 8px 39px 0px 0px; padding: 0px 13px;">
                 <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     @if(auth()->user()->photo)
-                        <img src="{{asset(auth()->user()->photo->getUrl('thumb'))}}" alt="" width="40" height="40" style="border-radius: 50px;margin:10px">
+                        <img src="{{auth()->user()->photo->getUrl('thumb')}}" alt="" width="40" height="40" style="border-radius: 50px;margin:10px">
                     @else 
                         <img src="{{asset('user.png')}}" alt="" width="40" height="40" style="border-radius: 50px;margin:10px">
                     @endif

@@ -69,8 +69,8 @@
                             </td>
                             <td>
                                 @if($item->photo)
-                                    <a href="{{ asset($item->photo->getUrl()) }}" target="_blank" style="display: inline-block">
-                                        <img src="{{ asset($item->photo->getUrl('thumb')) }}">
+                                    <a href="{{ $item->photo->getUrl() }}" target="_blank" style="display: inline-block">
+                                        <img src="{{ $item->photo->getUrl('thumb') }}">
                                     </a>
                                 @endif
                             </td>

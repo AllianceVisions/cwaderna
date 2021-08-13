@@ -19,7 +19,7 @@
                     <div class="team-one__single">
                         <div class="team-one__image">
                             @if($organizer->user->photo)
-                                <img src="{{asset($organizer->user->photo->getUrl('thumb'))}}" alt="">
+                                <img src="{{$organizer->user->photo->getUrl('thumb')}}" alt="">
                             @else 
                                 <img src="{{asset('assets/images/team-1-1.jpg')}}" alt="">
                             @endif

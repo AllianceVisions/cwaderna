@@ -79,8 +79,8 @@
                             </td> 
                             <td>
                                 @if($eventorganizer->user && $eventorganizer->user->photo)
-                                    <a href="{{ asset($eventorganizer->user->photo->getUrl()) }}" target="_blank" style="display: inline-block">
-                                        <img src="{{ asset($eventorganizer->user->photo->getUrl('thumb')) }}">
+                                    <a href="{{ $eventorganizer->user->photo->getUrl() }}" target="_blank" style="display: inline-block">
+                                        <img src="{{ $eventorganizer->user->photo->getUrl('thumb') }}">
                                     </a>
                                 @endif
                             </td> 

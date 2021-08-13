@@ -69,7 +69,7 @@
                 <div class="team-one__single">
                     <div class="team-one__image"> 
                         @if($cader->user->photo)
-                            <img src="{{asset($cader->user->photo->getUrl('preview'))}}" class="img-fluid" alt="">
+                            <img src="{{$cader->user->photo->getUrl('preview')}}" class="img-fluid" alt="">
                         @else
                             <img src="{{asset('user.png')}}" class="img-fluid" alt="">
                         @endif
@@ -137,8 +137,8 @@
                         @if($cader->user && $cader->user->certificates)
                             @foreach($cader->user->certificates as $key => $media)
                                 <li>
-                                    <a href="{{ asset($media->getUrl()) }}" target="_blank" style="display: inline-block">
-                                        <img src="{{asset($media->getUrl('preview'))}}" alt="">
+                                    <a href="{{ $media->getUrl() }}" target="_blank" style="display: inline-block">
+                                        <img src="{{$media->getUrl('preview') }}" alt="">
                                     </a>
                                 </li> 
                             @endforeach
@@ -180,7 +180,7 @@
                     <div class="blog-one__single">
                         <div class="blog-one__image">
                             @if($raw->photo)
-                                <img src="{{ asset($event->photo->getUrl('thumb')) }}" alt=""> 
+                                <img src="{{ $event->photo->getUrl('thumb') }}" alt=""> 
                             @else 
                                 <img src="{{ asset('assets/images/blog-1-1.jpg')}}" alt=""> 
                             @endif

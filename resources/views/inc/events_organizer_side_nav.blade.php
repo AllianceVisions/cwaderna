@@ -1,8 +1,14 @@
 <div id="sidebar" class="c-sidebar c-sidebar-fixed c-sidebar-lg-show" style="background: white">
-
+    @php
+        $general_settings = \App\Models\GeneralSettings::first();
+    @endphp
     <div class="c-sidebar-brand d-md-down-none"> 
         <a class="c-sidebar-brand-full h4" href="#">
-            <img src="{{asset('assets/images/logo-dark.png')}}" class="main-logo" width="128" alt="Awesome Image" />
+            @if($general_settings->logo)
+                <img src="{{$general_settings->logo->getUrl()}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
+            @else 
+                <img src="{{asset('assets/images/logo-dark.png')}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
+            @endif
         </a>
     </div>
 

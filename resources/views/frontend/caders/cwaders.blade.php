@@ -30,7 +30,7 @@
                     <div class="team-one__single team-one__content" >
                         <div class="team-one__image">
                             @if($cader->user->photo)
-                                <img src="{{asset($cader->user->photo->getUrl('thumb'))}}" alt="">
+                                <img src="{{$cader->user->photo->getUrl('thumb')}}" alt="">
                             @else 
                                 <img src="{{asset('user.png')}}" alt="">
                             @endif

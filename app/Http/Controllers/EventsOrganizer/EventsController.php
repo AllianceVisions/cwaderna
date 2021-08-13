@@ -142,8 +142,8 @@ class EventsController extends Controller
                 if ($photo = $row->photo) {
                     return sprintf(
                         '<a href="%s" target="_blank"><img src="%s" width="50px" height="50px"></a>',
-                        asset($photo->url),
-                        asset($photo->thumbnail)
+                        $photo->url,
+                        $photo->thumbnail
                     );
                 }
 
