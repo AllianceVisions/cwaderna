@@ -46,24 +46,6 @@
 .dataTables_scrollHeadInner{
     width: 100% !important;
 } 
-
-#sidebar .c-sidebar-nav-link ,#sidebar .c-sidebar-nav-dropdown-toggle{
-    color:black
-}
-#sidebar .c-sidebar-nav-link:hover ,#sidebar .c-sidebar-nav-dropdown-toggle:hover{
-    color: white
-}
-.c-sidebar .c-sidebar-nav-dropdown.c-show {
-    background: rgb(173 173 173 / 20%);
-}
-
-.c-sidebar .c-sidebar-nav-dropdown-toggle:hover, .c-sidebar .c-sidebar-nav-link:hover {
-    background: #958fca;
-}
-.c-sidebar .c-active.c-sidebar-nav-dropdown-toggle, .c-sidebar .c-sidebar-nav-link.c-active {
-    background: #958fca;
-    color:#fff !important
-}
 .c-sidebar-nav-dropdown-items {
     padding-left: 8%;
 }

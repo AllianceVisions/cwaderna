@@ -5,36 +5,41 @@
     {{-- Slider --}} 
     <div class="banner-wrapper" style="direction: ltr; text-align: left;">
         <section class="banner-two banner-carousel__one no-dots owl-theme owl-carousel">
-            <div class="banner-two__slide banner-two__slide-one" style="background-image: url('{{asset('assets/images/slider-2-1.jpg')}}');"> 
-                <div class="darklayer">
-                <div class="container">
-                    <div class="row no-gutters">
-                        <div class="col-xl-12">
-                            <h3 class="banner-two__title banner-two__light-color">عنوان الفعالية <br>
-                                </h3>
-                            
-                            <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى</p><!-- /.banner-two__title -->
-                            <a href="#" class="thm-btn banner-two__btn">المزيد</a>
-                        </div><!-- /.col-xl-12 -->
-                    </div><!-- /.row -->
-                    </div><!-- /.container --></div>
-            </div><!-- /.banner-two__slide -->
-            <div class="banner-two__slide banner-two__slide-two" style="background-image: url('{{asset('assets/images/slider-2-2.jpg')}}');">
-                <div class="darklayer">
-                    <div class="container">
-                        <div class="row no-gutters">
-                            <div class="col-xl-12">
-                                <h3 class="banner-two__title banner-two__light-color">
-                                    عنوان الفعالية <br>
-                                </h3>
-                                
-                                <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى</p><!-- /.banner-two__title -->
-                                <a href="#" class="thm-btn banner-two__btn">المزيد</a>
-                            </div><!-- /.col-xl-12 -->
-                        </div><!-- /.row -->
-                    </div><!-- /.container -->
-                </div>
-            </div><!-- /.banner-two__slide -->
+            @if($sliders->count() > 0)
+                @foreach($sliders as $slider)
+                    <div class="banner-two__slide banner-two__slide-one" style="background-image: url('{{asset($slider->slider->getUrl())}}');"> 
+                        <div class="darklayer">
+                        <div class="container">
+                            <div class="row no-gutters">
+                                <div class="col-xl-12">
+                                    <h3 class="banner-two__title banner-two__light-color">{{$slider->title}}<br>
+                                        </h3>
+                                    
+                                    <p>{{$slider->description}}</p><!-- /.banner-two__title -->
+                                    <a href="{{$slider->link}}" class="thm-btn banner-two__btn">المزيد</a>
+                                </div><!-- /.col-xl-12 -->
+                            </div><!-- /.row -->
+                            </div><!-- /.container --></div>
+                    </div><!-- /.banner-two__slide -->
+                @endforeach
+            @else
+                <div class="banner-two__slide banner-two__slide-two" style="background-image: url('{{asset('assets/images/slider-2-2.jpg')}}');">
+                    <div class="darklayer">
+                        <div class="container">
+                            <div class="row no-gutters">
+                                <div class="col-xl-12">
+                                    <h3 class="banner-two__title banner-two__light-color">
+                                        عنوان الفعالية <br>
+                                    </h3>
+                                    
+                                    <p>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى</p><!-- /.banner-two__title -->
+                                    <a href="#" class="thm-btn banner-two__btn">المزيد</a>
+                                </div><!-- /.col-xl-12 -->
+                            </div><!-- /.row -->
+                        </div><!-- /.container -->
+                    </div>
+                </div><!-- /.banner-two__slide -->
+            @endif
         </section><!-- /.banner-two -->
         <div class="banner-carousel-btn">
             <a href="#" class="banner-carousel-btn__left-btn"><i class="kipso-icon-left-arrow"></i></a>
@@ -115,13 +120,12 @@
                     <div class="block-title text-left">
                         <h2 class="block-title__title">من نحن / وماذا نفعل؟</h2><!-- /.block-title__title -->
                     </div><!-- /.block-title -->
-                    <p class="cta-three__text">هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أوكوادرنا هي منصة إلكترونية سعودية تجمع لك كل الكوادر المدربه والمهئيه لجميع الأنشطة والفعاليات والدورات المقامة في مدينتك وتشارك معك في نجاح هذه الانشطه والفعاليات.</p>
-
+                    <p class="cta-three__text">
+                        {{$general_settings->who_are_we}}
+                    </p>
                     <h3> أهدافنا </h3>
                     <p class="cta-three__text">
-
-                    ان نكون الجهه الرائده محلياً في تقديم وتأهيل وتدريب الكوادر الفعاله لجميع الانشطه والفعاليات  وبناء كوادر من المعرفه والتدريب في المستقبل.
-
+                        {{$general_settings->our_goal}}
                     </p>
                     
                     

@@ -19,7 +19,12 @@ class CreateGeneralSettingsTable extends Migration
             $table->string('address',255);
             $table->string('phone',255);
             $table->string('email',255);
+            $table->text('who_are_we');
+            $table->text('our_goal');
+            $table->text('our_vision');
+            $table->text('our_message');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

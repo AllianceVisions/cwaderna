@@ -7,7 +7,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>كوادرنا</title>
+    @php
+      $general_settings = App\Models\GeneralSettings::first();
+    @endphp
+
+    @if($general_settings)
+      <title>{{$general_settings->site_name}}</title>
+      @if($general_settings->logo)
+        <link name="favicon" type="image/x-icon" href="{{ asset($general_settings->logo->getUrl()) }}" rel="shortcut icon" />
+      @endif
+    @else
+      <title>{{ trans('panel.site_title') }}</title>
+    @endif
+
     <link name="favicon" type="image/x-icon" href="##" rel="shortcut icon" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
@@ -35,6 +47,14 @@
         }
       </style>
     @endif
+    <style>  
+      .c-sidebar .c-sidebar-nav-dropdown-toggle:hover, .c-sidebar .c-sidebar-nav-link:hover {
+          background: #2c284e;
+      }
+      .c-sidebar .c-active.c-sidebar-nav-dropdown-toggle, .c-sidebar .c-sidebar-nav-link.c-active {
+          background: #2c284e; 
+      }
+    </style>
     @yield('styles')
 </head>
 

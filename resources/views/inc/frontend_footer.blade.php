@@ -28,7 +28,7 @@
 
     <div class="site-footer__bottom">
         <div class="container">
-            <p class="site-footer__copy">© Copyright 2020 by <a href="#">Cawadrna</a></p> 
+            <p class="site-footer__copy">© Copyright 2021 by <a href="#">Cawadrna</a></p> 
             <!-- /.site-footer__copy -->
         </div><!-- /.container -->
     </div>

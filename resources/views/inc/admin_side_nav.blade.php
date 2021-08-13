@@ -1,15 +1,21 @@
-<div id="sidebar" class="c-sidebar c-sidebar-fixed c-sidebar-lg-show" style="background: white">
-
+<div id="sidebar" class="c-sidebar c-sidebar-fixed c-sidebar-lg-show" style="background: #132422">
+    @php
+        $general_settings = \App\Models\GeneralSettings::first();
+    @endphp
     <div class="c-sidebar-brand d-md-down-none"> 
         <a class="c-sidebar-brand-full h4" href="#">
-            <img src="{{asset('assets/images/logo-dark.png')}}" class="main-logo" width="128" alt="Awesome Image" />
+            @if($general_settings->logo)
+                <img src="{{asset($general_settings->logo->getUrl())}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
+            @else 
+                <img src="{{asset('assets/images/logo-dark.png')}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
+            @endif
         </a>
     </div>
 
     <ul class="c-sidebar-nav">
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.home") }}" class="c-sidebar-nav-link">
-                <i class="c-sidebar-nav-icon fas fa-fw fa-tachometer-alt" style="color: #922B21">
+                <i class="c-sidebar-nav-icon fas fa-fw fa-tachometer-alt" style="color: #d36c6c">
 
                 </i>
                 {{ trans('global.dashboard') }}
@@ -19,7 +25,7 @@
         @can('cader_managment_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/caders*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw far fa-id-card c-sidebar-nav-icon" style="color: #922B21">
+                    <i class="fa-fw far fa-id-card c-sidebar-nav-icon" style="color: #d36c6c">
 
                     </i>
                     {{ trans('cruds.caderManagment.title') }}
@@ -28,7 +34,7 @@
                     @can('cader_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.caders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/caders") || request()->is("admin/caders/*") ? "c-active" : "" }}">
-                                <i class="fa-fw far fa-address-book c-sidebar-nav-icon" style="color:#34495E">
+                                <i class="fa-fw far fa-address-book c-sidebar-nav-icon" style="color:#fff">
 
                                 </i>
                                 {{ trans('cruds.cader.title') }}
@@ -42,7 +48,7 @@
         @can('event_managment_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/event-organizers*") ? "c-show" : "" }} {{ request()->is("admin/events*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw fas fa-location-arrow c-sidebar-nav-icon" style="color: #922B21">
+                    <i class="fa-fw fas fa-location-arrow c-sidebar-nav-icon" style="color: #d36c6c">
 
                     </i>
                     {{ trans('cruds.eventManagment.title') }}
@@ -51,7 +57,7 @@
                     @can('event_organizer_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.event-organizers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/event-organizers") || request()->is("admin/event-organizers/*") ? "c-active" : "" }}">
-                                <i class="fa-fw far fa-user c-sidebar-nav-icon" style="color:#34495E">
+                                <i class="fa-fw far fa-user c-sidebar-nav-icon" style="color:#fff">
 
                                 </i>
                                 {{ trans('cruds.eventOrganizer.title') }}
@@ -61,7 +67,7 @@
                     @can('event_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.events.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/events") || request()->is("admin/events/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-medal c-sidebar-nav-icon" style="color: #34495E">
+                                <i class="fa-fw fas fa-medal c-sidebar-nav-icon" style="color: #fff">
 
                                 </i>
                                 {{ trans('cruds.event.title') }}
@@ -70,7 +76,7 @@
                     @endcan
                     <li class="c-sidebar-nav-item">
                         <a href="{{ route("admin.systemCalendar") }}" class="c-sidebar-nav-link {{ request()->is("admin/system-calendar") || request()->is("admin/system-calendar/*") ? "c-active" : "" }}">
-                            <i class="c-sidebar-nav-icon fa-fw fas fa-calendar" style="color: #34495E">
+                            <i class="c-sidebar-nav-icon fa-fw fas fa-calendar" style="color: #fff">
             
                             </i>
                             {{ trans('global.systemCalendar') }}
@@ -83,7 +89,7 @@
         @can('provider_man_mangment_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/categories*") ? "c-show" : "" }} {{ request()->is("admin/provider-men*") ? "c-show" : "" }} {{ request()->is("admin/items*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw fab fa-servicestack c-sidebar-nav-icon" style="color: #922B21">
+                    <i class="fa-fw fab fa-servicestack c-sidebar-nav-icon" style="color: #d36c6c">
 
                     </i>
                     {{ trans('cruds.providerManMangment.title') }}
@@ -92,7 +98,7 @@
                     @can('provider_man_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.provider-men.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/provider-men") || request()->is("admin/provider-men/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-user-astronaut c-sidebar-nav-icon"  style="color:#34495E">
+                                <i class="fa-fw fas fa-user-astronaut c-sidebar-nav-icon"  style="color:#fff">
 
                                 </i>
                                 {{ trans('cruds.providerMan.title') }}
@@ -102,7 +108,7 @@
                     @can('category_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.categories.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/categories") || request()->is("admin/categories/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-tasks c-sidebar-nav-icon"  style="color:#34495E">
+                                <i class="fa-fw fas fa-tasks c-sidebar-nav-icon"  style="color:#fff">
 
                                 </i>
                                 {{ trans('cruds.category.title') }}
@@ -112,7 +118,7 @@
                     @can('item_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.items.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/items") || request()->is("admin/items/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-feather-alt c-sidebar-nav-icon"  style="color:#34495E">
+                                <i class="fa-fw fas fa-feather-alt c-sidebar-nav-icon"  style="color:#fff">
 
                                 </i>
                                 {{ trans('cruds.item.title') }}
@@ -126,7 +132,7 @@
         @can('user_alert_access')
             <li class="c-sidebar-nav-item" style="color:#5499C7">
                 <a href="{{ route("admin.user-alerts.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/user-alerts") || request()->is("admin/user-alerts/*") ? "c-active" : "" }}">
-                    <i class="fa-fw fas fa-bell c-sidebar-nav-icon" style="color:#922B21">
+                    <i class="fa-fw fas fa-bell c-sidebar-nav-icon" style="color:#d36c6c">
 
                     </i>
                     {{ trans('cruds.userAlert.title') }}
@@ -137,7 +143,7 @@
         @can('user_management_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/permissions*") ? "c-show" : "" }} {{ request()->is("admin/roles*") ? "c-show" : "" }} {{ request()->is("admin/users*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw fas fa-users c-sidebar-nav-icon" style="color: #922B21">
+                    <i class="fa-fw fas fa-users c-sidebar-nav-icon" style="color: #d36c6c">
 
                     </i>
                     {{ trans('cruds.userManagement.title') }}
@@ -156,7 +162,7 @@
                     @can('role_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.roles.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/roles") || request()->is("admin/roles/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-briefcase c-sidebar-nav-icon" style="color:#34495E">
+                                <i class="fa-fw fas fa-briefcase c-sidebar-nav-icon" style="color:#fff">
 
                                 </i>
                                 {{ trans('cruds.role.title') }}
@@ -166,7 +172,7 @@
                     @can('user_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.users.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/users") || request()->is("admin/users/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-user c-sidebar-nav-icon" style="color: #34495E">
+                                <i class="fa-fw fas fa-user c-sidebar-nav-icon" style="color: #fff">
 
                                 </i>
                                 {{ trans('cruds.user.title') }}
@@ -176,7 +182,7 @@
                     @can('audit_log_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.audit-logs.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/audit-logs") || request()->is("admin/audit-logs/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-file-alt c-sidebar-nav-icon" style="color: #34495E">
+                                <i class="fa-fw fas fa-file-alt c-sidebar-nav-icon" style="color: #fff">
 
                                 </i>
                                 {{ trans('cruds.auditLog.title') }}
@@ -190,7 +196,7 @@
         @can('setting_access')
             <li class="c-sidebar-nav-dropdown  {{ request()->is("admin/cities*") ? "c-show" : "" }} {{ request()->is("admin/skills*") ? "c-show" : "" }} {{ request()->is("admin/specializations/*") ? "c-active" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon" style="color: #922B21">
+                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon" style="color: #d36c6c">
 
                     </i>
                     {{ trans('cruds.setting.title') }}
@@ -199,7 +205,7 @@
                     @can('city_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.cities.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/cities") || request()->is("admin/cities/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-globe-africa c-sidebar-nav-icon" style="color: #34495E">
+                                <i class="fa-fw fas fa-globe-africa c-sidebar-nav-icon" style="color: #fff">
             
                                 </i>
                                 {{ trans('cruds.city.title') }}
@@ -209,7 +215,7 @@
                     @can('specialization_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.specializations.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/specializations") || request()->is("admin/specializations/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-glasses c-sidebar-nav-icon" style="color: #34495E">
+                                <i class="fa-fw fas fa-glasses c-sidebar-nav-icon" style="color: #fff">
 
                                 </i>
                                 {{ trans('cruds.specialization.title') }}
@@ -219,20 +225,44 @@
                     @can('skill_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.skills.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/skills") || request()->is("admin/skills/*") ? "c-active" : "" }}">
-                                <i class="fa-fw fas fa-award c-sidebar-nav-icon" style="color: #34495E">
+                                <i class="fa-fw fas fa-award c-sidebar-nav-icon" style="color: #fff">
             
                                 </i>
                                 {{ trans('cruds.skill.title') }}
                             </a>
                         </li>
                     @endcan
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.general-settings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/general-settings") || request()->is("admin/general-settings/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cog c-sidebar-nav-icon" style="color: #fff">
+
+                            </i>
+                            {{ trans('cruds.generalSettings.title') }}
+                        </a>
+                    </li>
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.sliders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/sliders") || request()->is("admin/sliders/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-sliders-h c-sidebar-nav-icon" style="color: #fff"> 
+
+                            </i>
+                            {{ trans('cruds.slider.title') }}
+                        </a>
+                    </li>
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.contactus.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/contactus") || request()->is("admin/contactus/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-id-card-alt c-sidebar-nav-icon" style="color: #fff"> 
+                                
+                            </i>
+                            {{ trans('cruds.contactus.title') }}
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endcan
 
         <li class="c-sidebar-nav-item">
             <a href="#" class="c-sidebar-nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
-                <i class="c-sidebar-nav-icon fas fa-fw fa-sign-out-alt" style="color: #922B21">
+                <i class="c-sidebar-nav-icon fas fa-fw fa-sign-out-alt" style="color: #d36c6c">
 
                 </i>
                 {{ trans('global.logout') }}

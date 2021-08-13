@@ -14,16 +14,17 @@
 <section class="contact-one">
     <div class="container">
 
-        <form action="#" class="contact-one__form">
+        <form action="{{route('frontend.contactus.store')}}" method="POST" class="contact-one__form">
+            @csrf
             <div class="row low-gutters">
                 <div class="col-lg-6">
-                    <input type="text" placeholder="الاسم ">
+                    <input type="text" name="name" placeholder="الاسم ">
                 </div><!-- /.col-lg-6 -->
                 <div class="col-lg-6">
-                    <input type="text" placeholder="البريد الإلكتروني">
+                    <input type="email" name="email" placeholder="البريد الإلكتروني">
                 </div><!-- /.col-lg-6 -->
                 <div class="col-lg-12">
-                    <textarea placeholder="الرسالة"></textarea>
+                    <textarea placeholder="الرسالة" name="message"></textarea>
                     <div class="text-center">
                         <button type="submit" class="contact-one__btn thm-btn">إرسال</button>
                     </div><!-- /.text-center -->

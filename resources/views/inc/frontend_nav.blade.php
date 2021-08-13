@@ -1,8 +1,11 @@
 <div class="topbar-one">
+    @php
+        $general_settings = \App\Models\GeneralSettings::first();
+    @endphp
     <div class="container">
         <div class="topbar-one__left">
-            <a href="#"><i class="fas fa-envelope"></i> needhelp@saudievents.com</a>
-            <a href="#"><i class="fas fa-phone-alt"></i> 966 888 0000</a>
+            <a href="#"><i class="fas fa-envelope"></i> {{$general_settings->email}}</a>
+            <a href="#"><i class="fas fa-phone-alt"></i> {{$general_settings->phone}}</a>
         </div><!-- /.topbar-one__left -->
         <div class="topbar-one__right hidden-xs">
             @auth 

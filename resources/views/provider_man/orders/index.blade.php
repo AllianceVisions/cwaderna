@@ -51,6 +51,7 @@
                                 <td> 
                                     {{$item->pivot->profit}}
                                 </td>
+                                <td></td>
                             </tr>
                         @endforeach
                     @endforeach

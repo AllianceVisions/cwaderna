@@ -83,6 +83,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('items', 'ItemsController');
 
     
+    // General Settings
+    Route::post('general-settings/media', 'GeneralSettingsController@storeMedia')->name('general-settings.storeMedia');
+    Route::post('general-settings/ckmedia', 'GeneralSettingsController@storeCKEditorImages')->name('general-settings.storeCKEditorImages');
+    Route::resource('general-settings', 'GeneralSettingsController', ['except' => ['create', 'store', 'show', 'destroy']]);
+
+    // Sliders 
+    Route::post('sliders/media', 'SlidersController@storeMedia')->name('sliders.storeMedia');
+    Route::post('sliders/ckmedia', 'SlidersController@storeCKEditorImages')->name('sliders.storeCKEditorImages');
+    Route::resource('sliders', 'SlidersController');
+    
+    //Contact Us
+    Route::delete('contactus/destroy/{contactus}','ContactUsController@destroy')->name('contactus.destroy');
+    Route::get('contactus','ContactUsController@index')->name('contactus.index');
+
     // User Alerts 
     Route::resource('user-alerts', 'UserAlertsController', ['except' => ['edit', 'update']]);
     Route::post('user-alerts/read', 'UserAlertsController@read')->name('alert.read');

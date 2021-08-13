@@ -36,6 +36,7 @@ Route::group([ 'as' => 'frontend.' , 'namespace' => 'Frontend'],function () {
     Route::get('/','FrontendController@home')->name('home');
     Route::get('about-us','FrontendController@aboutus')->name('aboutus');
     Route::get('contact', 'FrontendController@contact')->name('contact');
+    Route::post('contact/store', 'FrontendController@save_contactus')->name('contactus.store');
 
     //caders
     Route::get('cader/register', 'CadersController@cader_register')->name('cader.register');
