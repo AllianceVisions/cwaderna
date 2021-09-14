@@ -37,8 +37,12 @@
         <div class="container clearfix">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="logo-box clearfix">
-                <a class="navbar-brand" href="{{route('frontend.home')}}">
-                    <img src="{{asset('assets/images/logo-dark.png')}}" class="main-logo" width="128" alt="Awesome Image" />
+                <a class="navbar-brand" href="{{route('frontend.home')}}">  
+                    @if($general_settings && $general_settings->logo)
+                        <img src="{{$general_settings->logo->getUrl()}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
+                    @else 
+                        <img src="{{asset('assets/images/logo-dark.png')}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
+                    @endif
                 </a>
             
                 <button class="menu-toggler" data-target=".main-navigation">

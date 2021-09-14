@@ -52,52 +52,50 @@
                         {!! $chart1->renderHtml() !!}
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-4"> 
+                        <div class="card text-white bg-primary" style="position: relative">
+                            <div style="position: absolute;@if(app()->getLocale() == 'ar') left:0 @else right:0 @endif">
+                                <i style="font-size: 91px;color:#082a482e" class="fa-fw far fa-user c-sidebar-nav-icons"></i>
+                            </div>
+                            <div class="card-body pb-0">
+                                <div class="text-value-lg">{{ trans('cruds.eventOrganizer.title') }}</div>
+                                <div style="font-size: 20px">{{\App\Models\User::where('user_type','events_organizer')->get()->count()}} </div>
+                                <br />
+                            </div>
+                        </div>
                         
+                        <div class="card text-white bg-info" style="position: relative">
+                            <div style="position: absolute;@if(app()->getLocale() == 'ar') left:0 @else right:0 @endif">
+                                <i style="font-size: 91px;color:#082a482e" class="fa-fw fas fa-medal c-sidebar-nav-icon"></i>
+                            </div>
+                            <div class="card-body pb-0">
+                                <div class="text-value-lg">{{ trans('cruds.event.title') }}</div>
+                                <div style="font-size: 20px">{{\App\Models\Event::get()->count()}}</div>
+                                <br />
+                            </div>
+                        </div>
                         
-                            <div class="card text-white bg-primary" style="position: relative">
-                                <div style="position: absolute;@if(app()->getLocale() == 'ar') left:0 @else right:0 @endif">
-                                    <i style="font-size: 91px;color:#082a482e" class="fa-fw far fa-user c-sidebar-nav-icons"></i>
-                                </div>
-                                <div class="card-body pb-0">
-                                    <div class="text-value-lg">{{ trans('cruds.eventOrganizer.title') }}</div>
-                                    <div style="font-size: 20px">{{\App\Models\User::where('user_type','events_organizer')->get()->count()}} </div>
-                                    <br />
-                                </div>
+                        <div class="card text-white bg-warning" style="position: relative">
+                            <div style="position: absolute;@if(app()->getLocale() == 'ar') left:0 @else right:0 @endif">
+                                <i style="font-size: 91px;color:#082a482e" class="fa-fw far fa-address-book c-sidebar-nav-icon"></i>
+                            </div>
+                            <div class="card-body pb-0">
+                                <div class="text-value-lg">{{ trans('cruds.cader.title') }}</div>
+                                <div style="font-size: 20px">{{\App\Models\User::where('user_type','cader')->get()->count()}}</div>
+                                <br />
+                            </div>
+                        </div>
+                        
+                        <div class="card text-white bg-danger" style="position: relative">
+                            <div style="position: absolute;@if(app()->getLocale() == 'ar') left:0 @else right:0 @endif">
+                                <i style="font-size: 91px;color:#082a482e" class="fa-fw fas fa-feather-alt c-sidebar-nav-icon"></i>
+                            </div>
+                            <div class="card-body pb-0">
+                                <div class="text-value-lg">{{ trans('cruds.item.title') }}</div>
+                                <div style="font-size: 20px">{{\App\Models\Item::get()->count()}}</div>
+                                <br />
                             </div>
                             
-                            <div class="card text-white bg-info" style="position: relative">
-                                <div style="position: absolute;@if(app()->getLocale() == 'ar') left:0 @else right:0 @endif">
-                                    <i style="font-size: 91px;color:#082a482e" class="fa-fw fas fa-medal c-sidebar-nav-icon"></i>
-                                </div>
-                                <div class="card-body pb-0">
-                                    <div class="text-value-lg">{{ trans('cruds.event.title') }}</div>
-                                    <div style="font-size: 20px">{{\App\Models\Event::get()->count()}}</div>
-                                    <br />
-                                </div>
-                            </div>
-                            
-                            <div class="card text-white bg-warning" style="position: relative">
-                                <div style="position: absolute;@if(app()->getLocale() == 'ar') left:0 @else right:0 @endif">
-                                    <i style="font-size: 91px;color:#082a482e" class="fa-fw far fa-address-book c-sidebar-nav-icon"></i>
-                                </div>
-                                <div class="card-body pb-0">
-                                    <div class="text-value-lg">{{ trans('cruds.cader.title') }}</div>
-                                    <div style="font-size: 20px">{{\App\Models\User::where('user_type','cader')->get()->count()}}</div>
-                                    <br />
-                                </div>
-                            </div>
-                            
-                            <div class="card text-white bg-danger" style="position: relative">
-                                <div style="position: absolute;@if(app()->getLocale() == 'ar') left:0 @else right:0 @endif">
-                                    <i style="font-size: 91px;color:#082a482e" class="fa-fw fas fa-feather-alt c-sidebar-nav-icon"></i>
-                                </div>
-                                <div class="card-body pb-0">
-                                    <div class="text-value-lg">{{ trans('cruds.item.title') }}</div>
-                                    <div style="font-size: 20px">{{\App\Models\Item::get()->count()}}</div>
-                                    <br />
-                                </div>
-                                
                         </div>
                     </div>
                 </div>

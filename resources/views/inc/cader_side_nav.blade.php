@@ -4,7 +4,7 @@
     @endphp
     <div class="c-sidebar-brand d-md-down-none"> 
         <a class="c-sidebar-brand-full h4" href="#">
-            @if($general_settings->logo)
+            @if($general_settings && $general_settings->logo)
                 <img src="{{$general_settings->logo->getUrl()}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
             @else 
                 <img src="{{asset('assets/images/logo-dark.png')}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
