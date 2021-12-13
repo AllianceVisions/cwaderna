@@ -13,9 +13,10 @@ class UserResource extends JsonResource
      * @return array
      */
     public function toArray($request)
-    {
-        $image = $this->photo ? asset($this->photo->getUrl()) : asset('user.png');
+    { 
         $name = 'name_' . app()->getLocale();
+        $image = $this->photo ? asset($this->photo->getUrl()) : null;
+        $image = str_replace('public/public','public',$image);
         return [
             'id' => $this->id,
             'phone' => $this->phone,

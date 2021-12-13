@@ -6,8 +6,12 @@
         {{ trans('global.show') }} {{ trans('cruds.event.title') }}
     </div>
 
-    <div class="card-body">
+    <div class="card-body"> 
         <div class="form-group">
+            
+            <div class="form-group"> 
+                <div id="map3"  style="width: 100%; height: 600px"></div>
+            </div>
             <div class="form-group">
                 <a class="btn btn-default" href="{{ route('admin.events.index') }}">
                     {{ trans('global.back_to_list') }}
@@ -536,7 +540,6 @@
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
-
         </div>
     </div>
 </div>
@@ -547,6 +550,121 @@
 
 @section('scripts')
 @parent
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyCq2UTcMzYp__KQb0P_By0dmzCjP9Twors&libraries=places&v=weekly"></script>
+<script>
+
+    let infoObj = []; 
+    let map ; 
+    let titles = [];
+    let markers = [];
+
+    function myMap3() {
+        var mapCanvas = document.getElementById("map3");
+        var mapOptions = {
+            center: new google.maps.LatLng('{{ $event->latitude}}', '{{ $event->longitude }}'),
+            zoom: 14,
+            mapTypeId: "roadmap",
+        };
+        map = new google.maps.Map(mapCanvas, mapOptions);
+
+        var circle = new google.maps.Circle({
+            center:new google.maps.LatLng('{{ $event->latitude}}', '{{ $event->longitude }}'), 
+            radius: parseInt('{{ $event->area}}'), 
+            fillColor: "#0000FF", 
+            fillOpacity: 0.3, 
+            map: map, 
+            strokeColor: "#FFFFFF", 
+            strokeOpacity: 0.6, 
+            strokeWeight: 2
+        });
+        @foreach($event->caders as $cader)
+            titles.push({
+                'id' : '{{ $cader->user_id }}',
+                'lat' : '{{ $cader->latitude}}',
+                'lng' : '{{ $cader->longitude}}',
+                'name' : '{{ $cader->user->first_name}}' + ' ' + '{{ $cader->user->last_name}}',
+                'photo' : 'http://localhost/cwaderna/public/storage/3/conversions/61afe1277f28b_Wallpapers-HD-Assassins-Creed-Gallery-88-Plus-PIC-WPW2013516-thumb.jpg'
+            });
+        @endforeach
+        
+        for(var i = 0; i < parseInt('{{ $event->caders()->get()->count() }}') ; i++){ 
+            var contentString = '<img style="padding:8px" src="' + titles[i].photo + '"> <h5>' + titles[i].name + '</h5> ';
+
+            const marker = new google.maps.Marker({
+                position: new google.maps.LatLng(titles[i].lat, titles[i].lng), 
+                map:map,
+                title:titles[i].id,
+            });
+
+            const infowindow = new google.maps.InfoWindow({
+                content: contentString,
+                maxWidth: 200,
+            });
+
+            marker.addListener("click", function(){
+                closeOtherInfo();
+                infowindow.open(map,marker);
+                infoObj[0] = infowindow;
+            }); 
+            markers.push(marker);
+        }
+    }
+    google.maps.event.addDomListener(window, 'load', myMap3); 
+    function functiontofindIndexByKeyValue(arraytosearch, key, valuetosearch) {
+
+        for (var i = 0; i < arraytosearch.length; i++) {
+
+            if (arraytosearch[i][key] == valuetosearch) {
+                return i;
+            }
+        }
+        return null;
+    } 
+    function closeOtherInfo(){
+        if(infoObj.length > 0){
+            infoObj[0].set('marker',null);
+            infoObj[0].close();
+            infoObj[0].length = 0; 
+        }
+    }
+    function addmarker(lat,lng,title = ''){
+        for (let i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+            circles[i].setMap(null);
+        }
+
+        const marker = new google.maps.Marker({
+            position: new google.maps.LatLng(lat,lng), 
+            map,
+            title: title,
+        });
+        markers.push(marker);
+        
+        var circle = new google.maps.Circle({
+            center:new google.maps.LatLng(lat,lng), 
+            radius: parseInt($('#area').val()), 
+            fillColor: "#0000FF", 
+            fillOpacity: 0.2, 
+            map: map, 
+            strokeColor: "#FFFFFF", 
+            strokeOpacity: 0.6, 
+            strokeWeight: 2
+        });
+        circles.push(circle);
+    }
+</script>
+
+<script>
+    var channel = pusher.subscribe('stream-location');
+
+    channel.bind('App\\Events\\ChangeLocation',function(obj){ 
+        
+        var index = functiontofindIndexByKeyValue(markers, "title", obj['user_id']);
+        
+        markers[index].setPosition(new google.maps.LatLng(obj['latitude'], obj['longitude']))
+            
+    });
+</script>
 <script> 
     function showmodal(id,start_attendance,end_attendance){
         $('#add_cader_modal').modal('show')

@@ -1,4 +1,4 @@
-<div id="sidebar" class="c-sidebar c-sidebar-fixed c-sidebar-lg-show" style="background: white">
+<div id="sidebar" class="c-sidebar c-sidebar-fixed c-sidebar-lg-show" >
     @php
         $general_settings = \App\Models\GeneralSettings::first();
     @endphp
@@ -15,7 +15,7 @@
     <ul class="c-sidebar-nav">
 
         <li class="c-sidebar-nav-item">
-            <a href="{{ route("provider-man.home") }}" class="c-sidebar-nav-link">
+            <a href="{{ route("events-organizer.home") }}" class="c-sidebar-nav-link">
                 <i class="c-sidebar-nav-icon fas fa-fw fa-tachometer-alt" style="color: #8E44AD">
 
                 </i>

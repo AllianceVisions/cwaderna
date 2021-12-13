@@ -18,6 +18,9 @@ class CreateCadersTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->double('rating',15,2)->default(0);
             $table->text('description')->nullable();
+            $table->double('longitude')->nullable();
+            $table->double('latitude')->nullable();
+            $table->tinyInteger('out_of_zone')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

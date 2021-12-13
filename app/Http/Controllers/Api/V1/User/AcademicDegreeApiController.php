@@ -32,7 +32,11 @@ class AcademicDegreeApiController extends Controller
         $validated_request['user_id'] = Auth::id();
         $acadmeic_degree = AcademicDegree::create($validated_request); 
 
-        return $this->returnSuccessMessage(__('Inserted Succeessfully'));
+        return $this->returnData(
+            [
+                'id' => $acadmeic_degree->id, 
+            ]
+        );
     }
 
     

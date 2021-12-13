@@ -13,6 +13,7 @@ Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User
     // settings
     Route::get('nationality','SettingsApiController@nationality'); 
     Route::get('cities','SettingsApiController@cities'); 
+    Route::get('prefix','SpecializationsApiController@index') ;
 
     Route::group(['middleware' => ['auth:sanctum']],function () {
 
@@ -48,7 +49,6 @@ Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User
 
         // specializations
         Route::group(['prefix' =>'specializations'],function(){
-            Route::get('/','SpecializationsApiController@index') ;
             Route::post('add','SpecializationsApiController@store') ;
             Route::get('delete/{specialization_id}','SpecializationsApiController@delete') ;
         }); 
@@ -63,6 +63,7 @@ Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User
         // events
         Route::group(['prefix' =>'cader/events'],function(){
             Route::get('/','CaderEventsApiController@index') ; 
+            Route::get('find/{id}','CaderEventsApiController@find') ; 
             Route::post('response','CaderEventsApiController@response') ;  
             Route::get('accepted','CaderEventsApiController@accepted') ; 
             Route::get('refused','CaderEventsApiController@refused') ; 

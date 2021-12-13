@@ -94,10 +94,12 @@ class UserAuthApiController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             if(Auth::user()->user_type == 'cader' || Auth::user()->approved == 1){
                 $token = Auth::user()->createToken('user_token')->plainTextToken; 
+                $cader = Cader::where('user_id',Auth::id())->first();
                 return $this->returnData(
                     [
                         'user_token' => $token,
-                        'user_id '=> Auth::id()
+                        'user_id '=> Auth::id(),
+                        'cader_id' => $cader->id,
                     ]
                 );
             }else{

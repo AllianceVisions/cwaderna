@@ -24,6 +24,8 @@ class Cader extends Model
         'user_id',
         'rating',
         'description',
+        'longitude',
+        'latitude',
         'created_at',
         'updated_at',
         'deleted_at',

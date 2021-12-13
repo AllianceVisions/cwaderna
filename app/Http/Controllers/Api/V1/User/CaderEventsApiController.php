@@ -9,11 +9,20 @@ use App\Models\Event;
 use App\Models\Cader; 
 use Validator;
 use Auth;
+use App\Events\ChangeLocation;
 use App\Http\Resources\V1\User\CaderEventsResource;
+use App\Http\Resources\V1\User\EventsResource;
 
 class CaderEventsApiController extends Controller
 {
     use api_return;
+
+    public function find($id){
+        $cader = Cader::where('user_id',Auth::id())->first();
+        $event = $cader->events()->where('id',$id)->first(); 
+        $new = new CaderEventsResource($event);
+        return $this->returnData($new,'success');
+    } 
 
     public function index(){
         $cader = Cader::where('user_id',Auth::id())->first();
@@ -89,7 +98,7 @@ class CaderEventsApiController extends Controller
             'event_id' => 'required|integer', 
             'latitude' => 'required', 
             'longitude' => 'required', 
-            'type' => 'in:attend,leave', 
+            'type' => 'in:attend,leave,stream', 
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -97,21 +106,67 @@ class CaderEventsApiController extends Controller
         if ($validator->fails()) {
             return $this->returnError('401', $validator->errors());
         }
-
+        
         $event = Event::find($request->event_id); 
+
+        $distance = $this->twopoints_on_earth($event->latitude,$event->longitude,
+                                            $request->latitude,$request->longitude);
+        
         $cader = Cader::where('user_id',Auth::id())->first();
-        $distance = $this->twopoints_on_earth($event->latitude,$event->longitude,$request->latitude,$request->longitude);
-        $event->attendance()->attach([
-            $cader->id => [ 
-                'out_of_zone' => $distance > $event->area ? 1 : 0, 
-                'type' => $request->type,
-                'attendance1' => date('Y-m-d',time()),
-                'attendance2' => date('H:i:s',time()),
-                'longitude' => $request->longitude,
-                'latitude' => $request->latitude,
-                'distance' => $distance, 
-            ],
-        ]);
+
+        if($request->type != 'stream'){ 
+
+            $event->attendance()->attach([
+                $cader->id => [ 
+                    'out_of_zone' => $distance > $event->area ? 1 : 0, 
+                    'type' => $request->type,
+                    'attendance1' => date('Y-m-d',time()),
+                    'attendance2' => date('H:i:s',time()),
+                    'longitude' => $request->longitude,
+                    'latitude' => $request->latitude,
+                    'distance' => $distance, 
+                ],
+            ]);
+        }else{
+
+            // check existance of cader .....
+            //  before  => in  out in out 
+            //  now     => out in  in out 
+            //  result  => 1   1   0  0
+            // -------------------------------
+
+            //         before(in)             now(out)                       before(out)              now(in)
+            if( (!$cader->out_of_zone && $distance > $event->area) || ($cader->out_of_zone && $distance < $event->area)){
+                
+                $event->attendance()->attach([
+                    $cader->id => [ 
+                        'out_of_zone' => $distance > $event->area ? 1 : 0, 
+                        'type' => $request->type,
+                        'attendance1' => date('Y-m-d',time()),
+                        'attendance2' => date('H:i:s',time()),
+                        'longitude' => $request->longitude,
+                        'latitude' => $request->latitude,
+                        'distance' => $distance, 
+                    ],
+                ]);
+                    
+            }
+        }
+
+        $cader->latitude = $request->latitude;
+        $cader->longitude = $request->longitude;
+        $cader->out_of_zone = $distance > $event->area ? 1 : 0; 
+        $cader->save();
+        
+        $data = [
+            'user_id' => Auth::id(), 
+            'event_id' => $request->event_id,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'out_of_zone' => $distance > $event->area ? 1 : 0, 
+        ];
+        event(new ChangeLocation($data));
+
         return $this->returnSuccessMessage(__('Response Sent Succeessfully'));
     }
 

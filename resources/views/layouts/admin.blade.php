@@ -120,6 +120,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 
     <script src="{{ asset('admin/main.js') }}"></script>
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+  
+      // Enable pusher logging - don't include this in production
+      Pusher.logToConsole = true;
+  
+      var pusher = new Pusher('e9dd9f96cd00887a9604', {
+        cluster: 'mt1'
+      }); 
+    </script>
     <script>
       
       function showFrontendAlert(type, title, message){

@@ -10,35 +10,71 @@
         <form method="POST" action="{{ route("admin.events.update", [$event->id]) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
+            <input type="hidden" name="latitude" id="latitude" value="{{ $event->latitude ?? ''}}">
+            <input type="hidden" name="longitude" id="longitude" value="{{ $event->longitude ?? ''}}">
             
             <div class="row">
 
                 <div class="col-md-6">
-                    {{-- event_organizer_id --}}
-                    <div class="form-group">
-                        <label class="required" for="event_organizer_id">{{ trans('cruds.event.fields.event_organizer_id') }}</label>
-                        <select class="form-control select2 {{ $errors->has('event_organizer_id') ? 'is-invalid' : '' }}" name="event_organizer_id" id="event_organizer_id" required>
-                            @foreach($event_organizers as $id => $entry)
-                                <option value="{{ $id }}" {{ (old('event_organizer_id') ? old('event_organizer_id') : $event->event_organizer->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                            @endforeach
-                        </select>
-                        @if($errors->has('event_organizer_id'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('event_organizer_id') }}
-                            </div>
-                        @endif
-                        <span class="help-block">{{ trans('cruds.event.fields.event_organizer_id_helper') }}</span>
+                    <div class="row"> 
+                        {{-- event_organizer_id --}}
+                        <div class="form-group col-md-6">
+                            <label class="required" for="event_organizer_id">{{ trans('cruds.event.fields.event_organizer_id') }}</label>
+                            <select class="form-control select2 {{ $errors->has('event_organizer_id') ? 'is-invalid' : '' }}" name="event_organizer_id" id="event_organizer_id" required>
+                                @foreach($event_organizers as $id => $entry)
+                                    <option value="{{ $id }}" {{ (old('event_organizer_id') ? old('event_organizer_id') : $event->event_organizer->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('event_organizer_id'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('event_organizer_id') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.event.fields.event_organizer_id_helper') }}</span>
+                        </div>
+                        {{-- title --}}
+                        <div class="form-group col-md-6">
+                            <label class="required" for="title">{{ trans('cruds.event.fields.title') }}</label>
+                            <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title" id="title" value="{{ old('title', $event->title) }}" required>
+                            @if($errors->has('title'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('title') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.event.fields.title_helper') }}</span>
+                        </div>
                     </div>
-                    {{-- title --}}
-                    <div class="form-group">
-                        <label class="required" for="title">{{ trans('cruds.event.fields.title') }}</label>
-                        <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title" id="title" value="{{ old('title', $event->title) }}" required>
-                        @if($errors->has('title'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('title') }}
+                    <div class="row">
+                        <div class="col-md-8">  
+                            {{-- city_id --}}
+                            <div class="form-group">
+                                <label class="required" for="city_id">{{ trans('cruds.event.fields.city_id') }}</label>
+                                <select class="form-control select2 {{ $errors->has('city_id') ? 'is-invalid' : '' }}" name="city_id" id="city_id" required>
+                                    @foreach($cities as $id => $name)
+                                        <option value="{{ $id }}" @if($event->city_id == $id) selected @endif {{ old('city_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                    @endforeach
+                                </select>
+                                @if($errors->has('city_id'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('city_id') }}
+                                    </div>
+                                @endif
+                                <span class="help-block">{{ trans('cruds.event.fields.city_id_helper') }}</span>
+                            </div> 
+                        </div> 
+                        <div class="col-md-4">
+                            {{-- area --}}
+                            <div class="form-group">
+                                <label class="required" for="area">{{ trans('cruds.event.fields.area') }}</label>
+                                <input class="form-control {{ $errors->has('area') ? 'is-invalid' : '' }}"  type="number" step="0.00000001" name="area" id="area" value="{{ old('area', $event->area) }}" required>
+                                @if($errors->has('area'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('area') }}
+                                    </div>
+                                @endif
+                                <span class="help-block" style="font-size: 10px">{{ trans('cruds.event.fields.area_helper') }}</span>
                             </div>
-                        @endif
-                        <span class="help-block">{{ trans('cruds.event.fields.title_helper') }}</span>
+                        </div>
                     </div>
                     {{-- description --}}
                     <div class="form-group">
@@ -65,15 +101,23 @@
 
                     <div class="partials-scrollable">
                         @include('admin.events.partials.specializations')
-                    </div>
-
-                    {{-- <button onclick="getLocation()" type="button">Try It</button>
-
-                    <div id="mapholder"></div> --}}
+                    </div> 
                 </div>
 
                 <div class="col-md-6">
+                    <div class="form-group">
+                        <input
+                            style="width: 300px"
+                            id="pac-input"
+                            class="form-control"
+                            type="text"
+                            placeholder="Search Box"
+                        />
+                        <div id="map3"  style="width: 100%; height: 400px"></div>
+                    </div>
+
                     <div class="row">
+                        
                         <div class="col-md-6">
                             {{-- start_date --}}
                             <div class="form-group">
@@ -122,65 +166,7 @@
                                 <span class="help-block">{{ trans('cruds.event.fields.end_attendance_helper') }}</span>
                             </div>
                         </div>
-                    </div>
-
-                    {{-- city_id --}}
-                    <div class="form-group">
-                        <label class="required" for="city_id">{{ trans('cruds.event.fields.city_id') }}</label>
-                        <select class="form-control select2 {{ $errors->has('city_id') ? 'is-invalid' : '' }}" name="city_id" id="city_id" required>
-                            @foreach($cities as $id => $name)
-                                <option value="{{ $id }}" @if($event->city_id == $id) selected @endif {{ old('city_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
-                            @endforeach
-                        </select>
-                        @if($errors->has('city_id'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('city_id') }}
-                            </div>
-                        @endif
-                        <span class="help-block">{{ trans('cruds.event.fields.city_id_helper') }}</span>
                     </div> 
-
-                    <div class="row">
-                        <div class="col-md-4"> 
-                            {{-- latitude --}}
-                            <div class="form-group">
-                                <label class="required" for="latitude">{{ trans('cruds.event.fields.latitude') }}</label>
-                                <input class="form-control {{ $errors->has('latitude') ? 'is-invalid' : '' }}" type="number" step="0.00000001" name="latitude" id="latitude" value="{{ old('latitude', $event->latitude) }}" required>
-                                @if($errors->has('latitude'))
-                                    <div class="invalid-feedback">
-                                        {{ $errors->first('latitude') }}
-                                    </div>
-                                @endif
-                                <span class="help-block">{{ trans('cruds.event.fields.latitude_helper') }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            {{-- longitude --}}
-                            <div class="form-group">
-                                <label class="required" for="longitude">{{ trans('cruds.event.fields.longitude') }}</label>
-                                <input class="form-control {{ $errors->has('longitude') ? 'is-invalid' : '' }}" type="number" step="0.00000001" name="longitude" id="longitude" value="{{ old('longitude', $event->longitude) }}" required>
-                                @if($errors->has('longitude'))
-                                    <div class="invalid-feedback">
-                                        {{ $errors->first('longitude') }}
-                                    </div>
-                                @endif
-                                <span class="help-block">{{ trans('cruds.event.fields.longitude_helper') }}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            {{-- area --}}
-                            <div class="form-group">
-                                <label class="required" for="area">{{ trans('cruds.event.fields.area') }}</label>
-                                <input class="form-control {{ $errors->has('area') ? 'is-invalid' : '' }}" type="number" step="0.00000001" name="area" id="area" value="{{ old('area', $event->area) }}" required>
-                                @if($errors->has('area'))
-                                    <div class="invalid-feedback">
-                                        {{ $errors->first('area') }}
-                                    </div>
-                                @endif
-                                <span class="help-block" style="font-size: 10px">{{ trans('cruds.event.fields.area_helper') }}</span>
-                            </div>
-                        </div>
-                    </div>
 
                     {{-- address --}}
                     <div class="form-group">
@@ -206,6 +192,7 @@
                         @endif
                         <span class="help-block">{{ trans('cruds.event.fields.photo_helper') }}</span>
                     </div>
+
                 </div>
 
 
@@ -225,6 +212,100 @@
 @endsection
 
 @section('scripts')
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyCq2UTcMzYp__KQb0P_By0dmzCjP9Twors&libraries=places&v=weekly"></script>
+<script>
+
+    let markers = [];
+    let circles = []; 
+    let map ; 
+    function myMap3() {
+        var mapCanvas = document.getElementById("map3");
+        var mapOptions = {
+            center: new google.maps.LatLng('{{ $event->latitude}}', '{{ $event->longitude }}'),
+            zoom: 14,
+            mapTypeId: "roadmap",
+        };
+        map = new google.maps.Map(mapCanvas, mapOptions); 
+
+        // Create the search box and link it to the UI element.
+        const input = document.getElementById("pac-input");
+        const searchBox = new google.maps.places.SearchBox(input);
+
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener("bounds_changed", () => {
+            searchBox.setBounds(map.getBounds());
+        });
+
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener("places_changed", () => {
+            const places = searchBox.getPlaces();
+
+            if (places.length == 0) {
+                return;
+            } 
+
+            // For each place, get the icon, name and location.
+            const bounds = new google.maps.LatLngBounds();
+
+            places.forEach((place) => {
+                if (!place.geometry || !place.geometry.location) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                } 
+                
+                addmarker(place.geometry.location.lat(),place.geometry.location.lng());
+                
+                if (place.geometry.viewport) {
+                    // Only geocodes have viewport.
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
+            });
+            map.fitBounds(bounds);
+        });
+        
+        addmarker('{{ $event->latitude}}', '{{ $event->longitude }}'); 
+
+        // Configure the click listener.
+        map.addListener("click", (mapsMouseEvent) => { 
+
+            addmarker(mapsMouseEvent.latLng.lat(),mapsMouseEvent.latLng.lng());
+
+            $('#latitude').val(mapsMouseEvent.latLng.lat());
+            $('#longitude').val(mapsMouseEvent.latLng.lng());
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', myMap3); 
+
+    function addmarker(lat,lng,title = ''){
+        for (let i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+            circles[i].setMap(null);
+        }
+
+        const marker = new google.maps.Marker({
+            position: new google.maps.LatLng(lat,lng), 
+            map,
+            title: title,
+        });
+        markers.push(marker);
+        
+        var circle = new google.maps.Circle({
+            center:new google.maps.LatLng(lat,lng), 
+            radius: parseInt($('#area').val()), 
+            fillColor: "#0000FF", 
+            fillOpacity: 0.2, 
+            map: map, 
+            strokeColor: "#FFFFFF", 
+            strokeOpacity: 0.6, 
+            strokeWeight: 2
+        });
+        circles.push(circle);
+    }
+</script>
 <script>
     Dropzone.options.photoDropzone = {
         url: '{{ route('admin.events.storeMedia') }}',

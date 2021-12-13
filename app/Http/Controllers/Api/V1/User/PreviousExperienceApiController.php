@@ -31,8 +31,11 @@ class PreviousExperienceApiController extends Controller
         $validated_request = $request->all();
         $validated_request['user_id'] = Auth::id();
         $previous_experience = PreviousExperience::create($validated_request);  
-
-        return $this->returnSuccessMessage(__('Inserted Succeessfully'));
+        return $this->returnData(
+            [
+                'id' => $previous_experience->id, 
+            ]
+        );
     }
 
     public function update(Request $request){

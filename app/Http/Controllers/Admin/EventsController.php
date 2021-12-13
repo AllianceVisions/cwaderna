@@ -378,7 +378,7 @@ class EventsController extends Controller
     {
         abort_if(Gate::denies('event_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $event->load(['event_organizer','specializations']); 
+        $event->load(['event_organizer','specializations','caders']);   
         
         return view('admin.events.show', compact('event'));
     }

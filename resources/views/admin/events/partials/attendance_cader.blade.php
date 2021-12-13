@@ -35,6 +35,8 @@
                         <td>
                             @if($raw->pivot->type == 'attend')
                                 <span class="badge bg-info text-white">تأكيد حضور</span>
+                            @elseif($raw->pivot->type == 'stream')
+                                <span class="badge bg-danger text-white">streaming</span>
                             @else 
                                 <span class="badge bg-warning text-white">تأكيد أنصراف</span>
                             @endif

@@ -15,11 +15,16 @@ class EventsResource extends JsonResource
     public function toArray($request)
     {
         $name = 'name_' . app()->getLocale();
+        $image = $this->photo ? asset($this->photo->getUrl()) : null;
+        $image = str_replace('public/public','public',$image);
         return [
             'id' => $this->id,
             'title' => $this->title,
             'address' => $this->address ?? '' ,
             'city' => $this->city->$name ?? '' ,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
+            'area' => $this->area,
             'description' => $this->description,
             'conditions' => $this->conditions,
             'start_date' => $this->start_date,
@@ -29,7 +34,7 @@ class EventsResource extends JsonResource
             'cader_start_attendance' => '0',
             'cader_end_attendance' => '0',
             'cader_price' => '0',
-            'photo' => $this->photo ? asset($this->photo->getUrl()) : null,
+            'photo' => $image,
             'cader_status' => '0',
             'cader_status2' => '0',
             'event_request_by' => '0',
