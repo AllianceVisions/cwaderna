@@ -12,14 +12,19 @@ use Auth;
 use App\Events\ChangeLocation;
 use App\Http\Resources\V1\User\CaderEventsResource;
 use App\Http\Resources\V1\User\EventsResource;
+use App\Traits\push_notification;
 
 class CaderEventsApiController extends Controller
 {
     use api_return;
+    use push_notification; 
 
     public function find($id){
         $cader = Cader::where('user_id',Auth::id())->first();
         $event = $cader->events()->where('id',$id)->first(); 
+        if(!$event){
+            return $this->returnError('404',('Not Found !!!'));
+        }
         $new = new CaderEventsResource($event);
         return $this->returnData($new,'success');
     } 
@@ -135,8 +140,11 @@ class CaderEventsApiController extends Controller
             //  result  => 1   1   0  0
             // -------------------------------
 
-            //         before(in)             now(out)                       before(out)              now(in)
-            if( (!$cader->out_of_zone && $distance > $event->area) || ($cader->out_of_zone && $distance < $event->area)){
+            //              before(in)             now(out)                       before(out)              now(in)
+            $insert = (!$cader->out_of_zone && $distance > $event->area) || ($cader->out_of_zone && $distance < $event->area);
+
+            $alert = !$cader->out_of_zone && $distance > $event->area;
+            if($insert){
                 
                 $event->attendance()->attach([
                     $cader->id => [ 
@@ -148,8 +156,11 @@ class CaderEventsApiController extends Controller
                         'latitude' => $request->latitude,
                         'distance' => $distance, 
                     ],
-                ]);
-                    
+                ]); 
+
+                if($alert){ 
+                    $this->send_notification('خارج نطاق الفعالية' , 'برجاء الرجوع لمنطفة الفعالية' , '' , '' , 'warning' , $cader->user_id, false);
+                }
             }
         }
 
@@ -158,12 +169,17 @@ class CaderEventsApiController extends Controller
         $cader->out_of_zone = $distance > $event->area ? 1 : 0; 
         $cader->save();
         
+        $first_name = $cader->user->first_name ?? '';
+        $last_name = $cader->user->last_name ?? '';
+        
         $data = [
             'user_id' => Auth::id(), 
+            'name' => $first_name . ' ' . $last_name,
             'event_id' => $request->event_id,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
-            'out_of_zone' => $distance > $event->area ? 1 : 0, 
+            'alert_out_of_zone' => $alert ? 1 : 0,
+            'refresh' => $insert ? 1 : 0, 
         ];
         event(new ChangeLocation($data));
 

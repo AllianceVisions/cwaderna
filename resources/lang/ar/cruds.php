@@ -103,6 +103,7 @@ return [
         'others'    => [
             'add_cader_to_event' => 'أضافة كادر لفعالية',
             'edit_cader_in_event' => 'تعديل كادر في فعالية',
+            'add_service_in_event' => 'أضافة خدمة في فعالية',
             'edit_service_in_event' => 'تعديل خدمة في فعالية',
             'attendance_in_event' => 'سجل حضور الكادر في الفعالية',
             'add_cader' => 'أضافة كادر',
@@ -114,6 +115,11 @@ return [
             'distance' => 'المسافة عن مكان الفعالية',
             'send_price' => 'أرسال التسعيرة',
             'by' => 'عن طريق',
+            'info' => 'معلومات الفعالية',
+            'map' => 'عرض الخريطة',
+            'caders' => 'الكوادر',
+            'services' => 'الخدمات',
+            'num_of_caders'          => 'عدد الكوادر المطلوبة',
         ],
         'fields'         => [
             'id'                      => 'ID',

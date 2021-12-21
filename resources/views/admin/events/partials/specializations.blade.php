@@ -5,7 +5,7 @@
 @foreach($specializations as $specialize)
     <div class="row">
         <div class="col-md-3">
-            <input {{ $specialize->value || old('specializations.'.$specialize->id) ? 'checked' : null }} data-id="{{ $specialize->id }}" type="checkbox" class="specialization-enable">
+            <input {{ $specialize->num_of_caders || old('specializations.'.$specialize->id) ? 'checked' : null }} data-id="{{ $specialize->id }}" type="checkbox" class="specialization-enable">
             {{ $specialize->$name }}
         </div> 
         <div class="col-md-4">

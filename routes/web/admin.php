@@ -43,17 +43,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Events   
     Route::post('events/partials/add_cader', 'EventsController@partials_add_cader')->name('events.partials.add_cader');
-    Route::post('events/partials/attendance_cader', 'EventsController@partials_attendance_cader')->name('events.partials.attendance_cader');
-    Route::get('events/cancel_cader/{event_id}/{cader_id}', 'EventsController@cancel_cader')->name('events.cancel_cader');
-    Route::get('events/send_pricing_to_cader/{event_id}/{cader_id}', 'EventsController@send_pricing_to_cader')->name('events.send_pricing_to_cader');
+    Route::post('events/partials/edit_cader', 'EventsController@partials_edit_cader')->name('events.partials.edit_cader');
+    Route::post('events/partials/attendance_cader', 'EventsController@partials_attendance_cader')->name('events.partials.attendance_cader'); 
+    Route::post('events/cader_status', 'EventsController@cader_status')->name('events.cader_status');
     Route::get('events/send_pricing/{id}', 'EventsController@send_pricing')->name('events.send_pricing');
     Route::post('events/delete_cader', 'EventsController@delete_cader')->name('events.delete_cader');
     Route::post('events/update_cader', 'EventsController@update_cader')->name('events.update_cader');
     Route::post('events/add_cader', 'EventsController@add_cader')->name('events.add_cader');
+    Route::post('events/add_item', 'EventsController@add_item')->name('events.add_item');
     Route::post('events/update_item', 'EventsController@update_item')->name('events.update_item');
+    Route::post('events/refresh_caders_list', 'EventsController@refresh_caders_list')->name('events.refresh_caders_list');
     Route::post('events/media', 'EventsController@storeMedia')->name('events.storeMedia');
     Route::post('events/ckmedia', 'EventsController@storeCKEditorImages')->name('events.storeCKEditorImages');
-    Route::resource('events', 'EventsController');
+    Route::resource('events', 'EventsController', ['except' => ['show']]);
+    Route::get('events/{event}/{relation_tab?}','EventsController@show')->name('events.show');
 
     // Event Organizer
     Route::post('event-organizers/update_approved', 'EventOrganizerController@update_approved')->name('event-organizers.update_approved');

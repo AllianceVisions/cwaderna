@@ -36,9 +36,9 @@
                             @if($raw->pivot->type == 'attend')
                                 <span class="badge bg-info text-white">تأكيد حضور</span>
                             @elseif($raw->pivot->type == 'stream')
-                                <span class="badge bg-danger text-white">streaming</span>
+                                <span class="badge bg-warning text-white"> وقت الحضور </span>
                             @else 
-                                <span class="badge bg-warning text-white">تأكيد أنصراف</span>
+                                <span class="badge bg-dark text-white">تأكيد أنصراف</span>
                             @endif
                         </td>
                     </tr> 
