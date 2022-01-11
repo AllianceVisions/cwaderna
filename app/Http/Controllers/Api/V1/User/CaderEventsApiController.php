@@ -32,6 +32,10 @@ class CaderEventsApiController extends Controller
         if ($validator->fails()) {
             return $this->returnError('401', $validator->errors());
         }
+        $event = Event::find($request->event_id);
+        if(!$event){
+            return $this->returnError('404',('Not Found !!!'));
+        }
         $cader = Cader::where('user_id',Auth::id())->first();
 
         $break = BreakType::find($request->break_id);
@@ -49,7 +53,23 @@ class CaderEventsApiController extends Controller
     }
 
     public function break_cancel(Request $request){
+        
+        $rules = [
+            'event_id' => 'required|integer',  
+        ];
 
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return $this->returnError('401', $validator->errors());
+        }
+        $cader = Cader::where('user_id',Auth::id())->first();
+
+        $event_break = EventBreak::where('cader_id',$cader->id)->where('event_id',$request->event_id)->orderBy('created_at','desc')->first();
+        $event_break->status = 'cancel';
+        $event_break->save();
+
+        return $this->returnSuccessMessage('Canceled Succeessfully');
     }
 
     public function find($id){
