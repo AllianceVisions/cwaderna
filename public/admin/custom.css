@@ -22,7 +22,8 @@
     background: #80808017;
     padding: 20px;
     max-height: 300px;
-    overflow: scroll;
+    overflow: scroll; 
+    overflow-x: hidden;
 } 
 
 .partials-scrollable::-webkit-scrollbar {

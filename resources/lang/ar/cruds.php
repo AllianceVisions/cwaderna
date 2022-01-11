@@ -518,4 +518,22 @@ return [
             'updated_at_helper'   => ' ',
         ],
     ],
+    'breakType' => [
+        'title'          => 'أنواع الأذونات',
+        'title_singular' => 'أذن أنصراف',
+        'fields'         => [
+            'id'                => 'ID',
+            'id_helper'         => ' ',
+            'name'              => 'النوع',
+            'name_helper'       => ' ',
+            'time'              => 'الوقت المسموح',
+            'time_helper'       => 'بالدقائق',
+            'created_at'        => 'Created at',
+            'created_at_helper' => ' ',
+            'updated_at'        => 'Updated at',
+            'updated_at_helper' => ' ',
+            'deleted_at'        => 'Deleted at',
+            'deleted_at_helper' => ' ',
+        ],
+    ],
 ];

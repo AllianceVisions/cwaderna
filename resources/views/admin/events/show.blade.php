@@ -51,8 +51,24 @@
                         </div> 
                     </div>
                 </div>
-            </div>
+            </div> 
 
+            <!-- Modal cader_break cader -->
+            <div class="modal fade bd-example-modal-lg" id="cader_break_modal" tabindex="1" role="dialog"
+                aria-labelledby="cader_break_modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cader_break_modalLabel"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Modal add service -->
             <div class="modal fade" id="add_service_modal" tabindex="1" role="dialog" aria-labelledby="add_service_modalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -386,11 +402,16 @@
         return null;
     } 
 
-    function zoomInMap(lat,lng){
-        var pt = new google.maps.LatLng(lat, lng);
-        map.setCenter(pt);
-        map.setZoom(18);
+    
+    function zoomInMap(cader_id){
+        
+        $.post('{{ route('admin.events.partials.zoominmap') }}', {_token:'{{ csrf_token() }}', cader_id:cader_id}, function(data){  
+            var pt = new google.maps.LatLng(data['lat'], data['lng']);
+            map.setCenter(pt);
+            map.setZoom(18);
+        });
     }
+
     function closeOtherInfo(){
         if(infoObj.length > 0){
             infoObj[0].set('marker',null);
@@ -437,17 +458,7 @@
             var title = 'خارج نطاق الفعالية';
             var message = 'الكادر ' + obj['name'];
             showFrontendAlert('warning', title, message);
-        }
-
-        if(obj['refresh'] == 1){
-            $.post('{{ route('admin.events.refresh_caders_list') }}', {
-                _token: '{{ csrf_token() }}', 
-                event_id: '{{ $event->id }}',
-            }, function(data) {
-                $('#caders_in_map').html(null);
-                $('#caders_in_map').html(data);
-            });
-        }
+        } 
     });
 </script>
 
@@ -510,6 +521,21 @@
         $.post('{{ route('admin.events.partials.attendance_cader') }}', {_token:'{{ csrf_token() }}', cader_id:cader_id,event_id:'{{$event->id}}'}, function(data){
             $('#attendance_cader').html(null);
             $('#attendance_cader').html(data);
+        });
+    } 
+    
+    function cader_attendance(cader_id){
+        $('#attendance_modal').modal('show') 
+        $.post('{{ route('admin.events.partials.attendance_cader') }}', {_token:'{{ csrf_token() }}', cader_id:cader_id,event_id:'{{$event->id}}'}, function(data){ 
+            $('#attendance_modal .modal-body').html(null);
+            $('#attendance_modal .modal-body').html(data);
+        });
+    } 
+    function cader_break(cader_id){
+        $('#cader_break_modal').modal('show') 
+        $.post('{{ route('admin.events.partials.cader_break') }}', {_token:'{{ csrf_token() }}', cader_id:cader_id,event_id:'{{$event->id}}'}, function(data){
+            $('#cader_break_modal .modal-body').html(null);
+            $('#cader_break_modal .modal-body').html(data);
         });
     } 
 </script>

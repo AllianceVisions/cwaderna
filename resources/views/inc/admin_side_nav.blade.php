@@ -232,6 +232,16 @@
                             </a>
                         </li>
                     @endcan
+                    @can('break_type_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.break-types.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/break-types") || request()->is("admin/break-types/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-coffee c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.breakType.title') }}
+                            </a>
+                        </li>
+                    @endcan
                     <li class="c-sidebar-nav-item">
                         <a href="{{ route("admin.general-settings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/general-settings") || request()->is("admin/general-settings/*") ? "c-active" : "" }}">
                             <i class="fa-fw fas fa-cog c-sidebar-nav-icon" style="color: #fff">

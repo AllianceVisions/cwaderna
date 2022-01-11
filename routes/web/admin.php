@@ -42,6 +42,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
 
     // Events   
+    Route::post('events/partials/cader_break', 'EventsController@partials_cader_break')->name('events.partials.cader_break'); 
+    Route::get('events/partials/cader_break_status/{id}/{status}', 'EventsController@partials_cader_break_status')->name('events.partials.cader_break_status'); 
+    Route::post('events/partials/zoominmap', 'EventsController@partials_zoominmap')->name('events.partials.zoominmap'); 
     Route::post('events/partials/add_cader', 'EventsController@partials_add_cader')->name('events.partials.add_cader');
     Route::post('events/partials/edit_cader', 'EventsController@partials_edit_cader')->name('events.partials.edit_cader');
     Route::post('events/partials/attendance_cader', 'EventsController@partials_attendance_cader')->name('events.partials.attendance_cader'); 
@@ -104,6 +107,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('user-alerts', 'UserAlertsController', ['except' => ['edit', 'update']]);
     Route::post('user-alerts/read', 'UserAlertsController@read')->name('alert.read');
 
+    // Break Types
+    Route::delete('break-types/destroy', 'BreakTypesController@massDestroy')->name('break-types.massDestroy');
+    Route::resource('break-types', 'BreakTypesController');
+    
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar'); 
 
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () { 

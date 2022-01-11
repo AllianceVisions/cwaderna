@@ -13,7 +13,12 @@ Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User
     // settings
     Route::get('nationality','SettingsApiController@nationality'); 
     Route::get('cities','SettingsApiController@cities'); 
+    Route::get('breaks_type','SettingsApiController@breaks_type');
     Route::get('prefix','SpecializationsApiController@index') ;
+
+    //forgetpassword
+    Route::post('forgetpassword','ForgetPasswordController@create_token');
+    Route::post('forgetpassword/reset','ForgetPasswordController@reset');
 
     Route::group(['middleware' => ['auth:sanctum']],function () {
 
@@ -71,6 +76,10 @@ Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User
             Route::get('canceled','CaderEventsApiController@canceled') ; 
             Route::get('pending','CaderEventsApiController@pending') ; 
             Route::post('attend','CaderEventsApiController@attend') ; 
+
+            //break
+            Route::post('break/request','CaderEventsApiController@break_request') ; 
+            Route::post('break/cancel','CaderEventsApiController@break_cancel') ;  
         });  
 
         // notifications

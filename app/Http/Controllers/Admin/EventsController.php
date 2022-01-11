@@ -10,8 +10,10 @@ use App\Models\Event;
 use App\Models\City;
 use App\Models\Specialization;
 use App\Models\EventOrganizer;
+use App\Models\EventBreak;
 use App\Models\Cader;
 use App\Models\UserAlert;
+use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
@@ -26,6 +28,41 @@ class EventsController extends Controller
 {
     use MediaUploadingTrait; 
     use push_notification; 
+
+
+    public function partials_cader_break_status($id,$status){
+        $event_break = EventBreak::findOrFail($id);
+        $event_break->status = $status;
+        $event_break->save();
+        
+        $user = User::find($event_break->cader_id);
+        if($status == 'accepted'){
+            Alert::success('تم قبول الأذن'); 
+            $title = 'تم قبول الأذن';
+        }else{ 
+            Alert::success('تم رفض الأذن');
+            $title = 'تم رفض الأذن';
+        }
+
+        $this->send_notification($title, '' , $title , '' , 'break' , $user->id, false,$status);
+
+        return redirect()->route('admin.events.show',$event_break->event_id);
+    }
+
+    public function partials_cader_break(Request $request){
+        $event_breaks = EventBreak::where('cader_id',$request->cader_id)->where('event_id',$request->event_id)->get(); 
+        return view('admin.events.partials.break',compact('event_breaks'));
+    }
+    public function partials_zoominmap(Request $request){
+        $cader = Cader::find($request->cader_id);
+
+        $data = [
+            'lat' => $cader->latitude,
+            'lng' => $cader->longitude
+        ];
+        
+        return response()->json($data);
+    }
 
     public function add_cader(Request $request){
         $event = Event::findOrFail($request->event_id); 
@@ -140,7 +177,7 @@ class EventsController extends Controller
             $body = $alert_text;
             $title = 'فعالية جديدة';
             
-            $this->send_notification($title , $body , $alert_text , $alert_link , 'event' , $cader->user_id);
+            $this->send_notification($title , $body , $alert_text , $alert_link , 'event' , $cader->user_id,true,$event->id);
         }
 
         return view('admin.events.caders.caders',compact('event','relation_tab_specialization'));

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Traits\api_return;
 use App\Models\Event; 
 use App\Models\Cader; 
+use App\Models\BreakType; 
+use App\Models\EventBreak; 
 use Validator;
 use Auth;
 use App\Events\ChangeLocation;
@@ -18,6 +20,37 @@ class CaderEventsApiController extends Controller
 {
     use api_return;
     use push_notification; 
+
+    public function break_request(Request $request){ 
+        $rules = [
+            'event_id' => 'required|integer', 
+            'break_id' => 'required|integer',  
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return $this->returnError('401', $validator->errors());
+        }
+        $cader = Cader::where('user_id',Auth::id())->first();
+
+        $break = BreakType::find($request->break_id);
+        
+        $event_break = EventBreak::create([
+            'event_id' => $request->event_id,
+            'cader_id' => $cader->id,
+            'break' => $break->name,
+            'time' => $break->time,
+            'reason' => $request->reason,
+            'status' => 'pending', 
+        ]);
+        
+        return $this->returnSuccessMessage('Request Sent Succeessfully');
+    }
+
+    public function break_cancel(Request $request){
+
+    }
 
     public function find($id){
         $cader = Cader::where('user_id',Auth::id())->first();
@@ -118,15 +151,40 @@ class CaderEventsApiController extends Controller
                                             $request->latitude,$request->longitude);
         
         $cader = Cader::where('user_id',Auth::id())->first();
+        $alert = 0;
+        $insert = 0;
+        $now_time = date('H:i:s',time());
+        $now_date = date('Y-m-d',time());
 
+        // after cader leave the event stop get stream from apis
+        $leave_before = $event->attendance()->wherePivot('cader_id',$cader->id)->where('type','leave')->wherePivot('attendance1',$now_date)->first();
+        if($leave_before){
+            return $this->returnError('401','تم تسجل الأنصراف من قبل لهذة الفعالية هذا اليوم');
+        } 
+        
         if($request->type != 'stream'){ 
+            if($request->type == 'attend'){
+                $attend_before = $event->attendance()->wherePivot('cader_id',$cader->id)->where('type','attend')->wherePivot('attendance1',$now_date)->first();
+                if($attend_before){
+                    return $this->returnError('401','تم تسجل الحضور من قبل لهذة الفعالية هذا اليوم');
+                }
+                if($distance > $event->area){ 
+                    $distance_long = $distance - $event->area;
+                    return $this->returnError('401',(
+                                                    ' لابد من تسجيل الحضور داخل نظاق الفعالية انت علي بعد '
+                                                    . round($distance_long,2) . 
+                                                    'متر من النطاق'
+                                                    )
+                                            );
+                }
+            }
 
             $event->attendance()->attach([
                 $cader->id => [ 
                     'out_of_zone' => $distance > $event->area ? 1 : 0, 
                     'type' => $request->type,
-                    'attendance1' => date('Y-m-d',time()),
-                    'attendance2' => date('H:i:s',time()),
+                    'attendance1' => $now_date,
+                    'attendance2' => $now_time,
                     'longitude' => $request->longitude,
                     'latitude' => $request->latitude,
                     'distance' => $distance, 
@@ -150,8 +208,8 @@ class CaderEventsApiController extends Controller
                     $cader->id => [ 
                         'out_of_zone' => $distance > $event->area ? 1 : 0, 
                         'type' => $request->type,
-                        'attendance1' => date('Y-m-d',time()),
-                        'attendance2' => date('H:i:s',time()),
+                        'attendance1' => $now_date,
+                        'attendance2' => $now_time,
                         'longitude' => $request->longitude,
                         'latitude' => $request->latitude,
                         'distance' => $distance, 

@@ -435,7 +435,29 @@ class PermissionsSeeder extends Seeder
             [
                 'id' => $i++,
                 'title' => 'setting_access'
-            ]
+            ],
+            
+            // break types
+            [
+                'id'    => $i++,
+                'title' => 'break_type_create',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'break_type_edit',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'break_type_show',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'break_type_delete',
+            ],
+            [
+                'id'    => $i++,
+                'title' => 'break_type_access',
+            ],
         ];
 
         Permission::insert($permissions);

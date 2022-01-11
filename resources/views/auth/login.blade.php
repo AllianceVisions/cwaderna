@@ -57,14 +57,15 @@
                                 </div>
                             @endif
                         </div>
-                    </div>
+                    </div> 
                 </div>
                 
                 
                 <div style="text-align: center;"> 
                     <div class="p-t-15">
-                        <button type="submit" class="contact-one__btn thm-btn">تسجبل الدخول</button>
+                        <button type="submit" class="contact-one__btn thm-btn">تسجبل الدخول</button> 
                     </div>
+                    <a href="{{ route('password.request') }}" class="btn-link forgot-password"> نسيت كلمة المرور </a>
                 </div>
             </div> 
         </form> 
