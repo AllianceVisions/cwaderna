@@ -5,6 +5,47 @@ $(document).ready(function () {
       week: {dow: 1} // Monday is the first day of the week
     })
   
+
+
+    $(document).on('mouseenter','.date',function(){
+      $(this).datetimepicker({
+        format: 'DD/MM/YYYY',
+        locale: 'en',
+        icons: {
+          up: 'fas fa-chevron-up',
+          down: 'fas fa-chevron-down',
+          previous: 'fas fa-chevron-left',
+          next: 'fas fa-chevron-right'
+        }
+      })
+    })
+  
+    $(document).on('mouseenter','.datetime',function(){
+      $(this).datetimepicker({
+        format: 'DD/MM/YYYY hh:mm a',
+        locale: 'en',
+        sideBySide: true,
+        icons: {
+          up: 'fas fa-chevron-up',
+          down: 'fas fa-chevron-down',
+          previous: 'fas fa-chevron-left',
+          next: 'fas fa-chevron-right'
+        }
+      })
+    })
+  
+    $(document).on('mouseenter','.timepicker',function(){
+      $(this).datetimepicker({
+        format: 'hh:mm a',
+        icons: {
+          up: 'fas fa-chevron-up',
+          down: 'fas fa-chevron-down',
+          previous: 'fas fa-chevron-left',
+          next: 'fas fa-chevron-right'
+        }
+      })
+    })
+
     $('.date').datetimepicker({
       format: 'DD/MM/YYYY',
       locale: 'en',

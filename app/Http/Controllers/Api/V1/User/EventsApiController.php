@@ -16,7 +16,20 @@ class EventsApiController extends Controller
     use api_return;
 
     public function index(){
-        $events = Event::with('caders')->whereIn('status',['pending','request_to_pricing'])->orderBy('created_at','desc')->paginate(10);
+
+        $now_date = date('Y-m-d',strtotime('now'));  
+        $cader = Cader::where('user_id',Auth::id())->first(); 
+        global $my_specialization;
+        $events_already_joined = $cader->events()->get()->pluck('id');
+        $my_specialization = $cader->specializations()->get()->pluck('id'); 
+        
+        $events = Event::with('caders')->whereNotIn('id',$events_already_joined)
+                        ->whereIn('status',['pending','request_to_pricing'])
+                        ->where('start_date','<=',$now_date)->where('end_date','>=',$now_date)
+                        ->whereHas('specializations',function ($query) {
+                            $query->whereIn('id',$GLOBALS['my_specialization']);
+                        })
+                        ->orderBy('created_at','desc')->paginate(10);
         $new = EventsResource::collection($events);
         return $this->returnPaginationData($new,$events,"success");
     }

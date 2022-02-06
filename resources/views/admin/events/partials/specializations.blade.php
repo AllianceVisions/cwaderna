@@ -10,30 +10,30 @@
         </div> 
         <div class="col-md-4">
             <label class="required" >{{ trans('cruds.event.fields.num_of_caders') }}</label>
-            <input value="{{ old('specializations.'.$specialize->id ,$specialize->num_of_caders) ?? null }}"
-                    {{ $specialize->num_of_caders || old('specializations.'.$specialize->id) ? null : 'disabled' }} 
+            <input value="{{ old('specializations.'.$specialize->id . '.num_of_caders' ,$specialize->num_of_caders) ?? null }}"
+                    {{ $specialize->num_of_caders || old('specializations.'.$specialize->id. '.num_of_caders') ? null : 'disabled' }} 
                     data-id="{{ $specialize->id }}" 
                     name="specializations[{{ $specialize->id }}][num_of_caders]" 
                     type="number" step="1" min="0" class="specialization-number form-control" placeholder="">
             <br>
             <label class="required" >{{ trans('cruds.event.fields.budget') }}</label>
-            <input value="{{ old('specializations.'.$specialize->id ,$specialize->budget) ?? null }}" 
-                    {{ $specialize->budget || old('specializations.'.$specialize->id) ? null : 'disabled' }} 
+            <input value="{{ old('specializations.'.$specialize->id. '.budget' ,$specialize->budget) ?? null }}" 
+                    {{ $specialize->budget || old('specializations.'.$specialize->id. '.budget') ? null : 'disabled' }} 
                     data-id="{{ $specialize->id }}" 
                     name="specializations[{{ $specialize->id }}][budget]" 
                     type="number" step="1" min="0" class="specialization-budget form-control" placeholder="">
         </div> 
         <div class="col-md-5">
             <label class="required" >{{ trans('cruds.event.fields.start_attendance') }}</label>
-            <input value="{{ old('specializations.'.$specialize->id ,$specialize->start_attendance) ?? null }}" 
-                    {{ $specialize->start_attendance || old('specializations.'.$specialize->id) ? null : 'disabled' }} 
+            <input value="{{ old('specializations.'.$specialize->id. '.start_attendance' ,$specialize->start_attendance) ?? null }}" 
+                    {{ $specialize->start_attendance || old('specializations.'.$specialize->id. '.start_attendance') ? null : 'disabled' }} 
                     data-id="{{ $specialize->id }}" 
                     name="specializations[{{ $specialize->id }}][start_attendance]" 
                     type="text" step="1" min="0" class="specialization-start_attendance datetime form-control" placeholder=""> 
             <br>
             <label class="required" >{{ trans('cruds.event.fields.end_attendance') }}</label>
-            <input value="{{ old('specializations.'.$specialize->id ,$specialize->end_attendance) ?? null }}" 
-                    {{ $specialize->end_attendance || old('specializations.'.$specialize->id) ? null : 'disabled' }} 
+            <input value="{{ old('specializations.'.$specialize->id. '.end_attendance' ,$specialize->end_attendance) ?? null }}" 
+                    {{ $specialize->end_attendance || old('specializations.'.$specialize->id. '.end_attendance') ? null : 'disabled' }} 
                     data-id="{{ $specialize->id }}" 
                     name="specializations[{{ $specialize->id }}][end_attendance]" 
                     type="text" step="1" min="0" class="specialization-end_attendance datetime form-control" placeholder="">

@@ -105,7 +105,7 @@
                 </div>
                 <div class="col-6">
                     <div class="input-group">
-                        <label class="label">رقم التليفون</label>
+                        <label class="label">رقم الجوال</label>
                         <input class="input--style-4" type="text" name="phone" required value="{{old('phone')}}"> 
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                 </div>
                 <div class="col-6">
                     <div class="input-group">
-                        <label class="label">الرقم القومي </label>
+                        <label class="label">رقم الهوية </label>
                         <input class="input--style-4" type="text" name="identity_num"  value="{{old('identity_num')}}"> 
                     </div>
                 </div>
@@ -158,20 +158,20 @@
                 </div>
             </div>
 
-            <div class="row row-space">
-                <div class="col-6">
-                    <label class="label">نبدة عنك</label>
+            <div class="row ">
+                <div class="col-md-6">
+                    <label class="label">نبذة عنك</label>
                     <div class="input-group"> 
                         <div>
                             <textarea cols="50" class="input--style-4" name="description" required>{{ old('description') }}</textarea>
                         </div> 
                     </div>
                 </div> 
-                <div class="col-6">
+                <div class="col-md-6">
                     <div class="input-group">
                         <div >
                             <label class="label">التخصصات</label>
-                            <select name="specializations[]" id="specializations" multiple class="form-control select2" required>
+                            <select name="specializations[]" id="specializations" multiple class="form-control select2 text-center" required style="width: 500px;">
                                 @foreach($specializations as $specialize)
                                     <option value="{{ $specialize->id }}"  {{ old('specializations','') == $specialize->id ? 'selected' : '' }}>{{ $specialize->name_ar }}</option>
                                 @endforeach

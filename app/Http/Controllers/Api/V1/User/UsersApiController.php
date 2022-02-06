@@ -25,8 +25,7 @@ class UsersApiController extends Controller
         return $this->returnData(new UserResource(Auth::user()), "success"); 
     }
 
-    public function update(Request $request){
-
+    public function update(Request $request){ 
         $rules = [
             'email' => 'required|unique:users,email,'.Auth::id(),
             'date_of_birth' =>'date_format:' . config('panel.date_format'),
@@ -40,7 +39,10 @@ class UsersApiController extends Controller
 
         $user = Auth::user();
 
-        if (request()->hasFile('photo') && request('photo') != '' && request('photo') != $user->photo){
+        if(!$user)
+            return $this->returnError('404',('Not Found !!!'));
+
+        if (request()->hasFile('photo') && request('photo') != ''){
             $validator = Validator::make($request->all(), [
                 'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             ]);
@@ -50,8 +52,29 @@ class UsersApiController extends Controller
             $user->addMedia(request('photo'))->toMediaCollection('photo'); 
         }
 
-        if(!$user)
-            return $this->returnError('404',('Not Found !!!'));
+        if (request()->has('certificates')){ 
+            $validator = Validator::make($request->all(), [
+                'certificates' => 'required|array',
+                'certificates.*' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+            if ($validator->fails()) {
+                return $this->returnError('401', $validator->errors());
+            } 
+            foreach (request('certificates') as $file) {
+                $user->addMedia($file)->toMediaCollection('certificates');
+            } 
+        }
+        if (request()->hasFile('cv') && request('cv') != ''){  
+            $validator = Validator::make($request->all(), [
+                'cv' => 'required|max:2048',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->returnError('401', $validator->errors());
+            } 
+
+            $user->addMedia(request('cv'))->toMediaCollection('cv'); 
+        }
 
         $user->update($request->all());
         

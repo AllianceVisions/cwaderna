@@ -33,7 +33,7 @@ class UserAuthApiController extends Controller
             'specializations' => 'required|array',
             'specializations.*' => 'integer',
             'date_of_birth' =>
-                'required|date_format:' . config('panel.date_format'),
+            'required|date_format:' . config('panel.date_format'),
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -48,30 +48,50 @@ class UserAuthApiController extends Controller
         $validated_requests['approved'] = 0;
         $user = User::create($validated_requests);
         if (request()->hasFile('photo') && request('photo') != ''){
+
             $validator = Validator::make($request->all(), [
                 'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             ]);
+            
             if ($validator->fails()) {
                 return $this->returnError('401', $validator->errors());
             } 
 
             $user->addMedia(request('photo'))->toMediaCollection('photo'); 
         }
+        
+        if (request()->has('certificates')){
+            $validator = Validator::make($request->all(), [
+                'certificates' => 'required|array',
+                'certificates.*' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+            if ($validator->fails()) {
+                return $this->returnError('401', $validator->errors());
+            } 
+            foreach ($request->input('certificates', []) as $file) {
+                $user->addMedia($file)->toMediaCollection('certificates');
+            } 
+        }
+        if (request()->hasFile('cv') && request('cv') != ''){  
+            $validator = Validator::make($request->all(), [
+                'cv' => 'required|max:2048',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->returnError('401', $validator->errors());
+            } 
+
+            $user->addMedia(request('cv'))->toMediaCollection('cv'); 
+        }
+        
         $cader = Cader::create([
             'user_id' => $user->id,
             'description' => $validated_requests['description'],
         ]);
 
-        $cader->specializations()->sync($request->input('specializations', [])); 
+        $cader->specializations()->sync($request->input('specializations', []));  
 
-        $token = $user->createToken('user_token')->plainTextToken;
-
-        return $this->returnData(
-            [
-                'user_token' => $token,
-                'user_id '=> $user->id
-            ]
-        );
+        return $this->returnSuccessMessage('تم أرسال طلب أنضمامك بنجاح');
 
     }
 

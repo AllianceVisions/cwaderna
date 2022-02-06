@@ -129,10 +129,10 @@ return [
     |
     */
 
-    'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
+    'custom'      => [ 
+        'start_date' => [
+            'start_date_check' => 'لابد ان يكون تاريخ بداية الفعالية أقل من النهاية'
+        ], 
     ],
 
     /*

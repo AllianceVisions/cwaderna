@@ -100,7 +100,7 @@
                 </div>
                 <div class="col-4">
                     <div class="input-group">
-                        <label class="label">رقم التليفون</label>
+                        <label class="label">رقم الجوال</label>
                         <input class="input--style-4" type="text" name="phone" required value="{{old('phone')}}"> 
                     </div>
                 </div>

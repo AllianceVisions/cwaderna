@@ -35,7 +35,7 @@ class EventsController extends Controller
         $event_break->status = $status;
         $event_break->save();
         
-        $user = User::find($event_break->cader_id);
+        $cader = Cader::find($event_break->cader_id);
         if($status == 'accepted'){
             Alert::success('تم قبول الأذن'); 
             $title = 'تم قبول الأذن';
@@ -44,7 +44,7 @@ class EventsController extends Controller
             $title = 'تم رفض الأذن';
         }
 
-        $this->send_notification($title, '' , $title , '' , 'break' , $user->id, false,$status);
+        $this->send_notification($title, '' , $title , '' , 'break' , $cader->user_id, false,$status);
 
         return redirect()->route('admin.events.show',$event_break->event_id);
     }

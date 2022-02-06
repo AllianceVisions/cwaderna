@@ -107,10 +107,11 @@ return [
     'uploaded'                       => 'The :attribute failed to upload.',
     'url'                            => 'The :attribute format is invalid.',
     'uuid'                           => 'The :attribute must be a valid UUID.',
-    'custom'                         => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
+
+    'custom'      => [ 
+        'start_date' => [
+            'start_date_check' => 'Must be StartDate lower than EndDate'
+        ], 
     ],
     'reserved_word'                  => 'The :attribute contains reserved word',
     'dont_allow_first_letter_number' => 'The \":input\" field can\'t have first letter as a number',

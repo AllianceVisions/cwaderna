@@ -16,6 +16,9 @@ Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User
     Route::get('breaks_type','SettingsApiController@breaks_type');
     Route::get('prefix','SpecializationsApiController@index') ;
 
+    // all specializations
+    Route::get('specializations','SpecializationsApiController@index') ;
+
     //forgetpassword
     Route::post('forgetpassword','ForgetPasswordController@create_token');
     Route::post('forgetpassword/reset','ForgetPasswordController@reset');

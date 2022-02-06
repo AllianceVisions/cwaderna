@@ -257,7 +257,7 @@ return [
             'approved_helper'          => ' ',
             'address'                  => 'العنوان',
             'address_helper'           => ' ',
-            'phone'                    => 'رقم الهاتف',
+            'phone'                    => 'رقم الجوال',
             'phone_helper'             => ' ',
             'photo'                    => 'صورة البروفايل',
             'photo_helper'             => ' ',

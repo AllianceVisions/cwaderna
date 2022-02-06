@@ -27,6 +27,7 @@ class UpdateEventRequest extends FormRequest
             ],
             'start_date' => [
                 'required',
+                'start_date_check',
                 'date_format:' . config('panel.date_format'),
             ],
             'end_date' => [
@@ -43,6 +44,9 @@ class UpdateEventRequest extends FormRequest
                 'required',
             ],
             'area'  => [
+                'required',
+            ],
+            'photo'  => [
                 'required',
             ],
             'address' => [

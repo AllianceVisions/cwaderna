@@ -133,21 +133,7 @@ class User extends Authenticatable implements HasMedia
     public function getIsAdminAttribute()
     {
         return $this->roles()->where('id', 1)->exists();
-    }
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        self::created(function (User $user) {
-            $registrationRole = config('panel.registration_default_role');
-
-            if (!$user->roles()->get()->contains($registrationRole)) {
-                $user->roles()->attach($registrationRole);
-            }
-        });
-    }
-
-        
+    }  
 
     public function getEmailVerifiedAtAttribute($value)
     {

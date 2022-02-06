@@ -195,29 +195,6 @@
                         @endif
                         <span class="help-block">{{ trans('cruds.user.fields.photo_helper') }}</span>
                     </div>
-
-                    <div class="form-group">
-                        <label for="certificates">{{ trans('cruds.user.fields.certificates') }}</label>
-                        <div class="needsclick dropzone {{ $errors->has('certificates') ? 'is-invalid' : '' }}" id="certificates-dropzone">
-                        </div>
-                        @if($errors->has('certificates'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('certificates') }}
-                            </div>
-                        @endif
-                        <span class="help-block">{{ trans('cruds.user.fields.certificates_helper') }}</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="cv">{{ trans('cruds.user.fields.cv') }}</label>
-                        <div class="needsclick dropzone {{ $errors->has('cv') ? 'is-invalid' : '' }}" id="cv-dropzone">
-                        </div>
-                        @if($errors->has('cv'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('cv') }}
-                            </div>
-                        @endif
-                        <span class="help-block">{{ trans('cruds.user.fields.cv_helper') }}</span>
-                    </div>
                     
 
                 </div>
@@ -256,6 +233,29 @@
                         </div>
                     </div> 
 
+
+                    <div class="form-group">
+                        <label for="certificates">{{ trans('cruds.user.fields.certificates') }}</label>
+                        <div class="needsclick dropzone {{ $errors->has('certificates') ? 'is-invalid' : '' }}" id="certificates-dropzone">
+                        </div>
+                        @if($errors->has('certificates'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('certificates') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.user.fields.certificates_helper') }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cv">{{ trans('cruds.user.fields.cv') }}</label>
+                        <div class="needsclick dropzone {{ $errors->has('cv') ? 'is-invalid' : '' }}" id="cv-dropzone">
+                        </div>
+                        @if($errors->has('cv'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('cv') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.user.fields.cv_helper') }}</span>
+                    </div>
                 </div>
             </div> 
 

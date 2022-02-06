@@ -358,6 +358,7 @@ return [
         'send_pricing' => 'طلب موافقة الكادر',
         'refused' => 'مرفوض',
         'accepted' => 'مقبول',
+        'cancel' => 'تم الألغاء',
     ],  
     'event_request_by' => [
         'by_event_organizer' => 'منظم الفعالية',

@@ -364,6 +364,7 @@ return [
         'send_pricing' => 'Request Approvment',
         'refused' => 'Refused',
         'accepted' => 'Accepted',
+        'cancel' => 'Canceld',
     ],  
     'event_request_by' => [
         'by_event_organizer' => 'Event Organizer',
