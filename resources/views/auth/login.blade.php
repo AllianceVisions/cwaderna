@@ -32,6 +32,18 @@
 
 <div class="about">
     <div class="container">  
+        @if ($errors->count() > 0)
+            <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </div>
+        @endif
+        @if(session('message'))
+            <div class="alert alert-info" role="alert">
+                {{ session('message') }}
+            </div>
+        @endif
         <form method="POST" action="{{ route('login') }}"> 
             @csrf
             <div class="col-6" style="margin: 0 auto;"> 

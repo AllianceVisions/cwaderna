@@ -8,9 +8,9 @@
                         @php
                             $image = str_replace('public/public','public',asset($cader->user->photo->getUrl('thumb')));
                         @endphp
-                        <img src="{{ $image  }}" alt="avatar">
+                        <img src="{{ $image  }}" alt="#">
                     @else
-                        <img src="{{ asset('user.png') }}" alt="avatar">
+                        <img src="{{ asset('user.png') }}" width="50" height="50" alt="avatar">
                     @endif
                     <span class="badge badge-light">
                         {{ $cader->user->first_name }}  {{ $cader->user->last_name}} <br> 

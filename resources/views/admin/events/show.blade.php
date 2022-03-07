@@ -364,7 +364,7 @@
                 'lat' : '{{ $cader->latitude}}',
                 'lng' : '{{ $cader->longitude}}',
                 'name' : '{{ $cader->user->first_name}}' + ' ' + '{{ $cader->user->last_name}}',
-                'photo' : '{{ str_replace("public/public","public",asset($cader->user->photo->getUrl("thumb"))) }}'
+                'photo' : '{{ str_replace("public/public","public",asset($cader->user->photo ? $cader->user->photo->getUrl("thumb") : '')) }}'
             });
         @endforeach
         

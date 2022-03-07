@@ -144,15 +144,17 @@
                 <div class="col-6">
                     <div class="input-group">
                         <label class="label">النوع</label>
-                        <div class="p-t-10">
-                            <label class="radio-container m-r-45">ذكر
-                                <input type="radio" checked="checked" value="male" name="gender">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label class="radio-container">انثى
-                                <input type="radio" value="female" name="gender">
-                                <span class="checkmark"></span>
-                            </label>
+                        <div class="input-group"> 
+                            <div class="p-t-10">
+                                <label class="radio-container m-r-45">ذكر
+                                    <input type="radio" checked="checked" value="male" name="gender">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="radio-container">انثى
+                                    <input type="radio" value="female" name="gender">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div> 
                         </div> 
                     </div>
                 </div>

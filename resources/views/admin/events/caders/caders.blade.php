@@ -64,27 +64,32 @@
                                                     <td>{{$cader->pivot->price}}</td>
                                                     <td>{{ trans('global.event_request_by.'.$cader->pivot->request_type) }}</td>
                                                     <td class="text-center"> 
-                                                        @if($cader->pivot->status == 'send_pricing') 
-                                                            <button onclick="cader_status({{ $event->id }},{{ $cader->id }},'cancel',{{$specialize->id}})" class="btn btn-outline-warning">ألغاء</button> <br>
-                                                            <span class="text-center text-white badge bg-warning">في أنتظار رد الكادر</span>
-                                                        @elseif($cader->pivot->status == 'accepted') 
-                                                            <span class="text-center text-white badge bg-success">تم الموافقة</span>
-                                                        @elseif($cader->pivot->status == 'refused') 
-                                                            <span class="text-center text-white badge bg-danger">تم الرفض من الكادر</span>
-                                                        @elseif($cader->pivot->status == 'cancel') 
-                                                            <span class="text-center text-white badge bg-danger">تم ألغاء الكادر</span> <br> 
-                                                            @if($event->status == 'request_to_pricing')
-                                                                <button onclick="cader_status({{ $event->id }},{{ $cader->id }},'send_pricing',{{$specialize->id}})" class="btn btn-outline-success">أرسال تسعيرة مرة أخري</button>
-                                                                <button type="button" class="btn btn-outline-info" onclick="edit_cader({{$cader->pivot->price ?? 0}},{{$cader->pivot->profit ?? 0}},'{{$cader->pivot_start_attendance()}}','{{$cader->pivot_end_attendance()}}',{{$cader->id}},'{{trans('cruds.event.others.edit_cader_in_event')}}',{{$specialize->id}})">{{ trans('global.edit') }}</button>
-                                                            @endif
-                                                        @else 
-                                                            <button onclick="cader_status({{ $event->id }},{{ $cader->id }},'send_pricing')" class="btn btn-outline-success">أرسال تسعيرة للكادر</button>
-                                                            <button type="button" class="btn btn-outline-info" onclick="edit_cader({{$cader->pivot->price ?? 0}},{{$cader->pivot->profit ?? 0}},'{{$cader->pivot_start_attendance()}}','{{$cader->pivot_end_attendance()}}',{{$cader->id}},'{{trans('cruds.event.others.edit_cader_in_event')}}',{{$specialize->id}})">{{ trans('global.edit') }}</button>
-                                                            @if($cader->pivot->request_type == 'by_admin') 
-                                                                <button onclick="delete_cader('{{ route('admin.events.delete_cader') }}',{{ $event->id }},{{ $cader->id }},{{$specialize->id}})" class="btn btn-outline-danger" type="submit">{{ trans('global.delete') }}</button>
+
+                                                        @if(Auth::user()->user_type == 'staff')
+
+                                                            @if($cader->pivot->status == 'send_pricing') 
+                                                                <button onclick="cader_status({{ $event->id }},{{ $cader->id }},'cancel',{{$specialize->id}})" class="btn btn-outline-warning">ألغاء</button> <br>
+                                                                <span class="text-center text-white badge bg-warning">في أنتظار رد الكادر</span>
+                                                            @elseif($cader->pivot->status == 'accepted') 
+                                                                <span class="text-center text-white badge bg-success">تم الموافقة</span>
+                                                            @elseif($cader->pivot->status == 'refused') 
+                                                                <span class="text-center text-white badge bg-danger">تم الرفض من الكادر</span>
+                                                            @elseif($cader->pivot->status == 'cancel') 
+                                                                <span class="text-center text-white badge bg-danger">تم ألغاء الكادر</span> <br> 
+                                                                @if($event->status == 'request_to_pricing')
+                                                                    <button onclick="cader_status({{ $event->id }},{{ $cader->id }},'send_pricing',{{$specialize->id}})" class="btn btn-outline-success">أرسال تسعيرة مرة أخري</button>
+                                                                    <button type="button" class="btn btn-outline-info" onclick="edit_cader({{$cader->pivot->price ?? 0}},{{$cader->pivot->profit ?? 0}},'{{$cader->pivot_start_attendance()}}','{{$cader->pivot_end_attendance()}}',{{$cader->id}},'{{trans('cruds.event.others.edit_cader_in_event')}}',{{$specialize->id}})">{{ trans('global.edit') }}</button>
+                                                                @endif
                                                             @else 
-                                                                <button onclick="cader_status({{ $event->id }},{{ $cader->id }},'cancel')" class="btn btn-outline-warning">ألغاء</button> <br>
+                                                                <button onclick="cader_status({{ $event->id }},{{ $cader->id }},'send_pricing')" class="btn btn-outline-success">أرسال تسعيرة للكادر</button>
+                                                                <button type="button" class="btn btn-outline-info" onclick="edit_cader({{$cader->pivot->price ?? 0}},{{$cader->pivot->profit ?? 0}},'{{$cader->pivot_start_attendance()}}','{{$cader->pivot_end_attendance()}}',{{$cader->id}},'{{trans('cruds.event.others.edit_cader_in_event')}}',{{$specialize->id}})">{{ trans('global.edit') }}</button>
+                                                                @if($cader->pivot->request_type == 'by_admin') 
+                                                                    <button onclick="delete_cader('{{ route('admin.events.delete_cader') }}',{{ $event->id }},{{ $cader->id }},{{$specialize->id}})" class="btn btn-outline-danger" type="submit">{{ trans('global.delete') }}</button>
+                                                                @else 
+                                                                    <button onclick="cader_status({{ $event->id }},{{ $cader->id }},'cancel')" class="btn btn-outline-warning">ألغاء</button> <br>
+                                                                @endif
                                                             @endif
+
                                                         @endif
                 
                                                         @if($event->status == 'accepted' && $cader->pivot->status == 'accepted') 
@@ -105,14 +110,16 @@
                     <div class="col-md-3">
                         <div class="card">
                             <div class="card-header">
-                                @if($event->status == 'request_to_pricing')
-                                    <a role="button"  href="#"  class="btn btn-success" 
-                                        onclick="add_cader( {{$specialize->id}},
-                                                            '{{$specialize->pivot_start_attendance()}}',
-                                                            '{{$specialize->pivot_end_attendance()}}',
-                                                            '{{trans('cruds.event.others.add_cader_to_event')}}')">
-                                        {{trans('global.add')}} {{$specialize->$name}}
-                                    </a>
+                                @if(Auth::user()->user_type == 'staff')
+                                    @if($event->status == 'request_to_pricing')
+                                        <a role="button"  href="#"  class="btn btn-success" 
+                                            onclick="add_cader( {{$specialize->id}},
+                                                                '{{$specialize->pivot_start_attendance()}}',
+                                                                '{{$specialize->pivot_end_attendance()}}',
+                                                                '{{trans('cruds.event.others.add_cader_to_event')}}')">
+                                            {{trans('global.add')}} {{$specialize->$name}}
+                                        </a>
+                                    @endif
                                 @endif
                             </div>
                             <div class="card-body"> 

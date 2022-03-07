@@ -9,10 +9,12 @@
                 <td>{{trans('cruds.providerMan.others.profit')}}</td>
                 <td>{{trans('cruds.providerMan.others.price')}}</td>
                 <td> 
-                    @if($event->status == 'request_to_pricing')
-                        <a role="button"  href="#"  class="btn btn-success" onclick="add_item()">
-                            {{trans('global.add')}} {{trans('cruds.item.title_singular')}}
-                        </a>
+                    @if(Auth::user()->user_type == 'staff')
+                        @if($event->status == 'request_to_pricing')
+                            <a role="button"  href="#"  class="btn btn-success" onclick="add_item()">
+                                {{trans('global.add')}} {{trans('cruds.item.title_singular')}}
+                            </a>
+                        @endif
                     @endif
                 </td>
             </tr>
