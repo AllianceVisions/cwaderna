@@ -9,20 +9,20 @@ trait push_notification
 {
 
     public function send_notification( $title , $body , $alert_text , $alert_link , $type , $user_id, $add_to_alerts = true, $data = null)
-    { 
+    {
         $user = User::findOrFail($user_id);
 
-        $key = 'key=AAAAdfqVv1A:APA91bG3E3yzpsskk3EikXfZknCxu7yEQTKFCb3dfkyl0fVycHQF68DxTpS-WVq_0Ly2D7VO-w910QWCyvDtX4-kv6inKAuigqgQm0nAERq1Ntjk_nEVFDRP8juApbgd9U6yeWw_85O_';
+        $key = 'key=AAAAYds0g4k:APA91bHNwrz13JkjR-OiDxa7rWsYMl6yeTMvD8SOsI0kMT_BNFtyoPap9Are1afMWNnUtRu1g7Ipv-DnMDO8IUw6KIhaVupVCbOQJVt5Jm33xrCrQvVBKirIi7szUTHbYjlvh42xOgu5';
 
         if($add_to_alerts){
             $userAlert = UserAlert::create([
                 'alert_text' => $alert_text,
                 'alert_link' => $alert_link,
                 'type' => $type,
-            ]); 
-    
+            ]);
+
             $userAlert->users()->sync($user_id);
-        } 
+        }
         if($type == 'event'){
 
             Http::withHeaders([
@@ -40,7 +40,7 @@ trait push_notification
                     "body" => $body
                 ]
             ]);
-        }elseif($type == 'break'){  
+        }elseif($type == 'break'){
             Http::withHeaders([
                 'Authorization' => $key,
                 'Content-Type' =>   'application/json',
@@ -57,7 +57,7 @@ trait push_notification
                 ]
             ]);
         }else{
-            
+
             Http::withHeaders([
                 'Authorization' => $key,
                 'Content-Type' =>   'application/json',
