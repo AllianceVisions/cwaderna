@@ -34,6 +34,7 @@ class GeneralSettings extends Model implements HasMedia
         'our_goal',
         'our_vision',
         'our_message',
+        'sign_up_status',
         'created_at',
         'updated_at',
         'deleted_at',

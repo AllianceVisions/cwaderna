@@ -23,6 +23,7 @@ class CreateGeneralSettingsTable extends Migration
             $table->text('our_goal');
             $table->text('our_vision');
             $table->text('our_message');
+            $table->boolean('sign_up_status')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

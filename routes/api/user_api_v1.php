@@ -16,6 +16,11 @@ Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User
     Route::get('breaks_type','SettingsApiController@breaks_type');
     Route::get('prefix','SpecializationsApiController@index') ;
 
+    //sign_up
+    Route::get('sign_up_status','SettingsApiController@sign_up_status'); 
+    Route::Post('update_sign_up_status','SettingsApiController@update_sign_up_status'); 
+
+
     // all specializations
     Route::get('specializations','SpecializationsApiController@index') ;
 
