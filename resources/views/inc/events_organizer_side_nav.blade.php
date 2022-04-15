@@ -3,13 +3,17 @@
         $general_settings = \App\Models\GeneralSettings::first();
     @endphp
     <div class="c-sidebar-brand d-md-down-none"> 
-        <a class="c-sidebar-brand-full h4" href="#">
+     <!--   <a class="c-sidebar-brand-full h4" href="#">
             @if($general_settings && $general_settings->logo)
                 <img src="{{$general_settings->logo->getUrl()}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
             @else 
                 <img src="{{asset('assets/images/logo-dark.png')}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
             @endif
-        </a>
+        </a>-->
+        <?php
+           $event_organizer =\App\Models\EventOrganizer::where('user_id',Auth::id())->first();
+        ?>
+        <h3 style="background: #8E44AD;color:#fff; border-radius: 30px; padding: 3px 15px;">{{$event_organizer->company_name}}</h3>
     </div>
 
     <ul class="c-sidebar-nav">

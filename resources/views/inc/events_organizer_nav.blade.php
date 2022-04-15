@@ -10,7 +10,13 @@
     <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
         <i class="fas fa-fw fa-bars"></i>
     </button>
-
+     <a class="c-sidebar-brand-full h4" href="#">
+            @if($general_settings && $general_settings->logo)
+                <img src="{{$general_settings->logo->getUrl()}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
+            @else 
+                <img src="{{asset('assets/images/logo-dark.png')}}" class="main-logo" width="128" alt="{{$general_settings->site_name}}" />
+            @endif
+        </a>
     <ul class="c-header-nav @if(app()->getLocale() == 'ar') mr-auto @else ml-auto @endif">
 
         <li class="c-header-nav-item">
